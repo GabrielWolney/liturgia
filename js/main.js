@@ -270,6 +270,48 @@ setupClick("btn-login-secreto", () => {
   document.querySelectorAll(".close-modal, .close-modal-sobre, #btn-entendido-horas, #btn-fechar-explicacao").forEach((b) => b.onclick = fechar);
   window.onclick = (e) => { if (e.target.classList.contains("modal")) fechar(); };
 
+  // --- NAVEGAÇÃO COM RESPOSTA VISUAL NOS CARDS ---
+const configurarNavegação = () => {
+  const navItems = document.querySelectorAll(".nav-item");
+
+  navItems.forEach((item) => {
+    item.onclick = (e) => {
+      e.preventDefault();
+
+      // Resposta Visual na Nav Bar
+      navItems.forEach(i => i.classList.remove("active"));
+      item.classList.add("active");
+
+      // Caso Especial: SOBRE
+      if (item.id === "nav-sobre-site") {
+        const modalSobre = document.getElementById("modalSobreSite");
+        if (modalSobre) modalSobre.style.display = "flex";
+        return;
+      }
+
+      // Caso Geral: AVISOS, LITURGIA E HORAS
+      const targetId = item.getAttribute("data-target");
+      if (targetId) {
+        const targetElement = document.querySelector(targetId);
+        
+        if (targetElement) {
+          // Scroll centralizado para o card aparecer bem no meio
+          targetElement.scrollIntoView({ behavior: "smooth", block: "center" });
+
+          // Efeito de piscar no Card
+          targetElement.classList.remove("highlight-card");
+          void targetElement.offsetWidth; 
+          targetElement.classList.add("highlight-card");
+
+          setTimeout(() => {
+            targetElement.classList.remove("highlight-card");
+          }, 1500);
+        }
+      }
+    };
+  });
+};
+configurarNavegação();
   configurarData(); 
   carregarAvisos(); 
   buscarDadosApi();
