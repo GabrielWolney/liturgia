@@ -278,7 +278,7 @@ const configurarNavegação = () => {
     item.onclick = (e) => {
       e.preventDefault();
 
-      // Resposta Visual na Nav Bar
+      // Feedback visual na Nav
       navItems.forEach(i => i.classList.remove("active"));
       item.classList.add("active");
 
@@ -289,18 +289,18 @@ const configurarNavegação = () => {
         return;
       }
 
-      // Caso Geral: AVISOS, LITURGIA E HORAS
+      // Caso Geral (Avisos, Liturgia, Terço, Horas)
       const targetId = item.getAttribute("data-target");
       if (targetId) {
         const targetElement = document.querySelector(targetId);
         
         if (targetElement) {
-          // Scroll centralizado para o card aparecer bem no meio
+          // Scroll suave centralizado
           targetElement.scrollIntoView({ behavior: "smooth", block: "center" });
 
-          // Efeito de piscar no Card
+          // Efeito visual de Piscar (Highlight)
           targetElement.classList.remove("highlight-card");
-          void targetElement.offsetWidth; 
+          void targetElement.offsetWidth; // Reset da animação
           targetElement.classList.add("highlight-card");
 
           setTimeout(() => {
@@ -311,6 +311,31 @@ const configurarNavegação = () => {
     };
   });
 };
+
+const configurarTerco = () => {
+  const tituloEl = document.getElementById("titulo-misterio");
+  const descEl = document.getElementById("descricao-misterio");
+  
+  if (!tituloEl || !descEl) return;
+
+  const diaSemana = new Date().getDay(); // 0 = Domingo, 1 = Segunda...
+  
+  const misterios = {
+    0: { titulo: "Mistérios Gloriosos", desc: "Ressurreição, Ascensão, Vinda do Espírito Santo, Assunção e Coroação de Maria." },
+    1: { titulo: "Mistérios Gozosos", desc: "Anunciação, Visitação, Nascimento de Jesus, Apresentação e Encontro no Templo." },
+    2: { titulo: "Mistérios Dolorosos", desc: "Agonia no Horto, Flagelação, Coroação de Espinhos, Caminho do Calvário e Crucificação." },
+    3: { titulo: "Mistérios Gloriosos", desc: "Ressurreição, Ascensão, Vinda do Espírito Santo, Assunção e Coroação de Maria." },
+    4: { titulo: "Mistérios Luminosos", desc: "Batismo, Bodas de Caná, Anúncio do Reino, Transfiguração e Instituição da Eucaristia." },
+    5: { titulo: "Mistérios Dolorosos", desc: "Agonia no Horto, Flagelação, Coroação de Espinhos, Caminho do Calvário e Crucificação." },
+    6: { titulo: "Mistérios Gozosos", desc: "Anunciação, Visitação, Nascimento de Jesus, Apresentação e Encontro no Templo." }
+  };
+
+  const hoje = misterios[diaSemana];
+  tituloEl.innerText = hoje.titulo;
+  descEl.innerText = hoje.desc;
+};
+
+configurarTerco();
 configurarNavegação();
   configurarData(); 
   carregarAvisos(); 

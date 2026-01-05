@@ -191,6 +191,10 @@ main {
   font-size: 0.75rem;
   font-weight: 700;
   border: 1px solid var(--border);
+  display: inline-block;
+  margin-top: 15px;
+  width: fit-content; /* Faz o botão não ocupar a largura toda */
+
 }
 
 /* Modais */
@@ -276,19 +280,24 @@ main {
   align-items: center;
   padding-bottom: env(safe-area-inset-bottom);
   flex-shrink: 0;
+  padding-left: 5px;
+  padding-right: 5px;
+
 }
 .nav-item {
   text-decoration: none;
   color: var(--muted);
-  font-size: 0.65rem;
+  font-size: 0.6rem;
   font-weight: 700;
   display: flex;
   flex-direction: column;
   align-items: center;
   gap: 4px;
+  gap: 2px;
+  flex: 1;
 }
 .nav-item span {
-  font-size: 1.4rem;
+  font-size: 1.2rem; /* Reduzi de 1.4rem para 1.2rem para caber melhor */
 }
 .nav-item.active {
   color: var(--primary);
@@ -433,3 +442,9 @@ textarea.input-admin {
     border-color: var(--border);
   }
 } 
+.section-tempo {
+  display: flex;
+  flex-direction: column;
+  align-items: center; /* Centraliza tudo horizontalmente */
+  text-align: center;
+}
