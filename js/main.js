@@ -418,6 +418,15 @@ document.addEventListener("DOMContentLoaded", () => {
     const hoje = misterios[diaSemana];
     tituloEl.innerText = hoje.titulo;
     descEl.innerText = hoje.desc;
+    // No final de todas as suas inicializações dentro do DOMContentLoaded
+// Coloque isso no final do seu document.addEventListener("DOMContentLoaded", ...)
+setTimeout(() => {
+  const splash = document.getElementById('splash-screen');
+  if (splash) {
+    splash.style.opacity = '0';
+    setTimeout(() => splash.remove(), 500); 
+  }
+}, 1500); // 1.5s é um tempo elegante para a logo dar algumas voltas
   };
 
   // INICIAR

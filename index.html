@@ -35,6 +35,34 @@
 <link rel="manifest" href="site.webmanifest" />
   </head>
   <body>
+  <div id="splash-screen" style="
+    position: fixed !important;
+    top: 0 !important;
+    left: 0 !important;
+    width: 100vw !important;
+    height: 100vh !important;
+    background-color: white !important;
+    display: flex !important;
+    justify-content: center !important;
+    align-items: center !important;
+    z-index: 999999 !important;
+    overflow: hidden !important;">
+    
+    <img src="logo-agape.png" alt="Logo Ágape" style="
+        width: 100px !important; 
+        height: 100px !important;
+        max-width: 100px !important;
+        object-fit: contain !important;
+        animation: girarLogo 2s linear infinite !important;">
+</div>
+
+<style>
+/* A animação precisa estar no bloco de style */
+@keyframes girarLogo {
+    from { transform: rotate(0deg); }
+    to { transform: rotate(360deg); }
+}
+</style>
     <header class="topo" id="home">
       <div class="header-container">
         <img src="logo-agape.png" alt="Logo" class="logo-header" />
