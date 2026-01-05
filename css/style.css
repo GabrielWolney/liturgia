@@ -207,37 +207,44 @@ main {
   background: rgba(15, 23, 42, 0.6);
   z-index: 2000;
   justify-content: center;
-  align-items: flex-end;
+  /* Mudamos para center para o modal não ficar colado no topo ou base demais */
+  align-items: center; 
+  padding: 10px;
 }
 .modal-content {
   background: white;
   width: 100%;
-  max-height: 85vh;
-  border-radius: 30px 30px 0 0;
+  /* No mobile, garantimos que ele não ultrapasse a tela e tenha respiro */
+  max-height: 90vh; 
+  border-radius: 25px; /* Arredondado em todos os cantos fica melhor centralizado */
   display: flex;
   flex-direction: column;
-  animation: slideUp 0.3s ease-out;
+  animation: fadeIn 0.3s ease-out;
+  position: relative;
 }
-@keyframes slideUp {
-  from {
-    transform: translateY(100%);
-  }
-  to {
-    transform: translateY(0);
-  }
+@keyframes fadeIn {
+  from { opacity: 0; transform: scale(0.95); }
+  to { opacity: 1; transform: scale(1); }
 }
 .modal-header {
-  padding: 1.5rem;
+  padding: 1.2rem 1.5rem;
   border-bottom: 1px solid var(--border);
   display: flex;
   justify-content: space-between;
   align-items: center;
+  /* Garante que o header seja a primeira coisa visível */
+  position: sticky;
+  top: 0;
+  background: white;
+  border-radius: 25px 25px 0 0;
+  z-index: 10;
 }
 .modal-body {
   padding: 1.5rem;
   overflow-y: auto;
-  font-size: 1rem;
-  line-height: 1.7;
+  /* Suaviza a rolagem no iPhone */
+  -webkit-overflow-scrolling: touch; 
+  flex: 1;
 }
 .modal-body hr {
   margin: 1.5rem 0;
@@ -249,11 +256,16 @@ main {
 .close-modal {
   background: #f1f5f9;
   border: none;
-  width: 32px;
-  height: 32px;
+  width: 36px;
+  height: 36px;
   border-radius: 50%;
   cursor: pointer;
-  font-weight: bold;
+  font-size: 1.2rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--text);
+  flex-shrink: 0;
 }
 
 #modal-corpo {

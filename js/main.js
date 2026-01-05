@@ -196,16 +196,29 @@ document.addEventListener("DOMContentLoaded", () => {
 
     if (modal && corpo) {
         const infoHoras = {
-            laudes: { titulo: "Laudes", desc: "As Laudes são destinadas a santificar o tempo da manhã..." },
-            vesperas: { titulo: "Vésperas", desc: "As Vésperas são celebradas ao entardecer..." },
-            completas: { titulo: "Completas", desc: "As Completas são a última oração do dia..." }
+            laudes: {
+                titulo: "Laudes: Oração da Manhã",
+                desc: "As Laudes são destinadas a santificar o tempo da manhã. Elas celebram a Ressurreição do Senhor, que é a 'Luz verdadeira' e o 'Sol de Justiça'. É o momento de consagrar a Deus os primeiros impulsos da nossa mente e do nosso coração."
+            },
+            vesperas: {
+                titulo: "Vésperas: Oração da Tarde",
+                desc: "As Vésperas são celebradas ao entardecer, quando o dia já declina. Nelas, damos graças pelo que nos foi dado no dia e pelo que realizamos retamente. Fazemos memória da Redenção por meio da oração que sobe como incenso na presença do Senhor."
+            },
+            completas: {
+                titulo: "Completas: Oração antes do Repouso",
+                desc: "As Completas são a última oração do dia, feita antes do sono da noite, mesmo depois da meia-noite. É o momento do exame de consciência e da entrega confiante de nossa vida nas mãos de Deus, sob a proteção da Virgem Maria."
+            }
         };
+
         const selecao = infoHoras[tipo];
         titulo.innerText = selecao.titulo;
         corpo.innerHTML = `
             <div style="text-align:center; padding: 10px;">
                 <p style="margin-bottom: 25px; text-align: justify; line-height: 1.6; color: var(--text); font-style: italic;">"${selecao.desc}"</p>
-                <a href="https://www.youtube.com/LiturgiadasHorasOnline" target="_blank" class="btn-primary" style="text-decoration:none; display:inline-block; width:auto; padding: 12px 25px; background: #FF0000; border-radius: 8px;">Abrir Canal no YouTube</a>
+                <div style="background: #f8fafc; border-radius: 12px; padding: 15px; border: 1px solid #e2e8f0;">
+                    <p style="font-size: 0.85rem; font-weight: 700; margin-bottom: 10px; color: #CC0000;">▶️ REZAR AGORA</p>
+                    <a href="https://www.youtube.com/LiturgiadasHorasOnline" target="_blank" class="btn-primary" style="text-decoration:none; display:inline-block; width:auto; padding: 12px 25px; background: #FF0000; border-radius: 8px;">Abrir Canal no YouTube</a>
+                </div>
             </div>`;
         modal.style.display = "flex";
     }
