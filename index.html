@@ -6,6 +6,25 @@
       name="viewport"
       content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"
     />
+    <link rel="icon" type="image/png" sizes="32x32" href="favicon-32x32.png" />
+    <link rel="icon" type="image/png" sizes="16x16" href="favicon-16x16.png" />
+
+    <link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png" />
+
+    <link
+      rel="icon"
+      type="image/png"
+      sizes="192x192"
+      href="android-chrome-192x192.png"
+    />
+    <link
+      rel="icon"
+      type="image/png"
+      sizes="512x512"
+      href="android-chrome-512x512.png"
+    />
+
+    <link rel="manifest" href="site.webmanifest" />
     <title>Liturgia | Ágape de Jovens</title>
     <link rel="stylesheet" href="css/style.css" />
   </head>
@@ -98,33 +117,35 @@
       </div>
     </div>
 
-   <div id="modalExplicacaoHoras" class="modal">
-  <div class="modal-content">
-    <div class="modal-header">
-      <h3>Sobre a Liturgia das Horas</h3>
-      <button id="btn-fechar-explicacao" class="close-modal">✖</button>
+    <div id="modalExplicacaoHoras" class="modal">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h3>Sobre a Liturgia das Horas</h3>
+          <button id="btn-fechar-explicacao" class="close-modal">✖</button>
+        </div>
+        <div class="modal-body text-justify">
+          <p>
+            A <strong>Liturgia das Horas</strong> ou
+            <strong>Ofício Divino</strong> é a oração oficial da Igreja Católica
+            que tem como objetivo <strong>santificar</strong> o tempo ao longo
+            do dia, unindo a oração pessoal dos fiéis à oração contínua da
+            Igreja inteira.<br /><br />
+            Estruturada em diferentes momentos, como o Ofício das Leituras,
+            Laudes, Hora Média (Terça, Sexta ou Noa), Vésperas e Completas, ela
+            é composta principalmente por salmos, hinos, leituras bíblicas e
+            preces, organizados segundo o calendário litúrgico.<br />
+            <br />Por meio dessa prática, a Igreja prolonga o louvor e a ação de
+            graças celebrados na Eucaristia, convidando clérigos, religiosos e
+            leigos a manterem uma vida de oração constante, em comunhão com
+            Cristo e com toda a comunidade cristã, ao longo do ritmo diário da
+            vida.
+          </p>
+          <button class="btn-primary" id="btn-entendido-horas">
+            Entendido
+          </button>
+        </div>
+      </div>
     </div>
-    <div class="modal-body text-justify">
-      <p>
-        A <strong>Liturgia das Horas</strong> ou <strong>Ofício Divino</strong> é
-        a oração oficial da Igreja Católica que tem como objetivo
-        <strong>santificar</strong> o tempo ao longo do dia, unindo a oração
-        pessoal dos fiéis à oração contínua da Igreja inteira.<br /><br />
-        Estruturada em diferentes momentos, como o Ofício das Leituras,
-        Laudes, Hora Média (Terça, Sexta ou Noa), Vésperas e Completas, ela
-        é composta principalmente por salmos, hinos, leituras bíblicas e
-        preces, organizados segundo o calendário litúrgico.<br />
-        <br />Por meio dessa prática, a Igreja prolonga o louvor e a ação de
-        graças celebrados na Eucaristia, convidando clérigos, religiosos e
-        leigos a manterem uma vida de oração constante, em comunhão com
-        Cristo e com toda a comunidade cristã, ao longo do ritmo diário da vida.
-      </p>
-      <button class="btn-primary" id="btn-entendido-horas">
-        Entendido
-      </button>
-    </div>
-  </div>
-</div>
     <div id="modalSobreSite" class="modal">
       <div class="modal-content">
         <div class="modal-header">
@@ -137,50 +158,84 @@
             litúrgica da nossa comunidade, o <strong>Ágape de Jovens</strong>.
           </p>
           <hr />
-          <p style="font-size: 0.8rem; color: var(--muted)">
-            Liturgia - 2026.
-          </p>
-          <button id="btn-login-secreto" class="btn-secondary" style="margin-top: 20px; font-size: 0.7rem;">
-  Área do Coordenador (Restrito)
-</button>
+          <p style="font-size: 0.8rem; color: var(--muted)">Liturgia - 2026.</p>
+          <button
+            id="btn-login-secreto"
+            class="btn-secondary"
+            style="margin-top: 20px; font-size: 0.7rem"
+          >
+            Área do Coordenador (Restrito)
+          </button>
         </div>
       </div>
     </div>
 
     <div id="modalLogin" class="modal">
-  <div class="modal-content" style="max-height: 50vh; align-self: center; border-radius: 20px; width: 90%; margin: 0 auto;">
-    <div class="modal-header">
-      <h3>Acesso Coordenador</h3>
-      <button class="close-modal">✖</button>
+      <div
+        class="modal-content"
+        style="
+          max-height: 50vh;
+          align-self: center;
+          border-radius: 20px;
+          width: 90%;
+          margin: 0 auto;
+        "
+      >
+        <div class="modal-header">
+          <h3>Acesso Coordenador</h3>
+          <button class="close-modal">✖</button>
+        </div>
+        <div class="modal-body">
+          <input
+            type="email"
+            id="login-email"
+            placeholder="E-mail"
+            class="input-admin"
+          />
+          <input
+            type="password"
+            id="login-senha"
+            placeholder="Senha"
+            class="input-admin"
+          />
+          <button id="btn-fazer-login" class="btn-primary">Entrar</button>
+        </div>
+      </div>
     </div>
-    <div class="modal-body">
-      <input type="email" id="login-email" placeholder="E-mail" class="input-admin">
-      <input type="password" id="login-senha" placeholder="Senha" class="input-admin">
-      <button id="btn-fazer-login" class="btn-primary">Entrar</button>
-    </div>
-  </div>
-</div>
 
-<div id="modalAdminAvisos" class="modal">
-  <div class="modal-content">
-    <div class="modal-header">
-      <h3>Painel de Avisos</h3>
-      <button class="close-modal">✖</button>
-    </div>
-    <div class="modal-body">
-      <textarea id="novo-aviso-texto" placeholder="Digite o aviso aqui..." class="input-admin"></textarea>
-      
-      <label style="display:block; margin: 10px 0 5px; font-weight: bold;">Expirar em:</label>
-      <input type="date" id="aviso-data-expiracao" class="input-admin" style="margin-bottom: 15px;">
-      
-      <button id="btn-salvar-aviso" class="btn-primary">Postar Aviso 🔥</button>
-      <hr>
-      <div id="meus-avisos-lista"></div>
-    </div>
-  </div>
-</div>
+    <div id="modalAdminAvisos" class="modal">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h3>Painel de Avisos</h3>
+          <button class="close-modal">✖</button>
+        </div>
+        <div class="modal-body">
+          <textarea
+            id="novo-aviso-texto"
+            placeholder="Digite o aviso aqui..."
+            class="input-admin"
+          ></textarea>
 
-<script type="module" src="js/main.js"></script>
+          <label style="display: block; margin: 10px 0 5px; font-weight: bold"
+            >Expirar em:</label
+          >
+          <input
+            type="date"
+            id="aviso-data-expiracao"
+            class="input-admin"
+            style="margin-bottom: 15px"
+          />
+
+          <button id="btn-salvar-aviso" class="btn-primary">
+            Postar Aviso 🔥
+          </button>
+          <hr />
+          <div id="meus-avisos-lista"></div>
+        </div>
+      </div>
+    </div>
+
+    <script type="module" src="js/main.js"></script>
 
     <script src="js/main.js"></script>
   </body>
