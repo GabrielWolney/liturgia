@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"
+    />
+    <title>Liturgia | Ágape de Jovens</title>
+    <link rel="stylesheet" href="css/style.css" />
+  </head>
+  <body>
+    <header class="topo" id="home">
+      <div class="header-container">
+        <img src="logo-agape.png" alt="Logo" class="logo-header" />
+        <h1>Liturgia | Ágape de Jovens</h1>
+        <div style="width: 40px"></div>
+      </div>
+    </header>
+
+    <main>
+      <div id="data-atual" class="data-atual">Carregando data...</div>
+
+      <section class="card section-tempo" id="santo">
+        <div class="tempo-container">
+          <div id="indicador-cor" class="circulo-liturgico">
+            <span id="emoji-tempo">🎄</span>
+          </div>
+
+          <div class="tempo-info">
+            <p class="label-pequeno">Tempo Litúrgico</p>
+            <h2 id="nome-santo">Carregando...</h2>
+            <div class="cor-detalhe">
+              <span>Cor Liturgica:</span>
+              <span id="badge-cor" class="badge-cor">...</span>
+            </div>
+          </div>
+        </div>
+        <a
+          href="https://santo.cancaonova.com"
+          target="_blank"
+          class="btn-conhecer"
+        >
+          Conhecer o Santo do Dia ↗
+        </a>
+      </section>
+
+      <section class="card" id="liturgia">
+        <h2>📖 Liturgia do Dia</h2>
+        <div id="resumo-leituras" class="resumo-texto">
+          <p>• 1ª Leitura</p>
+          <p>• Salmo</p>
+          <p>• Evangelho</p>
+        </div>
+        <button class="btn-primary" id="btn-abrir-liturgia">
+          Ver Liturgia Completa
+        </button>
+      </section>
+
+      <section class="card" id="horas">
+        <h2>🙏 Liturgia das Horas</h2>
+        <div class="botoes-horas">
+          <button class="btn-hora" onclick="abrirHora('laudes')">Laudes</button>
+          <button class="btn-hora" onclick="abrirHora('vesperas')">
+            Vésperas
+          </button>
+          <button class="btn-hora" onclick="abrirHora('completas')">
+            Completas
+          </button>
+        </div>
+        <button class="btn-primary" id="btn-explicar-horas">
+          O que é a Liturgia das Horas/Ofício Divino ?
+        </button>
+      </section>
+
+      <section class="card" id="avisos">
+        <h2>📢 Avisos</h2>
+        <ul id="lista-avisos" class="lista-limpa"></ul>
+      </section>
+    </main>
+
+    <nav class="bottom-nav">
+      <a href="#" class="nav-item" id="nav-inicio"><span>⛪</span>Início</a>
+      <a href="#" class="nav-item" data-target="#liturgia"
+        ><span>📜</span>Liturgia</a
+      >
+      <a href="#" class="nav-item" data-target="#horas"><span>🙏</span>Horas</a>
+      <a href="#" class="nav-item" id="nav-sobre-site"><span>❓</span>Sobre</a>
+    </nav>
+
+    <div id="modalGeral" class="modal">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h3 id="modal-titulo">Conteúdo</h3>
+          <button class="close-modal">✖</button>
+        </div>
+        <div id="modal-corpo" class="modal-body"></div>
+      </div>
+    </div>
+
+   <div id="modalExplicacaoHoras" class="modal">
+  <div class="modal-content">
+    <div class="modal-header">
+      <h3>Sobre a Liturgia das Horas</h3>
+      <button id="btn-fechar-explicacao" class="close-modal">✖</button>
+    </div>
+    <div class="modal-body text-justify">
+      <p>
+        A <strong>Liturgia das Horas</strong> ou <strong>Ofício Divino</strong> é
+        a oração oficial da Igreja Católica que tem como objetivo
+        <strong>santificar</strong> o tempo ao longo do dia, unindo a oração
+        pessoal dos fiéis à oração contínua da Igreja inteira.<br /><br />
+        Estruturada em diferentes momentos, como o Ofício das Leituras,
+        Laudes, Hora Média (Terça, Sexta ou Noa), Vésperas e Completas, ela
+        é composta principalmente por salmos, hinos, leituras bíblicas e
+        preces, organizados segundo o calendário litúrgico.<br />
+        <br />Por meio dessa prática, a Igreja prolonga o louvor e a ação de
+        graças celebrados na Eucaristia, convidando clérigos, religiosos e
+        leigos a manterem uma vida de oração constante, em comunhão com
+        Cristo e com toda a comunidade cristã, ao longo do ritmo diário da vida.
+      </p>
+      <button class="btn-primary" id="btn-entendido-horas">
+        Entendido
+      </button>
+    </div>
+  </div>
+</div>
+    <div id="modalSobreSite" class="modal">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h3>o Site Liturgia | Ágape de Jovens</h3>
+          <button class="close-modal">✖</button>
+        </div>
+        <div class="modal-body">
+          <p>
+            Este sistema foi desenvolvido para facilitar o acesso à vida
+            litúrgica da nossa comunidade, o <strong>Ágape de Jovens</strong>.
+          </p>
+          <hr />
+          <p style="font-size: 0.8rem; color: var(--muted)">
+            Liturgia - 2026.
+          </p>
+        </div>
+      </div>
+    </div>
+
+    <script src="js/main.js"></script>
+  </body>
+</html>
