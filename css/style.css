@@ -395,3 +395,17 @@ main {
   display: block;
   line-height: 1;
 }
+
+.input-admin {
+  width: 100%;
+  padding: 12px;
+  margin-bottom: 10px;
+  border-radius: 10px;
+  border: 1px solid var(--border);
+  font-family: inherit;
+}
+
+textarea.input-admin {
+  height: 80px;
+  resize: none;
+}

@@ -140,9 +140,47 @@
           <p style="font-size: 0.8rem; color: var(--muted)">
             Liturgia - 2026.
           </p>
+          <button id="btn-login-secreto" class="btn-secondary" style="margin-top: 20px; font-size: 0.7rem;">
+  Área do Coordenador (Restrito)
+</button>
         </div>
       </div>
     </div>
+
+    <div id="modalLogin" class="modal">
+  <div class="modal-content" style="max-height: 50vh; align-self: center; border-radius: 20px; width: 90%; margin: 0 auto;">
+    <div class="modal-header">
+      <h3>Acesso Coordenador</h3>
+      <button class="close-modal">✖</button>
+    </div>
+    <div class="modal-body">
+      <input type="email" id="login-email" placeholder="E-mail" class="input-admin">
+      <input type="password" id="login-senha" placeholder="Senha" class="input-admin">
+      <button id="btn-fazer-login" class="btn-primary">Entrar</button>
+    </div>
+  </div>
+</div>
+
+<div id="modalAdminAvisos" class="modal">
+  <div class="modal-content">
+    <div class="modal-header">
+      <h3>Painel de Avisos</h3>
+      <button class="close-modal">✖</button>
+    </div>
+    <div class="modal-body">
+      <textarea id="novo-aviso-texto" placeholder="Digite o aviso aqui..." class="input-admin"></textarea>
+      
+      <label style="display:block; margin: 10px 0 5px; font-weight: bold;">Expirar em:</label>
+      <input type="date" id="aviso-data-expiracao" class="input-admin" style="margin-bottom: 15px;">
+      
+      <button id="btn-salvar-aviso" class="btn-primary">Postar Aviso 🔥</button>
+      <hr>
+      <div id="meus-avisos-lista"></div>
+    </div>
+  </div>
+</div>
+
+<script type="module" src="js/main.js"></script>
 
     <script src="js/main.js"></script>
   </body>
