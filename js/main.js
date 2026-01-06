@@ -50,6 +50,8 @@ const configurarNotificacoes = async () => {
 };
 
 document.addEventListener("DOMContentLoaded", () => {
+
+
   // Ouvir mensagens com o site aberto (Foreground)
   onMessage(messaging, (payload) => {
     alert(`Novo Aviso do Ágape: ${payload.notification.body}`);
@@ -133,14 +135,17 @@ document.addEventListener("DOMContentLoaded", () => {
 
   // 3. SISTEMA DE AVISOS COM EXPIRAÇÃO AUTOMÁTICA
   const carregarAvisos = () => {
-    const container = document.getElementById("lista-avisos");
-    if (!container) return;
-    const hoje = new Date().toISOString().split("T")[0];
-    const q = query(
-      collection(db, "avisos"),
-      where("dataExpiracao", ">=", hoje),
-      orderBy("dataExpiracao", "asc")
-    );
+  const container = document.getElementById("lista-avisos");
+  if (!container) return;
+
+  // FORÇA A DATA LOCAL (Brasília) em vez de Londres (UTC)
+  const hoje = new Date().toLocaleDateString('en-CA'); 
+
+  const q = query(
+    collection(db, "avisos"),
+    where("dataExpiracao", ">=", hoje),
+    orderBy("dataExpiracao", "asc")
+  );
 
     onSnapshot(q, (snapshot) => {
       container.innerHTML = "";
@@ -159,10 +164,18 @@ document.addEventListener("DOMContentLoaded", () => {
 
   // GERENCIAMENTO DE AVISOS (Painel do Coordenador)
   const gerenciarAvisosPainel = () => {
-    const listaAdmin = document.getElementById("meus-avisos-lista");
-    if (!listaAdmin) return;
-    const q = query(collection(db, "avisos"), orderBy("dataExpiracao", "asc"));
+  const listaAdmin = document.getElementById("meus-avisos-lista");
+  if (!listaAdmin) return;
 
+  // 1. PEGA A DATA ATUAL DE BRASÍLIA
+  const hoje = new Date().toLocaleDateString('en-CA'); 
+
+  // 2. APLICA O FILTRO DE EXPIRAÇÃO (Igual ao da tela principal)
+  const q = query(
+    collection(db, "avisos"), 
+    where("dataExpiracao", ">=", hoje), // Só mostra o que não venceu
+    orderBy("dataExpiracao", "asc")
+  );
     onSnapshot(q, (snapshot) => {
       listaAdmin.innerHTML =
         "<h4 style='margin: 15px 0 10px;'>Gerenciar Avisos Ativos:</h4>";

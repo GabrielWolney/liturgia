@@ -449,3 +449,26 @@ textarea.input-admin {
   text-align: center;
 }
 
+/* Centraliza os textos e o badge */
+.tempo-info {
+  display: flex;
+  flex-direction: column;
+  align-items: center; /* Centraliza horizontalmente */
+  text-align: center;
+  flex: 1;
+}
+
+.cor-detalhe {
+  margin-top: 8px;
+  display: flex;
+  justify-content: center; /* Garante que o badge fique no meio */
+  width: 100%;
+}
+
+/* Ajuste opcional para o container principal se eles estiverem lado a lado */
+.tempo-container {
+  display: flex;
+  flex-direction: column; /* Empilha o círculo e o texto para um look mais moderno */
+  align-items: center;
+  gap: 15px;
+}
