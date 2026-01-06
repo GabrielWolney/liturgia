@@ -137,43 +137,42 @@ document.addEventListener("DOMContentLoaded", () => {
   const carregarAvisos = () => {
   const container = document.getElementById("lista-avisos");
   if (!container) return;
-
-  // FORÇA A DATA LOCAL (Brasília) em vez de Londres (UTC)
-  const hoje = new Date().toLocaleDateString('en-CA'); 
+  
+  // SOLUÇÃO: Pega a data local do usuário em formato AAAA-MM-DD
+  // Isso ignora se o servidor da Vercel está em Londres ou Japão.
+  const hojeLocal = new Date().toLocaleDateString('en-CA'); 
 
   const q = query(
     collection(db, "avisos"),
-    where("dataExpiracao", ">=", hoje),
+    where("dataExpiracao", ">=", hojeLocal),
     orderBy("dataExpiracao", "asc")
   );
 
-    onSnapshot(q, (snapshot) => {
-      container.innerHTML = "";
-      if (snapshot.empty) {
-        container.innerHTML =
-          "<li style='text-align:center; color:gray; font-size:0.9rem;'>Nenhum aviso ativo no momento.</li>";
-        return;
-      }
-      snapshot.forEach((doc) => {
-        const li = document.createElement("li");
-        li.innerText = doc.data().texto;
-        container.appendChild(li);
-      });
+  onSnapshot(q, (snapshot) => {
+    container.innerHTML = "";
+    if (snapshot.empty) {
+      container.innerHTML = "<li style='text-align:center; color:gray;'>Nenhum aviso ativo.</li>";
+      return;
+    }
+    snapshot.forEach((doc) => {
+      const li = document.createElement("li");
+      li.innerText = doc.data().texto;
+      container.appendChild(li);
     });
-  };
+  });
+};
 
   // GERENCIAMENTO DE AVISOS (Painel do Coordenador)
   const gerenciarAvisosPainel = () => {
   const listaAdmin = document.getElementById("meus-avisos-lista");
   if (!listaAdmin) return;
+  
+  const hojeLocal = new Date().toLocaleDateString('en-CA');
 
-  // 1. PEGA A DATA ATUAL DE BRASÍLIA
-  const hoje = new Date().toLocaleDateString('en-CA'); 
-
-  // 2. APLICA O FILTRO DE EXPIRAÇÃO (Igual ao da tela principal)
+  // Filtra para mostrar o que está ativo hoje no seu fuso horário
   const q = query(
     collection(db, "avisos"), 
-    where("dataExpiracao", ">=", hoje), // Só mostra o que não venceu
+    where("dataExpiracao", ">=", hojeLocal),
     orderBy("dataExpiracao", "asc")
   );
     onSnapshot(q, (snapshot) => {
