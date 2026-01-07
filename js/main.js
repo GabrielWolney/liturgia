@@ -1,8 +1,31 @@
 // 1. IMPORTS NO TOPO (OBRIGATÓRIO)
 import { initializeApp } from "https://www.gstatic.com/firebasejs/12.7.0/firebase-app.js";
-import { getFirestore, collection, addDoc, query, orderBy, onSnapshot, where, deleteDoc, doc, setDoc } from "https://www.gstatic.com/firebasejs/12.7.0/firebase-firestore.js";
-import { getAuth, signInWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/12.7.0/firebase-auth.js";
-import { getMessaging, getToken, onMessage } from "https://www.gstatic.com/firebasejs/12.7.0/firebase-messaging.js";
+import {
+  getFirestore,
+  collection,
+  addDoc,
+  query,
+  orderBy,
+  onSnapshot,
+  where,
+  deleteDoc,
+  doc,
+  setDoc,
+} from "https://www.gstatic.com/firebasejs/12.7.0/firebase-firestore.js";
+import {
+  getAuth,
+  signInWithEmailAndPassword,
+} from "https://www.gstatic.com/firebasejs/12.7.0/firebase-auth.js";
+import {
+  getMessaging,
+  getToken,
+  onMessage,
+} from "https://www.gstatic.com/firebasejs/12.7.0/firebase-messaging.js";
+// NOVO: Import do Analytics para análise de acessos
+import {
+  getAnalytics,
+  logEvent,
+} from "https://www.gstatic.com/firebasejs/12.7.0/firebase-analytics.js";
 
 // 2. CONFIGURAÇÃO
 const firebaseConfig = {
@@ -12,7 +35,7 @@ const firebaseConfig = {
   storageBucket: "agape-avisos.firebasestorage.app",
   messagingSenderId: "556421268172",
   appId: "1:556421268172:web:b9cb0955e3e95dd8e8f869",
-  measurementId: "G-ZMW9FY1H4N"
+  measurementId: "G-ZMW9FY1H4N",
 };
 
 // 3. INICIALIZAÇÃO (Nesta ordem exata)
@@ -20,10 +43,11 @@ const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
 const auth = getAuth(app);
 const messaging = getMessaging(app);
+const analytics = getAnalytics(app); // Inicialização do Analytics
 
 let dadosLiturgia = null;
 
-// --- NOVO: SISTEMA DE NOTIFICAÇÕES ---
+// --- SISTEMA DE NOTIFICAÇÕES ---
 const configurarNotificacoes = async () => {
   try {
     const permission = await Notification.requestPermission();
@@ -35,7 +59,6 @@ const configurarNotificacoes = async () => {
 
       if (token) {
         console.log("Token gerado:", token);
-        // Salva o token no Firestore para permitir o envio de notificações aos dispositivos
         await setDoc(doc(db, "tokens_notificacao", token), {
           token: token,
           ultimoAcesso: new Date(),
@@ -50,7 +73,8 @@ const configurarNotificacoes = async () => {
 };
 
 document.addEventListener("DOMContentLoaded", () => {
-
+  // Rastrear abertura do App no Analytics
+  logEvent(analytics, "page_view", { page_title: "Home Liturgia Ágape" });
 
   // Ouvir mensagens com o site aberto (Foreground)
   onMessage(messaging, (payload) => {
@@ -117,14 +141,23 @@ document.addEventListener("DOMContentLoaded", () => {
         if (elEmoji) elEmoji.innerText = simboloIcone;
 
         if (resumo) {
-          let htmlResumo = `<p>• 1ª Leitura</p><p>• Salmo</p>`;
+          let htmlResumo = `<p>• 1ª Leitura: <strong>${
+            dadosLiturgia.primeiraLeituraReferencia || ""
+          }</strong></p>`;
+          htmlResumo += `<p>• Salmo: <strong>${
+            dadosLiturgia.salmoReferencia || ""
+          }</strong></p>`;
           if (
             dadosLiturgia.segundaLeitura &&
             !dadosLiturgia.segundaLeitura.includes("Não há")
           ) {
-            htmlResumo += `<p>• 2ª Leitura</p>`;
+            htmlResumo += `<p>• 2ª Leitura: <strong>${
+              dadosLiturgia.segundaLeituraReferencia || ""
+            }</strong></p>`;
           }
-          htmlResumo += `<p>• Evangelho</p>`;
+          htmlResumo += `<p>• Evangelho: <strong>${
+            dadosLiturgia.evangelhoReferencia || ""
+          }</strong></p>`;
           resumo.innerHTML = htmlResumo;
         }
       }
@@ -135,46 +168,44 @@ document.addEventListener("DOMContentLoaded", () => {
 
   // 3. SISTEMA DE AVISOS COM EXPIRAÇÃO AUTOMÁTICA
   const carregarAvisos = () => {
-  const container = document.getElementById("lista-avisos");
-  if (!container) return;
-  
-  // SOLUÇÃO: Pega a data local do usuário em formato AAAA-MM-DD
-  // Isso ignora se o servidor da Vercel está em Londres ou Japão.
-  const hojeLocal = new Date().toLocaleDateString('en-CA'); 
+    const container = document.getElementById("lista-avisos");
+    if (!container) return;
 
-  const q = query(
-    collection(db, "avisos"),
-    where("dataExpiracao", ">=", hojeLocal),
-    orderBy("dataExpiracao", "asc")
-  );
+    const hojeLocal = new Date().toLocaleDateString("en-CA");
 
-  onSnapshot(q, (snapshot) => {
-    container.innerHTML = "";
-    if (snapshot.empty) {
-      container.innerHTML = "<li style='text-align:center; color:gray;'>Nenhum aviso ativo.</li>";
-      return;
-    }
-    snapshot.forEach((doc) => {
-      const li = document.createElement("li");
-      li.innerText = doc.data().texto;
-      container.appendChild(li);
+    const q = query(
+      collection(db, "avisos"),
+      where("dataExpiracao", ">=", hojeLocal),
+      orderBy("dataExpiracao", "asc")
+    );
+
+    onSnapshot(q, (snapshot) => {
+      container.innerHTML = "";
+      if (snapshot.empty) {
+        container.innerHTML =
+          "<li style='text-align:center; color:gray;'>Nenhum aviso ativo.</li>";
+        return;
+      }
+      snapshot.forEach((doc) => {
+        const li = document.createElement("li");
+        li.innerText = doc.data().texto;
+        container.appendChild(li);
+      });
     });
-  });
-};
+  };
 
   // GERENCIAMENTO DE AVISOS (Painel do Coordenador)
   const gerenciarAvisosPainel = () => {
-  const listaAdmin = document.getElementById("meus-avisos-lista");
-  if (!listaAdmin) return;
-  
-  const hojeLocal = new Date().toLocaleDateString('en-CA');
+    const listaAdmin = document.getElementById("meus-avisos-lista");
+    if (!listaAdmin) return;
 
-  // Filtra para mostrar o que está ativo hoje no seu fuso horário
-  const q = query(
-    collection(db, "avisos"), 
-    where("dataExpiracao", ">=", hojeLocal),
-    orderBy("dataExpiracao", "asc")
-  );
+    const hojeLocal = new Date().toLocaleDateString("en-CA");
+
+    const q = query(
+      collection(db, "avisos"),
+      where("dataExpiracao", ">=", hojeLocal),
+      orderBy("dataExpiracao", "asc")
+    );
     onSnapshot(q, (snapshot) => {
       listaAdmin.innerHTML =
         "<h4 style='margin: 15px 0 10px;'>Gerenciar Avisos Ativos:</h4>";
@@ -209,7 +240,7 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   };
 
-  // 4. LÓGICA DOS MODAIS (RESTAURADO COMPLETO)
+  // 4. LÓGICA DOS MODAIS E CLIQUE
   const setupClick = (id, fn) => {
     const el = document.getElementById(id);
     if (el) el.onclick = fn;
@@ -217,6 +248,12 @@ document.addEventListener("DOMContentLoaded", () => {
 
   setupClick("btn-abrir-liturgia", () => {
     if (!dadosLiturgia) return alert("Aguarde o carregamento...");
+
+    // Rastrear interesse na liturgia completa
+    logEvent(analytics, "visualizou_liturgia_completa", {
+      liturgia_titulo: dadosLiturgia.liturgia,
+    });
+
     const modal = document.getElementById("modalGeral");
     const corpo = document.getElementById("modal-corpo");
     const titulo = document.getElementById("modal-titulo");
@@ -237,25 +274,25 @@ document.addEventListener("DOMContentLoaded", () => {
       };
 
       let html = `<div class="leitura-bloco"><h4>1ª Leitura</h4><p><small>${
-        dadosLiturgia.primeiraLeitura.referencia || ""
+        dadosLiturgia.primeiraLeituraReferencia || ""
       }</small></p><p>${formatarTexto(
         dadosLiturgia.primeiraLeitura
       )}</p></div><hr>`;
       html += `<div class="leitura-bloco"><h4>Salmo Responsorial</h4><p><small>${
-        dadosLiturgia.salmo.referencia || ""
+        dadosLiturgia.salmoReferencia || ""
       }</small></p><p>${formatarTexto(dadosLiturgia.salmo)}</p></div><hr>`;
       if (
         dadosLiturgia.segundaLeitura &&
         !dadosLiturgia.segundaLeitura.includes("Não há")
       ) {
         html += `<div class="leitura-bloco"><h4>2ª Leitura</h4><p><small>${
-          dadosLiturgia.segundaLeitura.referencia || ""
+          dadosLiturgia.segundaLeituraReferencia || ""
         }</small></p><p>${formatarTexto(
           dadosLiturgia.segundaLeitura
         )}</p></div><hr>`;
       }
       html += `<div class="leitura-bloco"><h4>Evangelho</h4><p><small>${
-        dadosLiturgia.evangelho.referencia || ""
+        dadosLiturgia.evangelhoReferencia || ""
       }</small></p><p>${formatarTexto(dadosLiturgia.evangelho)}</p></div>`;
       corpo.innerHTML = html;
       modal.style.display = "flex";
@@ -263,6 +300,9 @@ document.addEventListener("DOMContentLoaded", () => {
   });
 
   window.abrirHora = (tipo) => {
+    // Rastrear uso da Liturgia das Horas
+    logEvent(analytics, "rezou_liturgia_horas", { tipo_hora: tipo });
+
     const modal = document.getElementById("modalGeral");
     const corpo = document.getElementById("modal-corpo");
     const titulo = document.getElementById("modal-titulo");
@@ -430,18 +470,18 @@ document.addEventListener("DOMContentLoaded", () => {
     const hoje = misterios[diaSemana];
     tituloEl.innerText = hoje.titulo;
     descEl.innerText = hoje.desc;
-    // No final de todas as suas inicializações dentro do DOMContentLoaded
-// Coloque isso no final do seu document.addEventListener("DOMContentLoaded", ...)
-setTimeout(() => {
-  const splash = document.getElementById('splash-screen');
-  if (splash) {
-    splash.style.opacity = '0';
-    setTimeout(() => splash.remove(), 500); 
-  }
-}, 1500); // 1.5s é um tempo elegante para a logo dar algumas voltas
+
+    // Splash Screen e Finalização
+    setTimeout(() => {
+      const splash = document.getElementById("splash-screen");
+      if (splash) {
+        splash.style.opacity = "0";
+        setTimeout(() => splash.remove(), 500);
+      }
+    }, 1500);
   };
 
-  // INICIAR
+  // INICIAR TODAS AS FUNÇÕES
   configurarTerco();
   configurarNavegação();
   configurarData();
