@@ -24,37 +24,33 @@ document.addEventListener("DOMContentLoaded", () => {
     alert(`Novo Aviso do Ágape: ${payload.notification.body}`);
   });
 
-  const tratarDadosApi = async () => {
+ const tratarDadosApi = async () => {
     const resumo = document.getElementById("resumo-leituras");
     try {
       dadosLiturgia = await buscarDadosApi();
+      
       const elSanto = document.getElementById("nome-santo");
       const elEmoji = document.getElementById("emoji-tempo");
       const elCirculo = document.getElementById("indicador-cor");
       const elBadge = document.getElementById("badge-cor");
 
       if (dadosLiturgia) {
-        if (elSanto)
-          elSanto.innerText = dadosLiturgia.liturgia || "Tempo Litúrgico";
+        if (elSanto) elSanto.innerText = dadosLiturgia.liturgia || "Tempo Litúrgico";
+
         const corAPI = (dadosLiturgia.cor || "Branco").toLowerCase();
         let classeCor = "verde";
         let simboloIcone = "🌱";
 
         if (corAPI.includes("branco") || corAPI.includes("dourado")) {
-          classeCor = "branco";
-          simboloIcone = "🙌🏼";
+          classeCor = "branco"; simboloIcone = "🙌🏼";
         } else if (corAPI.includes("verde")) {
-          classeCor = "verde";
-          simboloIcone = "🌱";
+          classeCor = "verde"; simboloIcone = "🌱";
         } else if (corAPI.includes("roxo") || corAPI.includes("violeta")) {
-          classeCor = "roxo";
-          simboloIcone = "🙏🏼";
+          classeCor = "roxo"; simboloIcone = "🙏🏼";
         } else if (corAPI.includes("vermelho")) {
-          classeCor = "vermelho";
-          simboloIcone = "✝️";
+          classeCor = "vermelho"; simboloIcone = "✝️";
         } else if (corAPI.includes("rosa")) {
-          classeCor = "rosa";
-          simboloIcone = "⏳";
+          classeCor = "rosa"; simboloIcone = "⏳";
         }
 
         if (elBadge) {
@@ -64,24 +60,29 @@ document.addEventListener("DOMContentLoaded", () => {
         if (elCirculo) elCirculo.className = `circulo-liturgico ${classeCor}`;
         if (elEmoji) elEmoji.innerText = simboloIcone;
 
+        // AQUI ESTAVA O ERRO: Agora acessamos .referencia dentro de cada objeto
+        // ... dentro de tratarDadosApi ...
         if (resumo) {
-          let htmlResumo = `<p>• 1ª Leitura: <strong>${
-            dadosLiturgia.primeiraLeituraReferencia || ""
-          }</strong></p>`;
-          htmlResumo += `<p>• Salmo: <strong>${
-            dadosLiturgia.salmoReferencia || ""
-          }</strong></p>`;
-          if (
-            dadosLiturgia.segundaLeitura &&
-            !dadosLiturgia.segundaLeitura.includes("Não há")
-          ) {
-            htmlResumo += `<p>• 2ª Leitura: <strong>${
-              dadosLiturgia.segundaLeituraReferencia || ""
-            }</strong></p>`;
+          // Extraindo as referências
+          const ref1 = dadosLiturgia.primeiraLeitura?.referencia || "Ver leitura";
+          const refSalmo = dadosLiturgia.salmo?.referencia || "Ver salmo";
+          const refEvangelho = dadosLiturgia.evangelho?.referencia || "Ver evangelho";
+          
+          // MUDANÇA: Adicionei style="text-align: center" na div pai
+          let htmlResumo = `<div style="text-align: center; display: flex; flex-direction: column; gap: 8px;">`;
+          
+          htmlResumo += `<span style="display: block;"><strong>1ª Leitura:</strong> ${ref1}</span>`;
+          htmlResumo += `<span style="display: block;"><strong>Salmo:</strong> ${refSalmo}</span>`;
+          
+          if (dadosLiturgia.segundaLeitura && !dadosLiturgia.segundaLeitura.includes("Não há")) {
+             const ref2 = dadosLiturgia.segundaLeitura?.referencia || "Ver leitura";
+             htmlResumo += `<span style="display: block;"><strong>2ª Leitura:</strong> ${ref2}</span>`;
           }
-          htmlResumo += `<p>• Evangelho: <strong>${
-            dadosLiturgia.evangelhoReferencia || ""
-          }</strong></p>`;
+          
+          htmlResumo += `<span style="display: block;"><strong>Evangelho:</strong> ${refEvangelho}</span>`;
+          
+          htmlResumo += `</div>`; // Fecha a div container
+          
           resumo.innerHTML = htmlResumo;
         }
       }
