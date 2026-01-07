@@ -1,7 +1,5 @@
-// 1. IMPORTS NO TOPO (OBRIGATÓRIO)
-import { initializeApp } from "https://www.gstatic.com/firebasejs/12.7.0/firebase-app.js";
+import { db, auth, messaging, analytics } from "./firebase-config.js";
 import {
-  getFirestore,
   collection,
   addDoc,
   query,
@@ -10,99 +8,26 @@ import {
   where,
   deleteDoc,
   doc,
-  setDoc,
 } from "https://www.gstatic.com/firebasejs/12.7.0/firebase-firestore.js";
-import {
-  getAuth,
-  signInWithEmailAndPassword,
-} from "https://www.gstatic.com/firebasejs/12.7.0/firebase-auth.js";
-import {
-  getMessaging,
-  getToken,
-  onMessage,
-} from "https://www.gstatic.com/firebasejs/12.7.0/firebase-messaging.js";
-// NOVO: Import do Analytics para análise de acessos
-import {
-  getAnalytics,
-  logEvent,
-} from "https://www.gstatic.com/firebasejs/12.7.0/firebase-analytics.js";
-
-// 2. CONFIGURAÇÃO
-const firebaseConfig = {
-  apiKey: "AIzaSyA8HrJeZ-QHGQHHGTn5-N7L_2CpSUd42gM",
-  authDomain: "agape-avisos.firebaseapp.com",
-  projectId: "agape-avisos",
-  storageBucket: "agape-avisos.firebasestorage.app",
-  messagingSenderId: "556421268172",
-  appId: "1:556421268172:web:b9cb0955e3e95dd8e8f869",
-  measurementId: "G-ZMW9FY1H4N",
-};
-
-// 3. INICIALIZAÇÃO (Nesta ordem exata)
-const app = initializeApp(firebaseConfig);
-const db = getFirestore(app);
-const auth = getAuth(app);
-const messaging = getMessaging(app);
-const analytics = getAnalytics(app); // Inicialização do Analytics
+import { signInWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/12.7.0/firebase-auth.js";
+import { onMessage } from "https://www.gstatic.com/firebasejs/12.7.0/firebase-messaging.js";
+import { logEvent } from "https://www.gstatic.com/firebasejs/12.7.0/firebase-analytics.js";
+import { configurarNotificacoes, buscarDadosApi } from "./services.js";
+import { configurarData, obterMisterioDoDia, setupClick } from "./utils.js";
 
 let dadosLiturgia = null;
 
-// --- SISTEMA DE NOTIFICAÇÕES ---
-const configurarNotificacoes = async () => {
-  try {
-    const permission = await Notification.requestPermission();
-    if (permission === "granted") {
-      const token = await getToken(messaging, {
-        vapidKey:
-          "BGj3cGIxl4_ysRQ5iXyazj8_gpMTe0_CW39i5O4gaqptTx-TlIQrxdAlO4SWBxGI8Pd9T4KuO-QSkqJp0MARLYg",
-      });
-
-      if (token) {
-        console.log("Token gerado:", token);
-        await setDoc(doc(db, "tokens_notificacao", token), {
-          token: token,
-          ultimoAcesso: new Date(),
-        });
-      }
-    }
-  } catch (err) {
-    console.warn(
-      "Aviso: Notificações não configuradas. Verifique se está em HTTPS ou localhost."
-    );
-  }
-};
-
 document.addEventListener("DOMContentLoaded", () => {
-  // Rastrear abertura do App no Analytics
   logEvent(analytics, "page_view", { page_title: "Home Liturgia Ágape" });
 
-  // Ouvir mensagens com o site aberto (Foreground)
   onMessage(messaging, (payload) => {
     alert(`Novo Aviso do Ágape: ${payload.notification.body}`);
   });
 
-  // 1. DATA DO TOPO
-  const configurarData = () => {
-    const el = document.getElementById("data-atual");
-    if (el) {
-      const hoje = new Date();
-      el.innerText = hoje.toLocaleDateString("pt-BR", {
-        weekday: "long",
-        day: "numeric",
-        month: "long",
-      });
-    }
-  };
-
-  // 2. BUSCA NA API E TRATAMENTO DE CORES/ÍCONES
-  const buscarDadosApi = async () => {
+  const tratarDadosApi = async () => {
     const resumo = document.getElementById("resumo-leituras");
     try {
-      const url = "https://liturgia.up.railway.app/";
-      const response = await fetch(url);
-      if (!response.ok) throw new Error("Erro na rede");
-      dadosLiturgia = await response.json();
-
+      dadosLiturgia = await buscarDadosApi();
       const elSanto = document.getElementById("nome-santo");
       const elEmoji = document.getElementById("emoji-tempo");
       const elCirculo = document.getElementById("indicador-cor");
@@ -111,7 +36,6 @@ document.addEventListener("DOMContentLoaded", () => {
       if (dadosLiturgia) {
         if (elSanto)
           elSanto.innerText = dadosLiturgia.liturgia || "Tempo Litúrgico";
-
         const corAPI = (dadosLiturgia.cor || "Branco").toLowerCase();
         let classeCor = "verde";
         let simboloIcone = "🌱";
@@ -166,19 +90,15 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   };
 
-  // 3. SISTEMA DE AVISOS COM EXPIRAÇÃO AUTOMÁTICA
   const carregarAvisos = () => {
     const container = document.getElementById("lista-avisos");
     if (!container) return;
-
     const hojeLocal = new Date().toLocaleDateString("en-CA");
-
     const q = query(
       collection(db, "avisos"),
       where("dataExpiracao", ">=", hojeLocal),
       orderBy("dataExpiracao", "asc")
     );
-
     onSnapshot(q, (snapshot) => {
       container.innerHTML = "";
       if (snapshot.empty) {
@@ -194,13 +114,10 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   };
 
-  // GERENCIAMENTO DE AVISOS (Painel do Coordenador)
   const gerenciarAvisosPainel = () => {
     const listaAdmin = document.getElementById("meus-avisos-lista");
     if (!listaAdmin) return;
-
     const hojeLocal = new Date().toLocaleDateString("en-CA");
-
     const q = query(
       collection(db, "avisos"),
       where("dataExpiracao", ">=", hojeLocal),
@@ -223,7 +140,6 @@ document.addEventListener("DOMContentLoaded", () => {
         `;
         listaAdmin.appendChild(item);
       });
-
       listaAdmin.querySelectorAll(".btn-excluir").forEach((btn) => {
         btn.onclick = async (e) => {
           const idAviso = e.currentTarget.getAttribute("data-id");
@@ -240,20 +156,11 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   };
 
-  // 4. LÓGICA DOS MODAIS E CLIQUE
-  const setupClick = (id, fn) => {
-    const el = document.getElementById(id);
-    if (el) el.onclick = fn;
-  };
-
   setupClick("btn-abrir-liturgia", () => {
     if (!dadosLiturgia) return alert("Aguarde o carregamento...");
-
-    // Rastrear interesse na liturgia completa
     logEvent(analytics, "visualizou_liturgia_completa", {
       liturgia_titulo: dadosLiturgia.liturgia,
     });
-
     const modal = document.getElementById("modalGeral");
     const corpo = document.getElementById("modal-corpo");
     const titulo = document.getElementById("modal-titulo");
@@ -272,7 +179,6 @@ document.addEventListener("DOMContentLoaded", () => {
         );
         return htmlFinal;
       };
-
       let html = `<div class="leitura-bloco"><h4>1ª Leitura</h4><p><small>${
         dadosLiturgia.primeiraLeituraReferencia || ""
       }</small></p><p>${formatarTexto(
@@ -300,44 +206,32 @@ document.addEventListener("DOMContentLoaded", () => {
   });
 
   window.abrirHora = (tipo) => {
-    // Rastrear uso da Liturgia das Horas
     logEvent(analytics, "rezou_liturgia_horas", { tipo_hora: tipo });
-
     const modal = document.getElementById("modalGeral");
     const corpo = document.getElementById("modal-corpo");
     const titulo = document.getElementById("modal-titulo");
-
     if (modal && corpo) {
       const infoHoras = {
         laudes: {
           titulo: "Laudes: Oração da Manhã",
-          desc: "As Laudes são destinadas a santificar o tempo da manhã. Elas celebram a Ressurreição do Senhor, que é a 'Luz verdadeira' e o 'Sol de Justiça'.",
+          desc: "As Laudes são destinadas a santificar o tempo da manhã...",
         },
         vesperas: {
           titulo: "Vésperas: Oração da Tarde",
-          desc: "As Vésperas são celebradas ao entardecer, quando o dia já declina. Fazemos memória da Redenção por meio da oração que sobe como incenso.",
+          desc: "As Vésperas são celebradas ao entardecer...",
         },
         completas: {
           titulo: "Completas: Oração antes do Repouso",
-          desc: "As Completas são a última oração do dia. É o momento do exame de consciência e da entrega confiante de nossa vida nas mãos de Deus.",
+          desc: "As Completas são a última oração do dia...",
         },
       };
-
       const selecao = infoHoras[tipo];
       titulo.innerText = selecao.titulo;
-      corpo.innerHTML = `
-            <div style="text-align:center; padding: 10px;">
-                <p style="margin-bottom: 25px; text-align: justify; line-height: 1.6; color: var(--text); font-style: italic;">"${selecao.desc}"</p>
-                <div style="background: #f8fafc; border-radius: 12px; padding: 15px; border: 1px solid #e2e8f0;">
-                    <p style="font-size: 0.85rem; font-weight: 700; margin-bottom: 10px; color: #CC0000;">▶️ REZAR AGORA</p>
-                    <a href="https://www.youtube.com/LiturgiadasHorasOnline" target="_blank" class="btn-primary" style="text-decoration:none; display:inline-block; width:auto; padding: 12px 25px; background: #FF0000; border-radius: 8px;">Abrir Canal no YouTube</a>
-                </div>
-            </div>`;
+      corpo.innerHTML = `<div style="text-align:center; padding: 10px;"><p style="margin-bottom: 25px; text-align: justify; line-height: 1.6; color: var(--text); font-style: italic;">"${selecao.desc}"</p><div style="background: #f8fafc; border-radius: 12px; padding: 15px; border: 1px solid #e2e8f0;"><p style="font-size: 0.85rem; font-weight: 700; margin-bottom: 10px; color: #CC0000;">▶️ REZAR AGORA</p><a href="https://www.youtube.com/LiturgiadasHorasOnline" target="_blank" class="btn-primary" style="text-decoration:none; display:inline-block; width:auto; padding: 12px 25px; background: #FF0000; border-radius: 8px;">Abrir Canal no YouTube</a></div></div>`;
       modal.style.display = "flex";
     }
   };
 
-  // Funções Administrativas
   setupClick("btn-fazer-login", async () => {
     const e = document.getElementById("login-email").value;
     const s = document.getElementById("login-senha").value;
@@ -369,7 +263,6 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   });
 
-  // Eventos de Navegação e Fechar
   setupClick("nav-inicio", (e) => {
     e.preventDefault();
     document.querySelector("main").scrollTo({ top: 0, behavior: "smooth" });
@@ -399,7 +292,6 @@ document.addEventListener("DOMContentLoaded", () => {
     if (e.target.classList.contains("modal")) fechar();
   };
 
-  // NAVEGAÇÃO E TERÇO
   const configurarNavegação = () => {
     const navItems = document.querySelectorAll(".nav-item");
     navItems.forEach((item) => {
@@ -432,46 +324,13 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   };
 
-  const configurarTerco = () => {
+  const configurarTercoUI = () => {
     const tituloEl = document.getElementById("titulo-misterio");
     const descEl = document.getElementById("descricao-misterio");
     if (!tituloEl || !descEl) return;
-    const diaSemana = new Date().getDay();
-    const misterios = {
-      0: {
-        titulo: "Mistérios Gloriosos",
-        desc: "Ressurreição, Ascensão, Vinda do Espírito Santo, Assunção e Coroação de Maria.",
-      },
-      1: {
-        titulo: "Mistérios Gozosos",
-        desc: "Anunciação, Visitação, Nascimento de Jesus, Apresentação e Encontro no Templo.",
-      },
-      2: {
-        titulo: "Mistérios Dolorosos",
-        desc: "Agonia no Horto, Flagelação, Coroação de Espinhos, Caminho do Calvário e Crucificação.",
-      },
-      3: {
-        titulo: "Mistérios Gloriosos",
-        desc: "Ressurreição, Ascensão, Vinda do Espírito Santo, Assunção e Coroação de Maria.",
-      },
-      4: {
-        titulo: "Mistérios Luminosos",
-        desc: "Batismo, Bodas de Caná, Anúncio do Reino, Transfiguração e Instituição da Eucaristia.",
-      },
-      5: {
-        titulo: "Mistérios Dolorosos",
-        desc: "Agonia no Horto, Flagelação, Coroação de Espinhos, Caminho do Calvário e Crucificação.",
-      },
-      6: {
-        titulo: "Mistérios Gozosos",
-        desc: "Anunciação, Visitação, Nascimento de Jesus, Apresentação e Encontro no Templo.",
-      },
-    };
-    const hoje = misterios[diaSemana];
+    const hoje = obterMisterioDoDia();
     tituloEl.innerText = hoje.titulo;
     descEl.innerText = hoje.desc;
-
-    // Splash Screen e Finalização
     setTimeout(() => {
       const splash = document.getElementById("splash-screen");
       if (splash) {
@@ -481,11 +340,10 @@ document.addEventListener("DOMContentLoaded", () => {
     }, 1500);
   };
 
-  // INICIAR TODAS AS FUNÇÕES
-  configurarTerco();
+  configurarTercoUI();
   configurarNavegação();
   configurarData();
   carregarAvisos();
-  buscarDadosApi();
+  tratarDadosApi();
   configurarNotificacoes();
 });
