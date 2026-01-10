@@ -1,19 +1,33 @@
 /* =========================================
-   1. VARIÁVEIS E TEMA
+   1. VARIÁVEIS E TEMA (EDITADO PARA DARK MODE)
    ========================================= */
 :root {
+  /* --- TEMA CLARO (SEU ORIGINAL) --- */
   --bg: #f1f5f9;
   --card-bg: #ffffff;
   --text: #1e293b;
   --muted: #64748b;
   --primary: #2563eb;
-  --primary-light: #dbeafe;
+  --primary-light: #dbeafe; /* Azul clarinho original */
   --border: #e2e8f0;
   --shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
 
   /* Layout */
   --nav-height: 70px;
   --header-max-width: 600px;
+}
+
+/* --- TEMA ESCURO (ADICIONADO) --- */
+[data-theme="dark"] {
+  --bg: #0f172a;        /* Azul Noturno */
+  --card-bg: #1e293b;   /* Card Escuro */
+  --text: #f8fafc;      /* Texto Claro */
+  --muted: #cbd5e1;     /* Texto Secundário Claro */
+  --border: #334155;    /* Bordas Escuras */
+  --shadow: none;       /* Sem sombra no escuro */
+  
+  /* Ajuste do botão azulzinho para não brilhar demais no escuro */
+  --primary-light: rgba(37, 99, 235, 0.35); 
 }
 
 /* =========================================
@@ -30,14 +44,17 @@ html,
 body {
   height: 100%;
   overflow: hidden;
-  background: var(--bg);
+  background: var(--bg); /* Já usa a variável */
   font-family: "Inter", -apple-system, BlinkMacSystemFont, sans-serif;
+  
+  /* Adicionado para suavizar a troca de tema */
+  transition: background-color 0.3s ease, color 0.3s ease;
 }
 
 body {
   display: flex;
   flex-direction: column;
-  color: var(--text);
+  color: var(--text); /* Já usa a variável */
 }
 
 /* =========================================
@@ -51,7 +68,7 @@ body {
   left: 0;
   width: 100vw;
   height: 100vh;
-  background-color: white;
+  background-color: white; /* Mantive branco fixo para não piscar */
   display: flex;
   justify-content: center;
   align-items: center;
@@ -74,10 +91,11 @@ body {
 
 /* Header */
 .topo {
-  background: var(--card-bg);
+  background: var(--card-bg); /* Mudança: Agora usa variável */
   border-bottom: 1px solid var(--border);
   flex-shrink: 0;
   z-index: 100;
+  transition: background-color 0.3s ease;
 }
 
 .header-container {
@@ -104,6 +122,20 @@ body {
   border-radius: 8px;
 }
 
+/* BOTÃO DE TEMA (Adicionado pois não tinha no original) */
+.btn-icon {
+    background: transparent;
+    border: none;
+    color: var(--text);
+    cursor: pointer;
+    padding: 8px;
+    border-radius: 50%;
+    transition: background 0.2s;
+}
+.btn-icon:hover {
+    background-color: var(--border);
+}
+
 /* =========================================
    4. ÁREA PRINCIPAL (MAIN)
    ========================================= */
@@ -111,7 +143,7 @@ main {
   flex: 1;
   overflow-y: auto;
   padding: 1rem;
-  padding-bottom: 100px !important; 
+  padding-bottom: 100px !important;
   -webkit-overflow-scrolling: touch;
   scroll-behavior: smooth;
 }
@@ -140,6 +172,7 @@ main {
   display: flex;
   flex-direction: column;
   align-items: center;
+  transition: background-color 0.3s ease;
 }
 
 .card h2 {
@@ -150,13 +183,15 @@ main {
   align-items: center;
   gap: 8px;
   text-align: center;
+  color: var(--text); /* Garante cor correta */
 }
 
-hr, .card-divider {
-  width: 60% !important;        
-  margin: 10px auto 5px auto !important; 
+hr,
+.card-divider {
+  width: 60% !important;
+  margin: 10px auto 5px auto !important;
   border: 0 !important;
-  border-top: 1px solid #e2e8f0 !important;
+  border-top: 1px solid var(--border) !important; /* Usa variável agora */
   opacity: 1 !important;
 }
 
@@ -199,59 +234,43 @@ hr, .card-divider {
 }
 
 .circulo-liturgico {
-    width: 80px;            /* Um pouco maior */
-    height: 80px;
-    border-radius: 22px;    /* A mágica do Squircle */
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    
-    border: none;           /* Removemos a borda grossa */
-    box-shadow: 0 4px 12px rgba(0,0,0,0.05); /* Sombra suave para destacar */
-    
-    transition: all 0.3s ease;
-    margin-bottom: 10px;    /* Respiro para o texto */
+  width: 80px;
+  height: 80px;
+  border-radius: 22px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: none;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+  transition: all 0.3s ease;
+  margin-bottom: 10px;
 }
 
-/* Classe para os PNGs litúrgicos (AJUSTADA) */
-/* Classe para os PNGs litúrgicos (AJUSTE FINO DE CENTRALIZAÇÃO) */
-/* Classe para os PNGs litúrgicos (LIMPA E PADRONIZADA) */
 .icone-liturgico-img {
   width: 100%;
   height: 100%;
   object-fit: contain;
   display: block;
-  
-  /* --- A CORREÇÃO DO VAZAMENTO --- */
-  /* Adiciona um espaço interno de 12px em volta do desenho */
-  padding: 5px; 
-  
-  text-indent: -9999px; 
+  padding: 5px;
+  text-indent: -9999px;
 }
 
+/* Cores Litúrgicas */
 .circulo-liturgico.verde { 
-    /* Um degradê sutil de esmeralda */
     background: linear-gradient(135deg, #10b981, #047857); 
-    /* Uma sombra verde brilhante (Glow) */
-    box-shadow: 0 8px 20px -5px rgba(16, 185, 129, 0.5); 
-    border: none;
+    box-shadow: 0 8px 20px -5px rgba(16, 185, 129, 0.5); border: none; 
 }
-
-/* TRUQUE DE MESTRE: Pinta o PNG de Branco SOMENTE no verde */
-.circulo-liturgico.verde .icone-liturgico-img {
-    filter: brightness(0) invert(1);
-    opacity: 0.95;
-}
-.circulo-liturgico.branco   { background: #f8fafc; color: #475569; box-shadow: 0 4px 12px rgba(0,0,0,0.08); } /* Sombra extra no branco */
+.circulo-liturgico.verde .icone-liturgico-img { filter: brightness(0) invert(1); opacity: 0.95; }
+.circulo-liturgico.branco { background: #f8fafc; color: #475569; box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08); }
 .circulo-liturgico.vermelho { background: #fee2e2; color: #991b1b; }
-.circulo-liturgico.roxo     { background: #f3e8ff; color: #6b21a8; }
-.circulo-liturgico.rosa     { background: #fdf2f8; color: #9d174d; }
+.circulo-liturgico.roxo { background: #f3e8ff; color: #6b21a8; }
+.circulo-liturgico.rosa { background: #fdf2f8; color: #9d174d; }
 
 #emoji-tempo {
-  font-size: 36px; 
+  font-size: 36px;
   display: block;
   line-height: 1;
-  font-variation-settings: 'FILL' 1, 'wght' 400, 'GRAD' 0, 'opsz' 40;
+  font-variation-settings: "FILL" 1, "wght" 400, "GRAD" 0, "opsz" 40;
 }
 
 .label-pequeno {
@@ -311,22 +330,29 @@ hr, .card-divider {
   margin-bottom: 5px;
 }
 #descricao-misterio {
-    /* Diminui de 1rem (padrão) para 0.9rem */
-    font-size: 0.85rem; 
-    
-    /* Aumenta um pouco o espaço entre as linhas para facilitar a leitura */
-    line-height: 1.6;  
-    
-    /* Garante que a cor seja a padrão do texto */
-    color: var(--text);
+  color: var(--muted); /* Usa variável */
+  font-size: clamp(0.7rem, 3.2vw, 0.9rem);
+  line-height: 1.6;
+  letter-spacing: -0.5px;
+  margin-left: -10px;
+  margin-right: -10px;
+  width: calc(100% + 20px);
+  text-align: center;
+  white-space: normal;
 }
 
-/* Garante que o título "Mistérios Gozosos", etc. continue destacado */
+@media (max-width: 380px) {
+  #descricao-misterio {
+    font-size: 0.75rem !important;
+    line-height: 1.4;
+  }
+}
+
 #titulo-misterio {
-    font-size: 1rem;
-    font-weight: 700;
-    margin-bottom: 8px;
-    color: var(--primary);
+  font-size: 1rem;
+  font-weight: 700;
+  margin-bottom: 8px;
+  color: var(--primary);
 }
 
 /* =========================================
@@ -360,8 +386,8 @@ hr, .card-divider {
 
 .btn-conhecer {
   text-decoration: none;
-  background: #f1f5f9;
-  color: var(--text);
+  background: transparent;
+  color: var(--primary);
   padding: 6px 12px;
   border-radius: 8px;
   font-size: 0.75rem;
@@ -398,39 +424,25 @@ hr, .card-divider {
 
 .btn-outline {
   width: auto !important;
-  display: inline-flex;        
+  display: inline-flex;
   align-items: center;
   justify-content: center;
-  gap: 8px;                   
-  
+  gap: 8px;
   background: transparent !important;
   border: 1px solid var(--primary);
   color: var(--primary);
-  
   border-radius: 20px;
-  padding: 6px 16px;          
+  padding: 6px 16px;
   font-size: 0.8rem;
   font-weight: 600;
-  
-  margin-top: 5px;              
+  margin-top: 5px;
   cursor: pointer;
   transition: all 0.2s ease;
 }
 
-.btn-outline .material-symbols-rounded {
-  font-size: 18px;            
-}
-
-.btn-outline:active {
-  transform: scale(0.96);
-  background: rgba(37, 99, 235, 0.05) !important;
-}
-
-
-.btn-outline.lido {
-  color: #22c55e !important;       
-  border-color: #22c55e !important;
-}
+.btn-outline .material-symbols-rounded { font-size: 18px; }
+.btn-outline:active { transform: scale(0.96); background: rgba(37, 99, 235, 0.05) !important; }
+.btn-outline.lido { color: #22c55e !important; border-color: #22c55e !important; }
 
 /* =========================================
    8. INPUTS E FORMULÁRIOS
@@ -442,12 +454,11 @@ hr, .card-divider {
   border-radius: 10px;
   border: 1px solid var(--border);
   font-family: inherit;
+  background: var(--card-bg); /* Adicionado para mudar no tema */
+  color: var(--text);
 }
 
-textarea.input-admin {
-  height: 80px;
-  resize: none;
-}
+textarea.input-admin { height: 80px; resize: none; }
 
 /* =========================================
    9. MODAIS
@@ -467,7 +478,7 @@ textarea.input-admin {
 }
 
 .modal-content {
-  background: white;
+  background: var(--card-bg); /* Mudança: Variável */
   width: 100%;
   max-height: 92vh;
   border-radius: 25px;
@@ -475,6 +486,7 @@ textarea.input-admin {
   flex-direction: column;
   animation: fadeIn 0.3s ease-out;
   position: relative;
+  border: 1px solid var(--border);
 }
 
 .modal-content-centered {
@@ -505,12 +517,7 @@ textarea.input-admin {
 }
 
 .modal-body strong { color: var(--primary); }
-.modal-body hr {
-  /* Linhas dentro do modal também seguem o padrão curto */
-  margin: 1.5rem auto !important;
-  opacity: 0.1;
-  width: 60%;
-}
+.modal-body hr { margin: 1.5rem auto !important; opacity: 0.1; width: 60%; }
 .text-justify { text-align: justify; }
 
 .close-modal {
@@ -521,6 +528,7 @@ textarea.input-admin {
   border-radius: 50%;
   cursor: pointer;
   font-weight: bold;
+  color: #1e293b;
 }
 
 /* =========================================
@@ -528,8 +536,8 @@ textarea.input-admin {
    ========================================= */
 .bottom-nav {
   height: 70px;
-  background: #ffffff;
-  border-top: 1px solid #e2e8f0;
+  background: var(--card-bg); /* Mudança: Agora segue o tema */
+  border-top: 1px solid var(--border); /* Mudança: Agora segue o tema */
   display: flex;
   justify-content: space-around;
   align-items: center;
@@ -538,6 +546,7 @@ textarea.input-admin {
   bottom: 0;
   width: 100%;
   z-index: 1000;
+  transition: background-color 0.3s ease;
 }
 
 .nav-item {
@@ -562,11 +571,8 @@ textarea.input-admin {
   font-weight: 600;
 }
 
-/* Estado Ativo */
 .nav-item.active { color: var(--primary); }
-.nav-item.active .material-symbols-rounded {
-  font-variation-settings: "FILL" 1, "wght" 400, "GRAD" 0, "opsz" 24;
-}
+.nav-item.active .material-symbols-rounded { font-variation-settings: "FILL" 1, "wght" 400, "GRAD" 0, "opsz" 24; }
 
 .nav-icon-wrapper {
   display: flex;
@@ -577,15 +583,11 @@ textarea.input-admin {
 #icon-horas { transition: all 0.5s ease-in-out; }
 
 /* =========================================
-   11. UTILITÁRIOS
+   11. UTILITÁRIOS E SKELETON
    ========================================= */
 .lista-limpa { list-style: none; }
-.lista-limpa li {
-  padding: 10px 0;
-  border-bottom: 1px solid var(--border);
-  font-size: 0.9rem;
-}
-/* Centraliza o botão de leitura */
+.lista-limpa li { padding: 10px 0; border-bottom: 1px solid var(--border); font-size: 0.9rem; }
+
 .feedback-leitura {
   text-align: center;
   display: flex;
@@ -594,61 +596,27 @@ textarea.input-admin {
 }
 #texto-contador-leituras {
   font-size: 0.8rem;
-  color: #666;
+  color: var(--muted);
   margin-top: 8px;
 }
 
-/* =========================================
-   SKELETON LOADING (Feedback Visual)
-   ========================================= */
-
-/* Classe base para a animação */
+/* Skeleton */
 .skeleton {
-    background: #f1f5f9; /* Cor base cinza claro */
-    background: linear-gradient(
-        90deg,
-        #f1f5f9 0px,
-        #e2e8f0 50%,
-        #f1f5f9 100%
-    );
-    background-size: 200% 100%;
-    animation: shimmer 1.5s infinite linear;
-    border-radius: 4px;
-    display: inline-block;
-    width: 100%; /* Ocupa o espaço disponível */
+  background: #f1f5f9;
+  background: linear-gradient(90deg, #f1f5f9 0px, #e2e8f0 50%, #f1f5f9 100%);
+  background-size: 200% 100%;
+  animation: shimmer 1.5s infinite linear;
+  border-radius: 4px;
+  display: inline-block;
+  width: 100%;
 }
 
-@keyframes shimmer {
-    0% { background-position: -200% 0; }
-    100% { background-position: 200% 0; }
-}
+@keyframes shimmer { 0% { background-position: -200% 0; } 100% { background-position: 200% 0; } }
 
-/* Variantes de tamanho para simular textos reais */
-.skeleton-title {
-    height: 24px;
-    width: 70%; /* Títulos não ocupam a linha toda */
-    margin: 5px auto;
-}
+.skeleton-title { height: 24px; width: 70%; margin: 5px auto; }
+.skeleton-text { height: 14px; margin-bottom: 8px; }
+.skeleton-text:last-child { width: 80%; }
+.skeleton-circle { width: 70px; height: 70px; border-radius: 50%; border: none; }
+.skeleton-badge { height: 20px; width: 80px; border-radius: 20px; display: inline-block; }
 
-.skeleton-text {
-    height: 14px;
-    margin-bottom: 8px;
-}
 
-.skeleton-text:last-child {
-    width: 80%; /* A última linha do parágrafo geralmente é menor */
-}
-
-.skeleton-circle {
-    width: 70px;
-    height: 70px;
-    border-radius: 50%;
-    border: none;
-}
-
-.skeleton-badge {
-    height: 20px;
-    width: 80px;
-    border-radius: 20px;
-    display: inline-block;
-}

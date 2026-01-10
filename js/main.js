@@ -39,6 +39,7 @@ async function initApp() {
   configurarData();
   configurarTercoUI();
   configurarIconeDinamicoHoras();
+  configurarTema(); // <--- NOVA CHAMADA DO DARK MODE AQUI
 
   // 2. Carregamento de Dados
   await tratarDadosApi();
@@ -62,6 +63,49 @@ async function initApp() {
 // =======================================================
 // LÓGICA DE UI E NAVEGAÇÃO
 // =======================================================
+
+/**
+ * Configura o Tema (Dark/Light Mode)
+ */
+function configurarTema() {
+  const btnTema = document.getElementById("btn-tema");
+  const html = document.documentElement;
+
+  // 1. Função interna para aplicar visualmente
+  function aplicarTema(tema) {
+    if (tema === "dark") {
+      html.setAttribute("data-theme", "dark");
+      if (btnTema)
+        btnTema.innerHTML =
+          '<span class="material-symbols-rounded">light_mode</span>';
+    } else {
+      html.setAttribute("data-theme", "light");
+      if (btnTema)
+        btnTema.innerHTML =
+          '<span class="material-symbols-rounded">dark_mode</span>';
+    }
+  }
+
+  // 2. Carregar Preferência Salva
+  const temaSalvo = localStorage.getItem("tema");
+  if (temaSalvo) {
+    aplicarTema(temaSalvo);
+  }
+
+  // 3. Evento de Clique
+  if (btnTema) {
+    btnTema.onclick = () => {
+      const temaAtual = html.getAttribute("data-theme");
+      if (temaAtual === "dark") {
+        aplicarTema("light");
+        localStorage.setItem("tema", "light");
+      } else {
+        aplicarTema("dark");
+        localStorage.setItem("tema", "dark");
+      }
+    };
+  }
+}
 
 /**
  * Atualiza o ícone da Liturgia das Horas baseado no horário do dia.
@@ -147,7 +191,7 @@ const configurarTercoUI = () => {
         ${hoje.desc.replace(/\n/g, "<br>")}
       </div>
       
-      <hr /> <div style="font-style: italic; color: #64748b; font-size: 0.85rem; padding-top: 5px; text-align: center;">
+      <hr /> <div class="citacao-misterio-footer" style="font-style: italic; font-size: 0.85rem; padding-top: 5px; text-align: center;">
         ${hoje.meditacao}
       </div>
     `;
@@ -169,76 +213,81 @@ const configurarTercoUI = () => {
  * Busca e renderiza os dados da Liturgia Diária.
  */
 async function tratarDadosApi() {
-    // 1. Mostra o carregamento (Skeletons) em TUDO (Liturgia + Terço)
-    renderizarSkeletons();
+  // 1. Mostra o carregamento (Skeletons) em TUDO (Liturgia + Terço)
+  renderizarSkeletons();
 
-    const resumo = document.getElementById("resumo-leituras");
-    
-    try {
-        // 2. Busca dados da API
-        dadosLiturgia = await buscarDadosApi();
+  const resumo = document.getElementById("resumo-leituras");
 
-        if (!dadosLiturgia) return;
+  try {
+    // 2. Busca dados da API
+    dadosLiturgia = await buscarDadosApi();
 
-        // 3. --- LITURGIA ---
-        // Configura Santo, Cor e Ícones
-        const elSanto = document.getElementById("nome-santo");
-        const elEmoji = document.getElementById("emoji-tempo");
-        const elCirculo = document.getElementById("indicador-cor");
-        const elBadge = document.getElementById("badge-cor");
+    if (!dadosLiturgia) return;
 
-        // Tratamento dos ícones/imagens (Aquele código que já fizemos)
-        const corAPI = (dadosLiturgia.cor || "Branco").toLowerCase();
-        
-        // Seus caminhos atualizados
-        const configCores = {
-            branco:   { classe: "branco",   img: "./liturgia-icons/branco.png" },
-            dourado:  { classe: "branco",   img: "./liturgia-icons/branco.png" },
-            verde:    { classe: "verde",    img: "./liturgia-icons/verde.png" },
-            roxo:     { classe: "roxo",     img: "./liturgia-icons/roxo.png" },
-            violeta:  { classe: "roxo",     img: "./liturgia-icons/roxo.png" },
-            vermelho: { classe: "vermelho", img: "./liturgia-icons/vermelho.png" },
-            rosa:     { classe: "rosa",     img: "./liturgia-icons/rosa.png" }
-        };
+    // 3. --- LITURGIA ---
+    // Configura Santo, Cor e Ícones
+    const elSanto = document.getElementById("nome-santo");
+    const elEmoji = document.getElementById("emoji-tempo");
+    const elCirculo = document.getElementById("indicador-cor");
+    const elBadge = document.getElementById("badge-cor");
 
-        const config = configCores[Object.keys(configCores).find(key => corAPI.includes(key))] || configCores.branco;
+    // Tratamento dos ícones/imagens
+    const corAPI = (dadosLiturgia.cor || "Branco").toLowerCase();
 
-        elSanto.innerText = dadosLiturgia.liturgia || "Tempo Litúrgico";
-        elBadge.innerText = dadosLiturgia.cor;
-        elBadge.className = `badge-cor ${config.classe}`; 
-        
-        // Atualiza o círculo e imagem
-        elCirculo.className = `circulo-liturgico ${config.classe}`; // Squircle e cor
-        elCirculo.classList.remove("skeleton", "skeleton-circle");
-        
-        elEmoji.style.display = "block";
-        elEmoji.innerHTML = `<img src="${config.img}" alt="${dadosLiturgia.cor}" class="icone-liturgico-img">`;
-        elEmoji.classList.remove("material-symbols-rounded");
+    const configCores = {
+      branco: { classe: "branco", img: "./liturgia-icons/branco.png" },
+      dourado: { classe: "branco", img: "./liturgia-icons/branco.png" },
+      verde: { classe: "verde", img: "./liturgia-icons/verde.png" },
+      roxo: { classe: "roxo", img: "./liturgia-icons/roxo.png" },
+      violeta: { classe: "roxo", img: "./liturgia-icons/roxo.png" },
+      vermelho: { classe: "vermelho", img: "./liturgia-icons/vermelho.png" },
+      rosa: { classe: "rosa", img: "./liturgia-icons/rosa.png" },
+    };
 
-        // Atualiza Resumo
-        if (resumo) {
-            const ref1 = dadosLiturgia.primeiraLeitura?.referencia || "---";
-            const refSalmo = dadosLiturgia.salmo?.referencia || "---";
-            const refEvangelho = dadosLiturgia.evangelho?.referencia || "---";
-            
-            let html = `<div style="text-align: center; line-height: 1.8;">
+    const config =
+      configCores[
+        Object.keys(configCores).find((key) => corAPI.includes(key))
+      ] || configCores.branco;
+
+    elSanto.innerText = dadosLiturgia.liturgia || "Tempo Litúrgico";
+    elBadge.innerText = dadosLiturgia.cor;
+    elBadge.className = `badge-cor ${config.classe}`;
+
+    // Atualiza o círculo e imagem
+    elCirculo.className = `circulo-liturgico ${config.classe}`;
+    elCirculo.classList.remove("skeleton", "skeleton-circle");
+
+    elEmoji.style.display = "block";
+    elEmoji.innerHTML = `<img src="${config.img}" alt="${dadosLiturgia.cor}" class="icone-liturgico-img">`;
+    elEmoji.classList.remove("material-symbols-rounded");
+
+    // Atualiza Resumo
+    if (resumo) {
+      const ref1 = dadosLiturgia.primeiraLeitura?.referencia || "---";
+      const refSalmo = dadosLiturgia.salmo?.referencia || "---";
+      const refEvangelho = dadosLiturgia.evangelho?.referencia || "---";
+
+      let html = `<div style="text-align: center; line-height: 1.8;">
                 <p><strong>1ª Leitura:</strong> ${ref1}</p>
                 <p><strong>Salmo:</strong> ${refSalmo}</p>`;
-            if (dadosLiturgia.segundaLeitura && !dadosLiturgia.segundaLeitura.includes("Não há")) {
-                html += `<p><strong>2ª Leitura:</strong> ${dadosLiturgia.segundaLeitura.referencia || "---"}</p>`;
-            }
-            html += `<p><strong>Evangelho:</strong> ${refEvangelho}</p></div>`;
-            resumo.innerHTML = html;
-        }
-
-        // 4. --- A CORREÇÃO (O PULO DO GATO) ---
-        // Chama a função do Terço para preencher o card (que estava com skeleton)
-        configurarTercoUI(); 
-
-    } catch (error) {
-        console.error("Erro:", error);
-        document.getElementById("nome-santo").innerText = "Erro ao carregar";
+      if (
+        dadosLiturgia.segundaLeitura &&
+        !dadosLiturgia.segundaLeitura.includes("Não há")
+      ) {
+        html += `<p><strong>2ª Leitura:</strong> ${
+          dadosLiturgia.segundaLeitura.referencia || "---"
+        }</p>`;
+      }
+      html += `<p><strong>Evangelho:</strong> ${refEvangelho}</p></div>`;
+      resumo.innerHTML = html;
     }
+
+    // 4. --- RECARREGA O TERÇO (CORREÇÃO) ---
+    configurarTercoUI();
+  } catch (error) {
+    console.error("Erro:", error);
+    document.getElementById("nome-santo").innerText = "Erro ao carregar";
+  }
 }
 
 // Função auxiliar para desenhar os retângulos cinzas
@@ -258,11 +307,11 @@ function renderizarSkeletons() {
   // Transforma o círculo num skeleton
   if (elCirculo) {
     elCirculo.className = "skeleton skeleton-circle";
-    elCirculo.style.border = "none"; // Remove borda colorida enquanto carrega
+    elCirculo.style.border = "none";
   }
-  if (elEmoji) elEmoji.style.display = "none"; // Esconde emoji enquanto carrega
+  if (elEmoji) elEmoji.style.display = "none";
 
-  // Skeleton do Resumo da Liturgia (simula 3 linhas de texto)
+  // Skeleton do Resumo da Liturgia
   const resumo = document.getElementById("resumo-leituras");
   if (resumo) {
     resumo.innerHTML = `
@@ -340,15 +389,11 @@ const ouvirContadorLeituras = () => {
 
 function atualizarEstadoBotaoLeitura(btn, lido) {
   if (lido) {
-    // Estado: Lido (Ícone Cheio + Texto Verde)
-    // check_circle = Ícone preenchido
     btn.innerHTML = `<span class="material-symbols-rounded" style="font-variation-settings: 'FILL' 1;">check_circle</span> <span>Leitura Concluída</span>`;
     btn.classList.add("lido");
     btn.style.color = "";
     btn.style.borderColor = "";
   } else {
-    // Estado: Não Lido (Ícone Contorno + Texto Azul)
-    // check_circle (sem FILL) ou bookmark_add
     btn.innerHTML = `<span class="material-symbols-rounded" style="font-variation-settings: 'FILL' 0;">check_circle</span> <span>Eu li as leituras</span>`;
     btn.classList.remove("lido");
     btn.style.color = "";
@@ -497,10 +542,46 @@ function abrirModalLiturgia() {
       dadosLiturgia.evangelho?.referencia || ""
     }</p><p>${formatarTexto(dadosLiturgia.evangelho)}</p></div>`;
 
+    // Botão de compartilhar no Modal
+    html += `
+        <div style="padding: 15px; border-top: 1px solid var(--border);">
+            <button id="btn-compartilhar" class="btn-primary" onclick="compartilharEvangelho()">
+                <span class="material-symbols-rounded" style="vertical-align: middle; margin-right: 5px;">share</span>
+                Compartilhar Evangelho
+            </button>
+        </div>
+    `;
+
     corpo.innerHTML = html;
     abrirModal("modalGeral");
   }
 }
+
+// FUNCIONALIDADE: COMPARTILHAMENTO NATIVO
+window.compartilharEvangelho = async function () {
+  if (!dadosLiturgia) return;
+
+  const texto = `📖 *Evangelho do Dia*\n\n${dadosLiturgia.liturgia}\n\nConfira a liturgia completa no App Ágape!\n${window.location.href}`;
+
+  if (navigator.share) {
+    try {
+      await navigator.share({
+        title: "Liturgia Diária - Ágape",
+        text: texto,
+        url: window.location.href,
+      });
+    } catch (err) {
+      console.log("Cancelado pelo usuário");
+    }
+  } else {
+    try {
+      await navigator.clipboard.writeText(texto);
+      alert("Link copiado!");
+    } catch (err) {
+      alert("Erro ao copiar.");
+    }
+  }
+};
 
 const gerenciarAvisosPainel = () => {
   const listaAdmin = document.getElementById("meus-avisos-lista");
