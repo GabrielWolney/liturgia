@@ -1,3 +1,6 @@
+/* =========================================
+   1. VARIÁVEIS E TEMA
+   ========================================= */
 :root {
   --bg: #f1f5f9;
   --card-bg: #ffffff;
@@ -7,8 +10,15 @@
   --primary-light: #dbeafe;
   --border: #e2e8f0;
   --shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+
+  /* Layout */
+  --nav-height: 70px;
+  --header-max-width: 600px;
 }
 
+/* =========================================
+   2. RESET E TIPOGRAFIA
+   ========================================= */
 * {
   margin: 0;
   padding: 0;
@@ -21,13 +31,45 @@ body {
   height: 100%;
   overflow: hidden;
   background: var(--bg);
+  font-family: "Inter", -apple-system, BlinkMacSystemFont, sans-serif;
 }
 
 body {
-  font-family: "Inter", -apple-system, sans-serif;
   display: flex;
   flex-direction: column;
   color: var(--text);
+}
+
+/* =========================================
+   3. COMPONENTES GLOBAIS
+   ========================================= */
+
+/* Splash Screen */
+#splash-screen {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background-color: white;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 999999;
+  overflow: hidden;
+}
+
+.splash-logo {
+  width: 100px;
+  height: 100px;
+  max-width: 100px;
+  object-fit: contain;
+  animation: girarLogo 2s linear infinite;
+}
+
+@keyframes girarLogo {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
 }
 
 /* Header */
@@ -37,14 +79,16 @@ body {
   flex-shrink: 0;
   z-index: 100;
 }
+
 .header-container {
-  max-width: 600px;
+  max-width: var(--header-max-width);
   margin: 0 auto;
   padding: 0.8rem 1rem;
   display: flex;
   align-items: center;
   justify-content: space-between;
 }
+
 .header-container h1 {
   flex: 1;
   text-align: center;
@@ -53,20 +97,25 @@ body {
   margin-right: -40px;
   color: var(--primary);
 }
+
 .logo-header {
   width: 38px;
   height: 38px;
   border-radius: 8px;
 }
 
-/* Main Area */
+/* =========================================
+   4. ÁREA PRINCIPAL (MAIN)
+   ========================================= */
 main {
   flex: 1;
   overflow-y: auto;
   padding: 1rem;
+  padding-bottom: 100px !important; 
   -webkit-overflow-scrolling: touch;
   scroll-behavior: smooth;
 }
+
 .data-atual {
   text-align: center;
   font-size: 0.8rem;
@@ -77,24 +126,22 @@ main {
   letter-spacing: 0.5px;
 }
 
-/* Cards */
+/* =========================================
+   5. CARDS E CONTEÚDO
+   ========================================= */
 .card {
   background: var(--card-bg);
   border-radius: 20px;
-  padding: 1.5rem;
+  padding: 20px;
   margin-bottom: 1rem;
   border: 1px solid var(--border);
   box-shadow: var(--shadow);
   text-align: center;
-    
-    /* Se você usa Flexbox no card, isso garante o centro horizontal */
-    display: flex;
-    flex-direction: column;
-    align-items: center; 
-    
-    /* Mantém o espaçamento interno */
-    padding: 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
+
 .card h2 {
   font-size: 0.95rem;
   font-weight: 700;
@@ -105,22 +152,129 @@ main {
   text-align: center;
 }
 
-/* Santo Layout */
-.santo-content {
+hr, .card-divider {
+  width: 60% !important;        
+  margin: 10px auto 5px auto !important; 
+  border: 0 !important;
+  border-top: 1px solid #e2e8f0 !important;
+  opacity: 1 !important;
+}
+
+.highlight-card {
+  animation: pulse-blue 1.5s ease-out;
+}
+
+@keyframes pulse-blue {
+  0% { transform: scale(1); box-shadow: 0 0 0 0 rgba(37, 99, 235, 0.4); border-color: var(--primary); }
+  30% { transform: scale(1.02); box-shadow: 0 0 20px 10px rgba(37, 99, 235, 0.2); border-color: var(--primary); }
+  100% { transform: scale(1); box-shadow: var(--shadow); border-color: var(--border); }
+}
+
+/* =========================================
+   6. COMPONENTES ESPECÍFICOS
+   ========================================= */
+
+/* Tempo Litúrgico */
+.section-tempo,
+.tempo-info,
+.tempo-container {
   display: flex;
   align-items: center;
+}
+
+.section-tempo,
+.tempo-info {
+  flex-direction: column;
+  text-align: center;
+}
+
+.tempo-container {
+  flex-direction: column;
   gap: 15px;
+  margin-bottom: 15px;
 }
-.santo-icon {
-  font-size: 2.5rem;
+
+.tempo-info {
+  flex: 1;
 }
+
+.circulo-liturgico {
+    width: 80px;            /* Um pouco maior */
+    height: 80px;
+    border-radius: 22px;    /* A mágica do Squircle */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    
+    border: none;           /* Removemos a borda grossa */
+    box-shadow: 0 4px 12px rgba(0,0,0,0.05); /* Sombra suave para destacar */
+    
+    transition: all 0.3s ease;
+    margin-bottom: 10px;    /* Respiro para o texto */
+}
+
+/* Classe para os PNGs litúrgicos (AJUSTADA) */
+/* Classe para os PNGs litúrgicos (AJUSTE FINO DE CENTRALIZAÇÃO) */
+/* Classe para os PNGs litúrgicos (LIMPA E PADRONIZADA) */
+.icone-liturgico-img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  display: block;
+  
+  /* --- A CORREÇÃO DO VAZAMENTO --- */
+  /* Adiciona um espaço interno de 12px em volta do desenho */
+  padding: 5px; 
+  
+  text-indent: -9999px; 
+}
+
+.circulo-liturgico.verde { 
+    /* Um degradê sutil de esmeralda */
+    background: linear-gradient(135deg, #10b981, #047857); 
+    /* Uma sombra verde brilhante (Glow) */
+    box-shadow: 0 8px 20px -5px rgba(16, 185, 129, 0.5); 
+    border: none;
+}
+
+/* TRUQUE DE MESTRE: Pinta o PNG de Branco SOMENTE no verde */
+.circulo-liturgico.verde .icone-liturgico-img {
+    filter: brightness(0) invert(1);
+    opacity: 0.95;
+}
+.circulo-liturgico.branco   { background: #f8fafc; color: #475569; box-shadow: 0 4px 12px rgba(0,0,0,0.08); } /* Sombra extra no branco */
+.circulo-liturgico.vermelho { background: #fee2e2; color: #991b1b; }
+.circulo-liturgico.roxo     { background: #f3e8ff; color: #6b21a8; }
+.circulo-liturgico.rosa     { background: #fdf2f8; color: #9d174d; }
+
+#emoji-tempo {
+  font-size: 36px; 
+  display: block;
+  line-height: 1;
+  font-variation-settings: 'FILL' 1, 'wght' 400, 'GRAD' 0, 'opsz' 40;
+}
+
+.label-pequeno {
+  font-size: 0.7rem;
+  text-transform: uppercase;
+  color: var(--muted);
+  font-weight: 700;
+  margin-bottom: 2px;
+}
+
 #nome-santo {
   font-size: 1.1rem;
   color: var(--text);
   margin-bottom: 4px;
 }
 
-/* Badges */
+.cor-detalhe {
+  margin-top: 8px;
+  display: flex;
+  justify-content: center;
+  width: 100%;
+}
+
 .badge-cor {
   padding: 4px 12px;
   border-radius: 20px;
@@ -128,200 +282,13 @@ main {
   font-weight: 800;
   text-transform: uppercase;
 }
-.verde {
-  background: #dcfce7;
-  color: #166534;
-}
-.roxo {
-  background: #f3e8ff;
-  color: #6b21a8;
-}
-.vermelho {
-  background: #fee2e2;
-  color: #991b1b;
-}
-.branco {
-  background: #f8fafc;
-  color: #475569;
-  border: 1px solid var(--border);
-}
+.badge-cor.verde { background: #dcfce7; color: #166534; }
+.badge-cor.branco { background: #f8fafc; color: #475569; border: 1px solid #e2e8f0; }
+.badge-cor.vermelho { background: #fee2e2; color: #991b1b; }
+.badge-cor.roxo { background: #f3e8ff; color: #6b21a8; }
+.badge-cor.rosa { background: #fdf2f8; color: #9d174d; }
 
-/* Botões */
-.btn-primary {
-  width: 100%;
-  background: var(--primary);
-  color: white;
-  border: none;
-  padding: 14px;
-  border-radius: 14px;
-  font-weight: 700;
-  cursor: pointer;
-  transition: 0.2s;
-  margin-top: 10px;
-}
-.btn-secondary {
-  width: 100%;
-  background: transparent;
-  color: var(--primary);
-  border: 1px solid var(--primary);
-  padding: 10px;
-  border-radius: 12px;
-  font-weight: 600;
-  font-size: 0.8rem;
-  margin-top: 12px;
-  cursor: pointer;
-}
-.botoes-horas {
-  display: flex;
-  gap: 10px;
-  margin-top: 10px;
-}
-.btn-hora {
-  flex: 1;
-  background: var(--primary-light);
-  color: var(--primary);
-  border: none;
-  padding: 12px;
-  border-radius: 12px;
-  font-weight: 700;
-  font-size: 0.8rem;
-  cursor: pointer;
-}
-.btn-hora:active,
-.btn-primary:active {
-  transform: scale(0.96);
-  opacity: 0.9;
-}
-.btn-conhecer {
-  text-decoration: none;
-  background: #f1f5f9;
-  color: var(--text);
-  padding: 6px 12px;
-  border-radius: 8px;
-  font-size: 0.75rem;
-  font-weight: 700;
-  border: 1px solid var(--border);
-  display: inline-block;
-  margin-top: 15px;
-  width: fit-content; /* Faz o botão não ocupar a largura toda */
-
-}
-
-/* Modais */
-.modal-body strong {
-  color: var(--primary);
-}
-.modal {
-  display: none;
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background: rgba(15, 23, 42, 0.6);
-  z-index: 2000;
-  justify-content: center;
-  /* Mudamos para center para o modal não ficar colado no topo ou base demais */
-  align-items: center; 
-  padding: 10px;
-}
-.modal-content {
-  background: white;
-  width: 100%;
-  /* No mobile, garantimos que ele não ultrapasse a tela e tenha respiro */
-  max-height: 90vh; 
-  border-radius: 25px; /* Arredondado em todos os cantos fica melhor centralizado */
-  display: flex;
-  flex-direction: column;
-  animation: fadeIn 0.3s ease-out;
-  position: relative;
-}
-@keyframes fadeIn {
-  from { opacity: 0; transform: scale(0.95); }
-  to { opacity: 1; transform: scale(1); }
-}
-.modal-header {
-  padding: 1.5rem;
-  border-bottom: 1px solid var(--border);
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-}
-.modal-body {
-  padding: 1.5rem;
-  overflow-y: auto;
-  /* Suaviza a rolagem no iPhone */
-  -webkit-overflow-scrolling: touch; 
-  flex: 1;
-}
-.modal-body hr {
-  margin: 1.5rem 0;
-  opacity: 0.1;
-}
-.text-justify {
-  text-align: justify;
-}
-.close-modal {
-  background: #f1f5f9;
-  border: none;
-  width: 32px;
-  height: 32px;
-  border-radius: 50%;
-  cursor: pointer;
-  font-weight: bold;
-}
-
-#modal-corpo {
-    padding: 1rem; /* Diminuir o padding no modal das horas ajuda no mobile */
-}
-
-/* Ajuste para o modal subir mais no celular e dar espaço ao iframe */
-.modal-content {
-    max-height: 92vh;
-}
-
-/* Nav */
-.bottom-nav {
-  height: 75px;
-  background: var(--card-bg);
-  border-top: 1px solid var(--border);
-  display: flex;
-  justify-content: space-around;
-  align-items: center;
-  padding-bottom: env(safe-area-inset-bottom);
-  flex-shrink: 0;
-  padding-left: 5px;
-  padding-right: 5px;
-
-}
-.nav-item {
-  text-decoration: none;
-  color: var(--muted);
-  font-size: 0.6rem;
-  font-weight: 700;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 4px;
-  gap: 2px;
-  flex: 1;
-}
-.nav-item span {
-  font-size: 1.2rem; /* Reduzi de 1.4rem para 1.2rem para caber melhor */
-}
-.nav-item.active {
-  color: var(--primary);
-}
-
-.lista-limpa {
-  list-style: none;
-}
-.lista-limpa li {
-  padding: 10px 0;
-  border-bottom: 1px solid var(--border);
-  font-size: 0.9rem;
-}
-
+/* Tipografia Liturgia */
 .leitura-bloco p {
   font-size: 0.95rem;
   line-height: 1.6;
@@ -334,88 +301,140 @@ main {
   margin-bottom: 5px;
 }
 
-.tempo-container {
-  display: flex;
-  align-items: center;
-  gap: 20px;
-  margin-bottom: 15px;
-}
-
-.circulo-liturgico {
-  width: 60px;
-  height: 60px;
-  border-radius: 50%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 1.8rem;
-  border: 3px solid var(--border);
-  transition: 0.3s;
-}
-
-.tempo-info .label-pequeno {
-  font-size: 0.7rem;
-  text-transform: uppercase;
-  color: var(--muted);
-  font-weight: 700;
-  margin-bottom: 2px;
-}
-
-.cor-detalhe {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  font-size: 0.8rem;
-  font-weight: 600;
-  color: var(--text);
-}
-
-.btn-secondary-outline {
-  display: block;
+/* UI Terço */
+#conteudo-terco {
   text-align: center;
-  text-decoration: none;
-  font-size: 0.8rem;
+  padding: 10px;
+}
+#titulo-misterio {
+  color: var(--primary);
+  margin-bottom: 5px;
+}
+#descricao-misterio {
+    /* Diminui de 1rem (padrão) para 0.9rem */
+    font-size: 0.85rem; 
+    
+    /* Aumenta um pouco o espaço entre as linhas para facilitar a leitura */
+    line-height: 1.6;  
+    
+    /* Garante que a cor seja a padrão do texto */
+    color: var(--text);
+}
+
+/* Garante que o título "Mistérios Gozosos", etc. continue destacado */
+#titulo-misterio {
+    font-size: 1rem;
+    font-weight: 700;
+    margin-bottom: 8px;
+    color: var(--primary);
+}
+
+/* =========================================
+   7. INTERAÇÃO E BOTÕES
+   ========================================= */
+.btn-primary {
+  width: 100%;
+  background: var(--primary);
+  color: white;
+  border: none;
+  padding: 14px;
+  border-radius: 14px;
   font-weight: 700;
+  cursor: pointer;
+  transition: 0.2s;
+  margin-top: 10px;
+}
+
+.btn-secondary {
+  width: 100%;
+  background: transparent;
   color: var(--primary);
   border: 1px solid var(--primary);
-  padding: 8px;
-  border-radius: 10px;
+  padding: 10px;
+  border-radius: 12px;
+  font-weight: 600;
+  font-size: 0.8rem;
+  margin-top: 12px;
+  cursor: pointer;
 }
 
-/* Cores aplicadas ao círculo */
-.circulo-liturgico.verde {
-  border-color: #166534;
-  background: #dcfce7;
-}
-.circulo-liturgico.branco {
-  border-color: #cbd5e1;
-  background: #ffffff;
-}
-.circulo-liturgico.vermelho {
-  border-color: #991b1b;
-  background: #fee2e2;
-}
-.circulo-liturgico.roxo {
-  border-color: #6b21a8;
-  background: #f3e8ff;
-}
-/* Cor Rosa (Gaudete/Laetare) */
-.circulo-liturgico.rosa {
-  border-color: #db2777;
-  background: #fdf2f8;
-}
-.badge-cor.rosa {
-  background: #fdf2f8;
-  color: #9d174d;
+.btn-conhecer {
+  text-decoration: none;
+  background: #f1f5f9;
+  color: var(--text);
+  padding: 6px 12px;
+  border-radius: 8px;
+  font-size: 0.75rem;
+  font-weight: 700;
+  border: 1px solid var(--border);
+  display: inline-block;
+  margin-top: 15px;
+  width: fit-content;
 }
 
-/* Ajuste no tamanho do símbolo para legibilidade */
-#emoji-tempo {
-  font-size: 2rem;
-  display: block;
-  line-height: 1;
+.botoes-horas {
+  display: flex;
+  gap: 10px;
+  margin-top: 10px;
 }
 
+.btn-hora {
+  flex: 1;
+  background: var(--primary-light);
+  color: var(--primary);
+  border: none;
+  padding: 12px;
+  border-radius: 12px;
+  font-weight: 700;
+  font-size: 0.8rem;
+  cursor: pointer;
+}
+
+.btn-hora:active,
+.btn-primary:active {
+  transform: scale(0.96);
+  opacity: 0.9;
+}
+
+.btn-outline {
+  width: auto !important;
+  display: inline-flex;        
+  align-items: center;
+  justify-content: center;
+  gap: 8px;                   
+  
+  background: transparent !important;
+  border: 1px solid var(--primary);
+  color: var(--primary);
+  
+  border-radius: 20px;
+  padding: 6px 16px;          
+  font-size: 0.8rem;
+  font-weight: 600;
+  
+  margin-top: 5px;              
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.btn-outline .material-symbols-rounded {
+  font-size: 18px;            
+}
+
+.btn-outline:active {
+  transform: scale(0.96);
+  background: rgba(37, 99, 235, 0.05) !important;
+}
+
+
+.btn-outline.lido {
+  color: #22c55e !important;       
+  border-color: #22c55e !important;
+}
+
+/* =========================================
+   8. INPUTS E FORMULÁRIOS
+   ========================================= */
 .input-admin {
   width: 100%;
   padding: 12px;
@@ -430,55 +449,206 @@ textarea.input-admin {
   resize: none;
 }
 
-/* Animação de destaque (Piscar) */
-.highlight-card {
-  animation: pulse-blue 1.5s ease-out;
+/* =========================================
+   9. MODAIS
+   ========================================= */
+.modal {
+  display: none;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(15, 23, 42, 0.6);
+  z-index: 2000;
+  justify-content: center;
+  align-items: center;
+  padding: 10px;
 }
 
-@keyframes pulse-blue {
-  0% {
-    transform: scale(1);
-    box-shadow: 0 0 0 0 rgba(37, 99, 235, 0.4);
-    border-color: var(--primary);
-  }
-  30% {
-    transform: scale(1.02);
-    box-shadow: 0 0 20px 10px rgba(37, 99, 235, 0.2);
-    border-color: var(--primary);
-  }
-  100% {
-    transform: scale(1);
-    box-shadow: var(--shadow);
-    border-color: var(--border);
-  }
-} 
-.section-tempo {
+.modal-content {
+  background: white;
+  width: 100%;
+  max-height: 92vh;
+  border-radius: 25px;
   display: flex;
   flex-direction: column;
-  align-items: center; /* Centraliza tudo horizontalmente */
-  text-align: center;
+  animation: fadeIn 0.3s ease-out;
+  position: relative;
 }
 
-/* Centraliza os textos e o badge */
-.tempo-info {
+.modal-content-centered {
+  max-height: 50vh;
+  align-self: center;
+  width: 90%;
+  margin: 0 auto;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: scale(0.95); }
+  to { opacity: 1; transform: scale(1); }
+}
+
+.modal-header {
+  padding: 1.5rem;
+  border-bottom: 1px solid var(--border);
   display: flex;
-  flex-direction: column;
-  align-items: center; /* Centraliza horizontalmente */
-  text-align: center;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.modal-body {
+  padding: 1.5rem;
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
   flex: 1;
 }
 
-.cor-detalhe {
-  margin-top: 8px;
-  display: flex;
-  justify-content: center; /* Garante que o badge fique no meio */
-  width: 100%;
+.modal-body strong { color: var(--primary); }
+.modal-body hr {
+  /* Linhas dentro do modal também seguem o padrão curto */
+  margin: 1.5rem auto !important;
+  opacity: 0.1;
+  width: 60%;
+}
+.text-justify { text-align: justify; }
+
+.close-modal {
+  background: #f1f5f9;
+  border: none;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  cursor: pointer;
+  font-weight: bold;
 }
 
-/* Ajuste opcional para o container principal se eles estiverem lado a lado */
-.tempo-container {
+/* =========================================
+   10. BOTTOM NAVIGATION
+   ========================================= */
+.bottom-nav {
+  height: 70px;
+  background: #ffffff;
+  border-top: 1px solid #e2e8f0;
   display: flex;
-  flex-direction: column; /* Empilha o círculo e o texto para um look mais moderno */
+  justify-content: space-around;
   align-items: center;
-  gap: 15px;
+  padding-bottom: env(safe-area-inset-bottom);
+  position: fixed;
+  bottom: 0;
+  width: 100%;
+  z-index: 1000;
+}
+
+.nav-item {
+  text-decoration: none;
+  color: var(--muted);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  flex: 1;
+  transition: all 0.3s ease;
+}
+
+.nav-item .material-symbols-rounded {
+  font-size: 24px;
+  margin-bottom: 4px;
+  font-variation-settings: "FILL" 0, "wght" 400, "GRAD" 0, "opsz" 24;
+}
+
+.nav-item span:not(.material-symbols-rounded) {
+  font-size: 10px;
+  font-weight: 600;
+}
+
+/* Estado Ativo */
+.nav-item.active { color: var(--primary); }
+.nav-item.active .material-symbols-rounded {
+  font-variation-settings: "FILL" 1, "wght" 400, "GRAD" 0, "opsz" 24;
+}
+
+.nav-icon-wrapper {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+#icon-horas { transition: all 0.5s ease-in-out; }
+
+/* =========================================
+   11. UTILITÁRIOS
+   ========================================= */
+.lista-limpa { list-style: none; }
+.lista-limpa li {
+  padding: 10px 0;
+  border-bottom: 1px solid var(--border);
+  font-size: 0.9rem;
+}
+/* Centraliza o botão de leitura */
+.feedback-leitura {
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+#texto-contador-leituras {
+  font-size: 0.8rem;
+  color: #666;
+  margin-top: 8px;
+}
+
+/* =========================================
+   SKELETON LOADING (Feedback Visual)
+   ========================================= */
+
+/* Classe base para a animação */
+.skeleton {
+    background: #f1f5f9; /* Cor base cinza claro */
+    background: linear-gradient(
+        90deg,
+        #f1f5f9 0px,
+        #e2e8f0 50%,
+        #f1f5f9 100%
+    );
+    background-size: 200% 100%;
+    animation: shimmer 1.5s infinite linear;
+    border-radius: 4px;
+    display: inline-block;
+    width: 100%; /* Ocupa o espaço disponível */
+}
+
+@keyframes shimmer {
+    0% { background-position: -200% 0; }
+    100% { background-position: 200% 0; }
+}
+
+/* Variantes de tamanho para simular textos reais */
+.skeleton-title {
+    height: 24px;
+    width: 70%; /* Títulos não ocupam a linha toda */
+    margin: 5px auto;
+}
+
+.skeleton-text {
+    height: 14px;
+    margin-bottom: 8px;
+}
+
+.skeleton-text:last-child {
+    width: 80%; /* A última linha do parágrafo geralmente é menor */
+}
+
+.skeleton-circle {
+    width: 70px;
+    height: 70px;
+    border-radius: 50%;
+    border: none;
+}
+
+.skeleton-badge {
+    height: 20px;
+    width: 80px;
+    border-radius: 20px;
+    display: inline-block;
 }

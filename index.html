@@ -1,55 +1,59 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
- <head>
+  <head>
     <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
-    
-    <link rel="icon" type="image/png" sizes="32x32" href="./favicon-32x32.png?v=1">
-    <link rel="apple-touch-icon" sizes="180x180" href="./apple-touch-icon.png?v=1">
-    
-    <link rel="manifest" href="./site.webmanifest?v=1">
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"
+    />
+    <meta
+      name="description"
+      content="Liturgia diária, orações e avisos para a comunidade Ágape de Jovens."
+    />
+    <meta name="theme-color" content="#ffffff" />
+
+    <link
+      rel="icon"
+      type="image/png"
+      sizes="32x32"
+      href="./favicon-32x32.png?v=1"
+    />
+    <link
+      rel="apple-touch-icon"
+      sizes="180x180"
+      href="./apple-touch-icon.png?v=1"
+    />
+    <link rel="manifest" href="./site.webmanifest?v=1" />
 
     <title>Liturgia | Ágape de Jovens</title>
+
     <link rel="stylesheet" href="css/style.css" />
-    
+    <link
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200"
+    />
 
-    <meta name="mobile-web-app-capable" content="yes">
-    <meta name="apple-mobile-web-app-capable" content="yes">
-    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-    <meta name="apple-mobile-web-app-title" content="Liturgia Ágape">
-</head>
+    <meta name="mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta
+      name="apple-mobile-web-app-status-bar-style"
+      content="black-translucent"
+    />
+    <meta name="apple-mobile-web-app-title" content="Liturgia Ágape" />
+  </head>
+
   <body>
-  <div id="splash-screen" style="
-    position: fixed !important;
-    top: 0 !important;
-    left: 0 !important;
-    width: 100vw !important;
-    height: 100vh !important;
-    background-color: white !important;
-    display: flex !important;
-    justify-content: center !important;
-    align-items: center !important;
-    z-index: 999999 !important;
-    overflow: hidden !important;">
-    
-    <img src="logo-agape.png" alt="Logo Ágape" style="
-        width: 100px !important; 
-        height: 100px !important;
-        max-width: 100px !important;
-        object-fit: contain !important;
-        animation: girarLogo 2s linear infinite !important;">
-</div>
+    <div id="splash-screen" aria-hidden="true">
+      <img
+        src="logo-agape.png"
+        alt="Logo Ágape Carregando"
+        class="splash-logo"
+      />
+    </div>
 
-<style>
-/* A animação precisa estar no bloco de style */
-@keyframes girarLogo {
-    from { transform: rotate(0deg); }
-    to { transform: rotate(360deg); }
-}
-</style>
     <header class="topo" id="home">
       <div class="header-container">
-        <img src="logo-agape.png" alt="Logo" class="logo-header" />
+        <img src="logo-agape.png" alt="Logo Ágape" class="logo-header" />
         <h1>Liturgia | Ágape de Jovens</h1>
         <div style="width: 40px"></div>
       </div>
@@ -58,61 +62,65 @@
     <main>
       <div id="data-atual" class="data-atual">Carregando data...</div>
 
-      <section class="card section-tempo" id="santo">
-        <div class="tempo-container">
-          <div id="indicador-cor" class="circulo-liturgico">
-            <span id="emoji-tempo"></span>
-          </div>
+      <section
+        class="card section-tempo"
+        id="santo"
+        aria-labelledby="label-tempo"
+      >
+        <div id="indicador-cor" class="circulo-liturgico">
+    <span id="emoji-tempo" class="material-symbols-rounded"></span>
+</div>
 
           <div class="tempo-info">
-  <p class="label-pequeno">Tempo Litúrgico</p>
-  <h2 id="nome-santo">Carregando...</h2>
-  <div class="cor-detalhe">
-    <span id="badge-cor" class="badge-cor">...</span>
-  </div>
-</div>
+            <p class="label-pequeno" id="label-tempo">Tempo Litúrgico</p>
+            <h2 id="nome-santo">Carregando...</h2>
+            <div class="cor-detalhe">
+              <span id="badge-cor" class="badge-cor">...</span>
+            </div>
+          </div>
+        </div>
         <a
           href="https://santo.cancaonova.com"
           target="_blank"
+          rel="noopener noreferrer"
           class="btn-conhecer"
         >
           Conhecer o Santo do Dia ↗
         </a>
       </section>
 
-     <section class="card" id="liturgia">
-    <h2>📖 Liturgia do Dia</h2>
-    
-    <div id="resumo-leituras" class="resumo-texto">
-        <p>Carregando leituras...</p>
-    </div>
+      <section class="card" id="liturgia">
+        <h2>Liturgia do Dia</h2>
 
-    <button class="btn-primary" id="btn-abrir-liturgia">
-        Ver Liturgia Completa
-    </button>
+        <div id="resumo-leituras" class="resumo-texto">
+          <p>Carregando leituras...</p>
+        </div>
 
-    <hr style="width: 60%; margin: 15px auto; border: 0; border-top: 1px solid #eee;">
-
-    <div class="feedback-leitura" style="text-align: center;">
-        <button id="btn-li-a-leitura" class="btn-secundario" style="background: none; border: 1px solid #007AFF; color: #007AFF; border-radius: 20px; padding: 5px 15px; cursor: pointer;">
-            Eu li as leituras
+        <button class="btn-primary" id="btn-abrir-liturgia">
+          Ver Liturgia Completa
         </button>
-        <p id="texto-contador-leituras" style="font-size: 0.8rem; color: #666; margin-top: 8px;">
-            ...
-        </p>
-    </div>
-</section>
+
+        <hr class="card-divider" />
+
+        <div class="feedback-leitura">
+          <button id="btn-li-a-leitura" class="btn-outline">
+            <span class="material-symbols-rounded">check_circle</span>
+            <span>Eu li as leituras</span>
+          </button>
+          <p id="texto-contador-leituras" class="text-small">...</p>
+        </div>
+      </section>
 
       <section class="card" id="terco">
-    <h2 >📿 Mistério do Dia</h2>
-    <div id="conteudo-terco" style="text-align: center; padding: 10px;">
-      <h3 id="titulo-misterio" style="color: var(--primary); margin-bottom: 5px;">Carregando...</h3>
-      <p id="descricao-misterio" style="font-size: 0.9rem; font-style: italic; color: var(--muted);"></p>
-    </div>
-  </section>
+        <h2>Mistério do Dia</h2>
+        <div id="conteudo-terco" class="conteudo-centralizado">
+          <h3 id="titulo-misterio" class="titulo-destaque">Carregando...</h3>
+          <p id="descricao-misterio" class="texto-descricao"></p>
+        </div>
+      </section>
 
       <section class="card" id="horas">
-        <h2>🙏 Liturgia das Horas</h2>
+        <h2>Liturgia das Horas</h2>
         <div class="botoes-horas">
           <button class="btn-hora" onclick="abrirHora('laudes')">Laudes</button>
           <button class="btn-hora" onclick="abrirHora('vesperas')">
@@ -123,39 +131,62 @@
           </button>
         </div>
         <button class="btn-primary" id="btn-explicar-horas">
-          O que é a Liturgia das Horas/Ofício Divino ?
+          O que é a Liturgia das Horas/Ofício Divino?
         </button>
       </section>
 
       <section class="card" id="avisos">
-        <h2>📢 Avisos</h2>
+        <h2>Avisos</h2>
         <ul id="lista-avisos" class="lista-limpa"></ul>
       </section>
     </main>
 
-   <nav class="bottom-nav">
-  <a href="#" class="nav-item" data-target="#liturgia"><span>📜</span>Liturgia</a>
-  <a href="#" class="nav-item" data-target="#terco"><span>📿</span>Terço</a>
-  <a href="#" class="nav-item" data-target="#horas"><span>🙏</span>Horas</a>
-  <a href="#" class="nav-item" data-target="#avisos" id="nav-avisos"><span>📢</span>Avisos</a>
-  <a href="#" class="nav-item" id="nav-sobre-site"><span>❓</span>Sobre</a>
-</nav>
+    <nav class="bottom-nav">
+      <a href="#" class="nav-item active" data-target="#liturgia">
+        <span class="material-symbols-rounded">book_5</span>
+        <span>Liturgia</span>
+      </a>
 
-    <div id="modalGeral" class="modal">
+      <a href="#" class="nav-item" data-target="#terco">
+        <span class="material-symbols-rounded">flare</span>
+        <span>Terço</span>
+      </a>
+
+      <a href="#" class="nav-item" data-target="#horas">
+        <div class="nav-icon-wrapper">
+          <span class="material-symbols-rounded" id="icon-horas">schedule</span>
+        </div>
+        <span>Horas</span>
+      </a>
+
+      <a href="#" class="nav-item" data-target="#avisos" id="nav-avisos">
+        <span class="material-symbols-rounded">notifications</span>
+        <span>Avisos</span>
+      </a>
+
+      <a href="#" class="nav-item" id="nav-sobre-site">
+        <span class="material-symbols-rounded">info</span>
+        <span>Sobre</span>
+      </a>
+    </nav>
+
+    <div id="modalGeral" class="modal" aria-hidden="true">
       <div class="modal-content">
         <div class="modal-header">
           <h3 id="modal-titulo">Conteúdo</h3>
-          <button class="close-modal">✖</button>
+          <button class="close-modal" aria-label="Fechar">&times;</button>
         </div>
         <div id="modal-corpo" class="modal-body"></div>
       </div>
     </div>
 
-    <div id="modalExplicacaoHoras" class="modal">
+    <div id="modalExplicacaoHoras" class="modal" aria-hidden="true">
       <div class="modal-content">
         <div class="modal-header">
           <h3>Sobre a Liturgia das Horas</h3>
-          <button id="btn-fechar-explicacao" class="close-modal">✖</button>
+          <button id="btn-fechar-explicacao" class="close-modal">
+            &times;
+          </button>
         </div>
         <div class="modal-body text-justify">
           <p>
@@ -165,14 +196,11 @@
             do dia, unindo a oração pessoal dos fiéis à oração contínua da
             Igreja inteira.<br /><br />
             Estruturada em diferentes momentos, como o Ofício das Leituras,
-            Laudes, Hora Média (Terça, Sexta ou Noa), Vésperas e Completas, ela
-            é composta principalmente por salmos, hinos, leituras bíblicas e
-            preces, organizados segundo o calendário litúrgico.<br />
-            <br />Por meio dessa prática, a Igreja prolonga o louvor e a ação de
-            graças celebrados na Eucaristia, convidando clérigos, religiosos e
-            leigos a manterem uma vida de oração constante, em comunhão com
-            Cristo e com toda a comunidade cristã, ao longo do ritmo diário da
-            vida.
+            Laudes, Hora Média, Vésperas e Completas, ela é composta
+            principalmente por salmos, hinos, leituras bíblicas e preces.<br /><br />
+            Por meio dessa prática, a Igreja prolonga o louvor celebrado na
+            Eucaristia, convidando todos a manterem uma vida de oração
+            constante.
           </p>
           <button class="btn-primary" id="btn-entendido-horas">
             Entendido
@@ -180,11 +208,12 @@
         </div>
       </div>
     </div>
-    <div id="modalSobreSite" class="modal">
+
+    <div id="modalSobreSite" class="modal" aria-hidden="true">
       <div class="modal-content">
         <div class="modal-header">
-          <h3>o Site Liturgia | Ágape de Jovens</h3>
-          <button class="close-modal">✖</button>
+          <h3>O Site Liturgia | Ágape de Jovens</h3>
+          <button class="close-modal">&times;</button>
         </div>
         <div class="modal-body">
           <p>
@@ -204,20 +233,11 @@
       </div>
     </div>
 
-    <div id="modalLogin" class="modal">
-      <div
-        class="modal-content"
-        style="
-          max-height: 50vh;
-          align-self: center;
-          border-radius: 20px;
-          width: 90%;
-          margin: 0 auto;
-        "
-      >
+    <div id="modalLogin" class="modal" aria-hidden="true">
+      <div class="modal-content modal-content-centered">
         <div class="modal-header">
           <h3>Acesso Coordenador</h3>
-          <button class="close-modal">✖</button>
+          <button class="close-modal">&times;</button>
         </div>
         <div class="modal-body">
           <input
@@ -225,23 +245,25 @@
             id="login-email"
             placeholder="E-mail"
             class="input-admin"
+            autocomplete="email"
           />
           <input
             type="password"
             id="login-senha"
             placeholder="Senha"
             class="input-admin"
+            autocomplete="current-password"
           />
           <button id="btn-fazer-login" class="btn-primary">Entrar</button>
         </div>
       </div>
     </div>
 
-    <div id="modalAdminAvisos" class="modal">
+    <div id="modalAdminAvisos" class="modal" aria-hidden="true">
       <div class="modal-content">
         <div class="modal-header">
           <h3>Painel de Avisos</h3>
-          <button class="close-modal">✖</button>
+          <button class="close-modal">&times;</button>
         </div>
         <div class="modal-body">
           <textarea
@@ -249,7 +271,6 @@
             placeholder="Digite o aviso aqui..."
             class="input-admin"
           ></textarea>
-
           <label style="display: block; margin: 10px 0 5px; font-weight: bold"
             >Expirar em:</label
           >
@@ -259,7 +280,6 @@
             class="input-admin"
             style="margin-bottom: 15px"
           />
-
           <button id="btn-salvar-aviso" class="btn-primary">
             Postar Aviso 🔥
           </button>
@@ -270,6 +290,5 @@
     </div>
 
     <script type="module" src="./js/main.js"></script>
-
   </body>
 </html>
