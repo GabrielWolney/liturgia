@@ -126,14 +126,25 @@ body {
 .btn-icon {
     background: transparent;
     border: none;
-    color: var(--text);
+    color: var(--text); /* ou var(--text-primary) dependendo de como ficou seu CSS final */
     cursor: pointer;
     padding: 8px;
     border-radius: 50%;
     transition: background 0.2s;
+
+    /* --- AS CORREÇÕES PARA NÃO PARECER "CLICADO" --- */
+    outline: none; /* Remove a borda azul/preta de foco */
+    -webkit-tap-highlight-color: transparent; /* Remove o quadrado cinza no celular */
+    user-select: none; /* Impede de selecionar o ícone como texto */
 }
+
 .btn-icon:hover {
     background-color: var(--border);
+}
+
+/* Garante que não fique cinza se ficar focado */
+.btn-icon:focus {
+    outline: none;
 }
 
 /* =========================================
