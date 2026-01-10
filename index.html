@@ -11,6 +11,7 @@
 
     <title>Liturgia | Ágape de Jovens</title>
     <link rel="stylesheet" href="css/style.css" />
+    
 
     <meta name="mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-capable" content="yes">
@@ -79,17 +80,28 @@
         </a>
       </section>
 
-      <section class="card" id="liturgia">
-        <h2>📖 Liturgia do Dia</h2>
-        <div id="resumo-leituras" class="resumo-texto">
-          <p>• 1ª Leitura</p>
-          <p>• Salmo</p>
-          <p>• Evangelho</p>
-        </div>
-        <button class="btn-primary" id="btn-abrir-liturgia">
-          Ver Liturgia Completa
+     <section class="card" id="liturgia">
+    <h2>📖 Liturgia do Dia</h2>
+    
+    <div id="resumo-leituras" class="resumo-texto">
+        <p>Carregando leituras...</p>
+    </div>
+
+    <button class="btn-primary" id="btn-abrir-liturgia">
+        Ver Liturgia Completa
+    </button>
+
+    <hr style="width: 60%; margin: 15px auto; border: 0; border-top: 1px solid #eee;">
+
+    <div class="feedback-leitura" style="text-align: center;">
+        <button id="btn-li-a-leitura" class="btn-secundario" style="background: none; border: 1px solid #007AFF; color: #007AFF; border-radius: 20px; padding: 5px 15px; cursor: pointer;">
+            Eu li as leituras
         </button>
-      </section>
+        <p id="texto-contador-leituras" style="font-size: 0.8rem; color: #666; margin-top: 8px;">
+            ...
+        </p>
+    </div>
+</section>
 
       <section class="card" id="terco">
     <h2 >📿 Mistério do Dia</h2>
