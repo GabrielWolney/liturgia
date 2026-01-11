@@ -1,14 +1,14 @@
 /* =========================================
-   1. VARIÁVEIS E TEMA (EDITADO PARA DARK MODE)
+   1. VARIÁVEIS E TEMA
    ========================================= */
 :root {
-  /* --- TEMA CLARO (SEU ORIGINAL) --- */
+  /* TEMA CLARO */
   --bg: #f1f5f9;
   --card-bg: #ffffff;
   --text: #1e293b;
   --muted: #64748b;
   --primary: #2563eb;
-  --primary-light: #dbeafe; /* Azul clarinho original */
+  --primary-light: #dbeafe;
   --border: #e2e8f0;
   --shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
 
@@ -17,17 +17,15 @@
   --header-max-width: 600px;
 }
 
-/* --- TEMA ESCURO (ADICIONADO) --- */
+/* TEMA ESCURO */
 [data-theme="dark"] {
-  --bg: #0f172a;        /* Azul Noturno */
-  --card-bg: #1e293b;   /* Card Escuro */
-  --text: #f8fafc;      /* Texto Claro */
-  --muted: #cbd5e1;     /* Texto Secundário Claro */
-  --border: #334155;    /* Bordas Escuras */
-  --shadow: none;       /* Sem sombra no escuro */
-  
-  /* Ajuste do botão azulzinho para não brilhar demais no escuro */
-  --primary-light: rgba(37, 99, 235, 0.35); 
+  --bg: #0f172a;
+  --card-bg: #1e293b;
+  --text: #f8fafc;
+  --muted: #cbd5e1;
+  --border: #334155;
+  --shadow: none;
+  --primary-light: rgba(37, 99, 235, 0.35);
 }
 
 /* =========================================
@@ -44,111 +42,123 @@ html,
 body {
   height: 100%;
   overflow: hidden;
-  background: var(--bg); /* Já usa a variável */
+  background: var(--bg);
   font-family: "Inter", -apple-system, BlinkMacSystemFont, sans-serif;
-  
-  /* Adicionado para suavizar a troca de tema */
   transition: background-color 0.3s ease, color 0.3s ease;
 }
 
 body {
   display: flex;
   flex-direction: column;
-  color: var(--text); /* Já usa a variável */
+  color: var(--text);
 }
 
 /* =========================================
    3. COMPONENTES GLOBAIS
    ========================================= */
-
-/* Splash Screen */
 #splash-screen {
   position: fixed;
   top: 0;
   left: 0;
   width: 100vw;
   height: 100vh;
-  background-color: white; /* Mantive branco fixo para não piscar */
+  background-color: white;
   display: flex;
   justify-content: center;
   align-items: center;
   z-index: 999999;
   overflow: hidden;
 }
-
 .splash-logo {
   width: 100px;
   height: 100px;
-  max-width: 100px;
   object-fit: contain;
   animation: girarLogo 2s linear infinite;
 }
-
 @keyframes girarLogo {
-  from { transform: rotate(0deg); }
-  to { transform: rotate(360deg); }
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
 }
 
-/* Header */
+/* =========================================
+   HEADER "APP NATIVO" (LOGO ESQ / TEXTO MEIO / BTN DIR)
+   ========================================= */
 .topo {
-  background: var(--card-bg); /* Mudança: Agora usa variável */
-  border-bottom: 1px solid var(--border);
-  flex-shrink: 0;
-  z-index: 100;
+  position: fixed;
+  top: 15px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 92%;
+  max-width: 450px;
+  height: 60px; /* Um pouco mais fina para ser elegante */
+  border-radius: 50px;
+  background: var(--card-bg);
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+  border: 1px solid var(--border);
+  z-index: 1100;
+  display: flex;
+  align-items: center;
   transition: background-color 0.3s ease;
 }
 
 .header-container {
-  max-width: var(--header-max-width);
-  margin: 0 auto;
-  padding: 0.8rem 1rem;
+  width: 100%;
+  height: 100%;
+  padding: 0 15px;
   display: flex;
   align-items: center;
-  justify-content: space-between;
+  justify-content: space-between; /* Joga Logo pra Esq e Botão pra Dir */
+  position: relative; /* Necessário para o título flutuar no meio */
 }
 
-.header-container h1 {
-  flex: 1;
-  text-align: center;
-  font-size: 1.1rem;
-  font-weight: 700;
-  margin-right: -40px;
-  color: var(--primary);
-}
-
+/* 1. LOGO (ESQUERDA) */
 .logo-header {
-  width: 38px;
-  height: 38px;
+  width: 32px;
+  height: 32px;
   border-radius: 8px;
+  object-fit: contain;
 }
 
-/* BOTÃO DE TEMA (Adicionado pois não tinha no original) */
-.btn-icon {
-    background: transparent;
-    border: none;
-    color: var(--text); /* ou var(--text-primary) dependendo de como ficou seu CSS final */
-    cursor: pointer;
-    padding: 8px;
-    border-radius: 50%;
-    transition: background 0.2s;
-
-    /* --- AS CORREÇÕES PARA NÃO PARECER "CLICADO" --- */
-    outline: none; /* Remove a borda azul/preta de foco */
-    -webkit-tap-highlight-color: transparent; /* Remove o quadrado cinza no celular */
-    user-select: none; /* Impede de selecionar o ícone como texto */
+/* 2. TÍTULO (CENTRO ABSOLUTO) */
+.header-container h1 {
+  position: absolute; /* O Pulo do Gato: Tira ele do fluxo */
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%); /* Centraliza exato */
+  
+  font-family: 'Poppins', sans-serif;
+  font-size: 0.9rem; /* Tamanho elegante */
+  font-weight: 800; /* Extra grosso */
+  color: var(--primary);
+  text-transform: uppercase;
+  letter-spacing: 2px; /* Espaçamento "Premium" */
+  margin: 0;
+  white-space: nowrap;
 }
 
-.btn-icon:hover {
-    background-color: var(--border);
+/* 3. BOTÃO (DIREITA) */
+#btn-tema {
+  background: transparent !important;
+  border: none !important;
+  padding: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--text);
+  cursor: pointer;
+  border-radius: 50%;
 }
 
-/* Garante que não fique cinza se ficar focado */
-.btn-icon:focus {
-    outline: none;
+/* Conteúdo */
+main {
+    padding-top: 100px !important;
 }
-
 /* =========================================
-   4. ÁREA PRINCIPAL (MAIN)
+   4. ÁREA PRINCIPAL E ABAS (NOVO)
    ========================================= */
 main {
   flex: 1;
@@ -159,6 +169,19 @@ main {
   scroll-behavior: smooth;
 }
 
+/* ESTILO DAS ABAS */
+.conteudo-aba {
+  animation: fadeIn 0.3s ease-out;
+}
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
 .data-atual {
   text-align: center;
   font-size: 0.8rem;
@@ -167,6 +190,29 @@ main {
   margin-bottom: 1rem;
   text-transform: uppercase;
   letter-spacing: 0.5px;
+}
+
+/* GRID DO MENU (NOVO) */
+.menu-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 15px;
+}
+.menu-item {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  padding: 20px;
+  cursor: pointer;
+  gap: 10px;
+}
+.menu-item:active {
+  transform: scale(0.98);
+}
+.menu-item span {
+  font-weight: 600;
+  font-size: 0.9rem;
 }
 
 /* =========================================
@@ -185,65 +231,32 @@ main {
   align-items: center;
   transition: background-color 0.3s ease;
 }
-
 .card h2 {
   font-size: 0.95rem;
   font-weight: 700;
   margin-bottom: 1rem;
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  text-align: center;
-  color: var(--text); /* Garante cor correta */
+  color: var(--text);
 }
-
 hr,
 .card-divider {
   width: 60% !important;
   margin: 10px auto 5px auto !important;
   border: 0 !important;
-  border-top: 1px solid var(--border) !important; /* Usa variável agora */
+  border-top: 1px solid var(--border) !important;
   opacity: 1 !important;
-}
-
-.highlight-card {
-  animation: pulse-blue 1.5s ease-out;
-}
-
-@keyframes pulse-blue {
-  0% { transform: scale(1); box-shadow: 0 0 0 0 rgba(37, 99, 235, 0.4); border-color: var(--primary); }
-  30% { transform: scale(1.02); box-shadow: 0 0 20px 10px rgba(37, 99, 235, 0.2); border-color: var(--primary); }
-  100% { transform: scale(1); box-shadow: var(--shadow); border-color: var(--border); }
 }
 
 /* =========================================
    6. COMPONENTES ESPECÍFICOS
    ========================================= */
-
-/* Tempo Litúrgico */
-.section-tempo,
-.tempo-info,
-.tempo-container {
-  display: flex;
-  align-items: center;
+.box-destaque-youtube {
+  background-color: var(--bg);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 15px;
+  margin-top: 15px;
+  color: var(--text);
 }
-
-.section-tempo,
-.tempo-info {
-  flex-direction: column;
-  text-align: center;
-}
-
-.tempo-container {
-  flex-direction: column;
-  gap: 15px;
-  margin-bottom: 15px;
-}
-
-.tempo-info {
-  flex: 1;
-}
-
 .circulo-liturgico {
   width: 80px;
   height: 80px;
@@ -253,58 +266,59 @@ hr,
   justify-content: center;
   border: none;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
-  transition: all 0.3s ease;
   margin-bottom: 10px;
+  transition: all 0.3s ease;
 }
-
 .icone-liturgico-img {
   width: 100%;
   height: 100%;
   object-fit: contain;
   display: block;
   padding: 5px;
-  text-indent: -9999px;
 }
 
 /* Cores Litúrgicas */
-.circulo-liturgico.verde { 
-    background: linear-gradient(135deg, #10b981, #047857); 
-    box-shadow: 0 8px 20px -5px rgba(16, 185, 129, 0.5); border: none; 
+.circulo-liturgico.verde {
+  background: linear-gradient(135deg, #10b981, #047857);
+  box-shadow: 0 8px 20px -5px rgba(16, 185, 129, 0.5);
 }
-.circulo-liturgico.verde .icone-liturgico-img { filter: brightness(0) invert(1); opacity: 0.95; }
-.circulo-liturgico.branco { background: #f8fafc; color: #475569; box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08); }
-.circulo-liturgico.vermelho { background: #fee2e2; color: #991b1b; }
-.circulo-liturgico.roxo { background: #f3e8ff; color: #6b21a8; }
-.circulo-liturgico.rosa { background: #fdf2f8; color: #9d174d; }
+.circulo-liturgico.verde .icone-liturgico-img {
+  filter: brightness(0) invert(1);
+  opacity: 0.95;
+}
+.circulo-liturgico.branco {
+  background: #f8fafc;
+  color: #475569;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+}
+.circulo-liturgico.vermelho {
+  background: #fee2e2;
+  color: #991b1b;
+}
+.circulo-liturgico.roxo {
+  background: #f3e8ff;
+  color: #6b21a8;
+}
+.circulo-liturgico.rosa {
+  background: #fdf2f8;
+  color: #9d174d;
+}
 
 #emoji-tempo {
   font-size: 36px;
   display: block;
-  line-height: 1;
-  font-variation-settings: "FILL" 1, "wght" 400, "GRAD" 0, "opsz" 40;
 }
-
 .label-pequeno {
   font-size: 0.7rem;
   text-transform: uppercase;
   color: var(--muted);
   font-weight: 700;
-  margin-bottom: 2px;
 }
-
 #nome-santo {
   font-size: 1.1rem;
   color: var(--text);
   margin-bottom: 4px;
 }
-
-.cor-detalhe {
-  margin-top: 8px;
-  display: flex;
-  justify-content: center;
-  width: 100%;
-}
-
 .badge-cor {
   padding: 4px 12px;
   border-radius: 20px;
@@ -312,62 +326,64 @@ hr,
   font-weight: 800;
   text-transform: uppercase;
 }
-.badge-cor.verde { background: #dcfce7; color: #166534; }
-.badge-cor.branco { background: #f8fafc; color: #475569; border: 1px solid #e2e8f0; }
-.badge-cor.vermelho { background: #fee2e2; color: #991b1b; }
-.badge-cor.roxo { background: #f3e8ff; color: #6b21a8; }
-.badge-cor.rosa { background: #fdf2f8; color: #9d174d; }
+.badge-cor.verde {
+  background: #dcfce7;
+  color: #166534;
+}
+.badge-cor.branco {
+  background: #f8fafc;
+  color: #475569;
+  border: 1px solid #e2e8f0;
+}
+.badge-cor.vermelho {
+  background: #fee2e2;
+  color: #991b1b;
+}
+.badge-cor.roxo {
+  background: #f3e8ff;
+  color: #6b21a8;
+}
+.badge-cor.rosa {
+  background: #fdf2f8;
+  color: #9d174d;
+}
+#texto-contador-leituras {
+  font-size: 0.7rem; /* Letra bem pequena */
+  color: var(--muted);
+  margin-top: 4px;
+  font-weight: 500;
+}
 
-/* Tipografia Liturgia */
+/* Tipografia */
 .leitura-bloco p {
   font-size: 0.95rem;
   line-height: 1.6;
   margin-bottom: 15px;
   text-align: justify;
 }
-
 .leitura-bloco h4 {
   color: var(--primary);
   margin-bottom: 5px;
 }
 
-/* UI Terço */
-#conteudo-terco {
-  text-align: center;
-  padding: 10px;
-}
+/* Terço */
 #titulo-misterio {
   color: var(--primary);
-  margin-bottom: 5px;
-}
-#descricao-misterio {
-  color: var(--muted); /* Usa variável */
-  font-size: clamp(0.7rem, 3.2vw, 0.9rem);
-  line-height: 1.6;
-  letter-spacing: -0.5px;
-  margin-left: -10px;
-  margin-right: -10px;
-  width: calc(100% + 20px);
-  text-align: center;
-  white-space: normal;
-}
-
-@media (max-width: 380px) {
-  #descricao-misterio {
-    font-size: 0.75rem !important;
-    line-height: 1.4;
-  }
-}
-
-#titulo-misterio {
+  margin-bottom: 8px;
   font-size: 1rem;
   font-weight: 700;
-  margin-bottom: 8px;
-  color: var(--primary);
+}
+#descricao-misterio {
+  color: var(--muted);
+  font-size: clamp(0.7rem, 3.2vw, 0.9rem);
+  line-height: 1.6;
+  margin: 0 -10px;
+  width: calc(100% + 20px);
+  text-align: center;
 }
 
 /* =========================================
-   7. INTERAÇÃO E BOTÕES
+   7. BOTÕES E INPUTS
    ========================================= */
 .btn-primary {
   width: 100%;
@@ -381,7 +397,6 @@ hr,
   transition: 0.2s;
   margin-top: 10px;
 }
-
 .btn-secondary {
   width: 100%;
   background: transparent;
@@ -394,7 +409,6 @@ hr,
   margin-top: 12px;
   cursor: pointer;
 }
-
 .btn-conhecer {
   text-decoration: none;
   background: transparent;
@@ -406,15 +420,13 @@ hr,
   border: 1px solid var(--border);
   display: inline-block;
   margin-top: 15px;
-  width: fit-content;
 }
-
 .botoes-horas {
   display: flex;
   gap: 10px;
   margin-top: 10px;
+  width: 100%;
 }
-
 .btn-hora {
   flex: 1;
   background: var(--primary-light);
@@ -426,53 +438,46 @@ hr,
   font-size: 0.8rem;
   cursor: pointer;
 }
-
-.btn-hora:active,
-.btn-primary:active {
-  transform: scale(0.96);
-  opacity: 0.9;
-}
-
 .btn-outline {
-  width: auto !important;
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  gap: 8px;
+  gap: 6px;
   background: transparent !important;
   border: 1px solid var(--primary);
   color: var(--primary);
-  border-radius: 20px;
-  padding: 6px 16px;
-  font-size: 0.8rem;
+  border-radius: 50px;
+  padding: 4px 20px;
+  font-size: 0.75rem;
   font-weight: 600;
   margin-top: 5px;
   cursor: pointer;
-  transition: all 0.2s ease;
+  width: auto !important;
 }
-
-.btn-outline .material-symbols-rounded { font-size: 18px; }
-.btn-outline:active { transform: scale(0.96); background: rgba(37, 99, 235, 0.05) !important; }
-.btn-outline.lido { color: #22c55e !important; border-color: #22c55e !important; }
-
-/* =========================================
-   8. INPUTS E FORMULÁRIOS
-   ========================================= */
+.btn-outline .material-symbols-rounded {
+  font-size: 16px !important; /* Força ele a ficar pequeno (16px) */
+  line-height: 1; /* Garante que não empurre o texto para baixo */
+}
+.btn-outline.lido {
+  color: #22c55e !important;
+  border-color: #22c55e !important;
+}
 .input-admin {
   width: 100%;
   padding: 12px;
   margin-bottom: 10px;
   border-radius: 10px;
   border: 1px solid var(--border);
-  font-family: inherit;
-  background: var(--card-bg); /* Adicionado para mudar no tema */
+  background: var(--card-bg);
   color: var(--text);
 }
-
-textarea.input-admin { height: 80px; resize: none; }
+textarea.input-admin {
+  height: 80px;
+  resize: none;
+}
 
 /* =========================================
-   9. MODAIS
+   8. MODAIS E BOTTOM NAV
    ========================================= */
 .modal {
   display: none;
@@ -487,31 +492,21 @@ textarea.input-admin { height: 80px; resize: none; }
   align-items: center;
   padding: 10px;
 }
-
 .modal-content {
-  background: var(--card-bg); /* Mudança: Variável */
+  background: var(--card-bg);
   width: 100%;
   max-height: 92vh;
   border-radius: 25px;
   display: flex;
   flex-direction: column;
-  animation: fadeIn 0.3s ease-out;
-  position: relative;
   border: 1px solid var(--border);
 }
-
 .modal-content-centered {
   max-height: 50vh;
-  align-self: center;
   width: 90%;
   margin: 0 auto;
+  align-self: center;
 }
-
-@keyframes fadeIn {
-  from { opacity: 0; transform: scale(0.95); }
-  to { opacity: 1; transform: scale(1); }
-}
-
 .modal-header {
   padding: 1.5rem;
   border-bottom: 1px solid var(--border);
@@ -519,18 +514,16 @@ textarea.input-admin { height: 80px; resize: none; }
   justify-content: space-between;
   align-items: center;
 }
-
 .modal-body {
   padding: 1.5rem;
   overflow-y: auto;
-  -webkit-overflow-scrolling: touch;
   flex: 1;
 }
-
-.modal-body strong { color: var(--primary); }
-.modal-body hr { margin: 1.5rem auto !important; opacity: 0.1; width: 60%; }
-.text-justify { text-align: justify; }
-
+.modal-body strong {
+  color: var(
+    --primary
+  ) !important; /* O !important garante que não fique branco */
+}
 .close-modal {
   background: #f1f5f9;
   border: none;
@@ -542,78 +535,85 @@ textarea.input-admin { height: 80px; resize: none; }
   color: #1e293b;
 }
 
-/* =========================================
-   10. BOTTOM NAVIGATION
-   ========================================= */
 .bottom-nav {
-  height: 70px;
-  background: var(--card-bg); /* Mudança: Agora segue o tema */
-  border-top: 1px solid var(--border); /* Mudança: Agora segue o tema */
+  /* Posição e Flutuação */
+  position: fixed;
+  bottom: 20px; /* Distância do fundo da tela */
+  left: 50%;
+  transform: translateX(-50%); /* Centraliza perfeitamente */
+
+  /* Tamanho e Forma */
+  width: 92%; /* Não encosta nas bordas laterais */
+  max-width: 450px; /* Limite para não ficar gigante em telas grandes */
+  height: 65px; /* Um pouco mais compacta */
+  border-radius: 50px; /* Borda totalmente redonda (Pill shape) */
+
+  /* Visual */
+  background: var(--card-bg); /* Respeita o Dark Mode */
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15); /* Sombra mais forte para destacar */
+  border: 1px solid var(--border); /* Borda sutil */
+
+  /* Layout interno */
   display: flex;
   justify-content: space-around;
   align-items: center;
-  padding-bottom: env(safe-area-inset-bottom);
-  position: fixed;
-  bottom: 0;
-  width: 100%;
+  padding: 0 5px; /* Respiro nas laterais */
   z-index: 1000;
-  transition: background-color 0.3s ease;
+
+  /* Suavização */
+  transition: all 0.3s ease;
+
+  /* Ajuste para iPhones sem botão (Home Indicator) */
+  margin-bottom: env(safe-area-inset-bottom);
 }
 
+/* Ajuste fino nos itens para ficarem centralizados na pílula */
 .nav-item {
-  text-decoration: none;
-  color: var(--muted);
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
   flex: 1;
-  transition: all 0.3s ease;
+  text-decoration: none;
+  color: var(--muted);
+  border-radius: 50%; /* Feedback de clique redondo */
+  height: 55px; /* Altura do toque */
+  transition: all 0.2s;
 }
 
+/* Efeito ao tocar */
+.nav-item:active { 
+  background-color: transparent !important;
+  transform: scale(0.95);
+}
+
+/* Ícone */
 .nav-item .material-symbols-rounded {
   font-size: 24px;
-  margin-bottom: 4px;
-  font-variation-settings: "FILL" 0, "wght" 400, "GRAD" 0, "opsz" 24;
-}
-
-.nav-item span:not(.material-symbols-rounded) {
-  font-size: 10px;
-  font-weight: 600;
-}
-
-.nav-item.active { color: var(--primary); }
-.nav-item.active .material-symbols-rounded { font-variation-settings: "FILL" 1, "wght" 400, "GRAD" 0, "opsz" 24; }
-
-.nav-icon-wrapper {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-#icon-horas { transition: all 0.5s ease-in-out; }
-
-/* =========================================
-   11. UTILITÁRIOS E SKELETON
-   ========================================= */
-.lista-limpa { list-style: none; }
-.lista-limpa li { padding: 10px 0; border-bottom: 1px solid var(--border); font-size: 0.9rem; }
-
-.feedback-leitura {
-  text-align: center;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-}
-#texto-contador-leituras {
-  font-size: 0.8rem;
+  margin-bottom: 2px;
   color: var(--muted);
-  margin-top: 8px;
+  transition: color 0.3s;
+}
+
+/* Texto */
+.nav-item span:not(.material-symbols-rounded) {
+  font-size: 9px; /* Texto levemente menor para caber bem */
+  font-weight: 600;
+  margin-top: 0;
+}
+
+/* Estado Ativo */
+.nav-item.active .material-symbols-rounded {
+  color: var(--primary);
+  font-variation-settings: "FILL" 1;
+  transform: translateY(-2px); /* Leve pulinho para cima */
+}
+.nav-item.active span {
+  color: var(--primary);
 }
 
 /* Skeleton */
 .skeleton {
-  background: #f1f5f9;
   background: linear-gradient(90deg, #f1f5f9 0px, #e2e8f0 50%, #f1f5f9 100%);
   background-size: 200% 100%;
   animation: shimmer 1.5s infinite linear;
@@ -621,13 +621,951 @@ textarea.input-admin { height: 80px; resize: none; }
   display: inline-block;
   width: 100%;
 }
+@keyframes shimmer {
+  0% {
+    background-position: -200% 0;
+  }
+  100% {
+    background-position: 200% 0;
+  }
+}
+.skeleton-title {
+  height: 24px;
+  width: 70%;
+  margin: 5px auto;
+}
+.skeleton-text {
+  height: 14px;
+  margin-bottom: 8px;
+}
+.skeleton-circle {
+  width: 70px;
+  height: 70px;
+  border-radius: 50%;
+}
+.skeleton-badge {
+  height: 20px;
+  width: 80px;
+  border-radius: 20px;
+}
+/* =========================================
+   REMOVER BARRA DE ROLAGEM VISUAL (Global)
+   ========================================= */
 
-@keyframes shimmer { 0% { background-position: -200% 0; } 100% { background-position: 200% 0; } }
+/* Para Chrome, Safari e Edge (Webkit) */
+::-webkit-scrollbar {
+  display: none !important; /* Some com a barra */
+  width: 0px !important;
+  background: transparent !important;
+}
 
-.skeleton-title { height: 24px; width: 70%; margin: 5px auto; }
-.skeleton-text { height: 14px; margin-bottom: 8px; }
-.skeleton-text:last-child { width: 80%; }
-.skeleton-circle { width: 70px; height: 70px; border-radius: 50%; border: none; }
-.skeleton-badge { height: 20px; width: 80px; border-radius: 20px; display: inline-block; }
+/* Para Firefox */
+* {
+  scrollbar-width: none !important;
+}
 
+/* Garante que o scroll funcione, mas sem mostrar a barra */
+main {
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch; /* Rolagem macia no iPhone */
+  padding-bottom: 120px !important; 
+}
 
+/* Garante que o card da liturgia tenha espaço para respirar */
+#liturgia-card,
+#liturgia {
+  min-height: auto; /* Não força altura fixa */
+  height: auto;
+}
+/* Estilo de Missal */
+.rubrica {
+    color: #ef4444; /* Vermelho litúrgico */
+    font-size: 0.75rem;
+    font-style: italic;
+    font-weight: 600;
+    margin: 15px 0 5px 0;
+    text-transform: uppercase;
+}
+.folheto-conteudo strong {
+    color: var(--primary);
+}
+/* =========================================
+   CORREÇÃO VISUAL DA ABA BÍBLIA
+   ========================================= */
+
+/* 1. Resolve o problema do conteúdo cortado no final */
+#tab-biblia {
+  padding-bottom: 120px; /* Garante que o último livro não fique atrás do menu */
+}
+
+/* 2. Melhora a grade de livros */
+#grid-livros {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr); /* 3 colunas fixas */
+  gap: 12px; /* Mais espaço entre os botões */
+  margin-top: 15px;
+}
+
+/* 3. Estilo Novo dos Botões de Livro (Mais fácil de clicar) */
+.btn-livro {
+  background-color: rgba(var(--primary-rgb), 0.1); /* Fundo azulzinho bem leve */
+  border: 1px solid var(--border); /* Borda sutil */
+  color: var(--text);
+  border-radius: 12px;
+  padding: 0 5px; /* Padding lateral pequeno */
+  height: 50px; /* Altura fixa para todos ficarem iguais */
+  
+  /* Centraliza o texto */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  
+  font-size: 0.8rem;
+  font-weight: 600;
+  text-transform: capitalize;
+  transition: all 0.2s ease;
+  cursor: pointer;
+  width: 100%;
+}
+
+/* Efeito ao tocar */
+.btn-livro:active {
+  background-color: var(--primary);
+  color: #fff;
+  transform: scale(0.95);
+}
+
+/* Ajuste dos Botões de Testamento (Novo/Antigo) */
+#btn-novo-test, #btn-antigo-test {
+  transition: opacity 0.3s, background-color 0.3s;
+  flex: 1; /* Para ocuparem o mesmo tamanho */
+}
+/* =========================================
+   TEMA ROXO (CONFISSÃO)
+   ========================================= */
+
+/* Títulos Roxos */
+.titulo-roxo {
+  color: #7e22ce; /* Roxo Escuro */
+  font-size: 1.1rem;
+  font-weight: 700;
+  margin-bottom: 10px;
+}
+
+/* Bolinhas dos Passos em Roxo */
+.passo-numero {
+  background-color: #9333ea !important; /* Roxo Vibrante */
+}
+
+/* Accordion (Details) com tema Roxo */
+.exame-grupo.roxo summary {
+  color: #6b21a8;
+  background-color: rgba(147, 51, 234, 0.08);
+}
+
+/* Checkbox Personalizado Roxo */
+.check-roxo {
+  accent-color: #9333ea; /* Muda a cor do "check" nativo do navegador para roxo */
+  width: 18px;
+  height: 18px;
+  cursor: pointer;
+}
+/* =========================================
+   NOVO VISUAL DOS 5 PASSOS (PREMIUM)
+   ========================================= */
+
+.lista-passos-visual {
+  display: flex;
+  flex-direction: column;
+  gap: 15px; /* Espaço entre os cartões */
+}
+
+.passo-card {
+  display: flex;
+  align-items: flex-start; /* Alinha no topo */
+  gap: 15px;
+  padding: 10px;
+  border-radius: 12px;
+  transition: background-color 0.2s ease;
+}
+
+/* Efeito ao tocar no passo (opcional, mas legal) */
+.passo-card:active {
+  background-color: rgba(var(--primary-rgb), 0.05);
+}
+
+/* Caixa do Ícone (Quadrado Arredondado Roxo) */
+.passo-icon-box {
+  background: rgba(147, 51, 234, 0.1); /* Fundo Roxo Transparente */
+  color: #9333ea; /* Ícone Roxo */
+  width: 45px;
+  height: 45px;
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0; /* Impede que o ícone esmague */
+}
+
+.passo-icon-box span {
+  font-size: 24px;
+}
+
+/* Conteúdo de Texto */
+.passo-content {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding-top: 2px; /* Pequeno ajuste visual */
+}
+
+.passo-content h4 {
+  margin: 0 0 4px 0;
+  font-size: 0.95rem;
+  font-weight: 700;
+  color: var(--text);
+}
+
+.passo-content p {
+  margin: 0;
+  font-size: 0.85rem;
+  color: var(--muted);
+  line-height: 1.4;
+}
+/* =======================================================
+   ADICIONAIS ESPECÍFICOS (CONFISSÃO E BÍBLIA)
+   Cole isso no final do seu arquivo CSS
+   ======================================================= */
+
+/* --- VARIÁVEIS ROXAS (Caso não tenha) --- */
+:root {
+  --cor-roxo: #9333ea;
+  --cor-roxo-bg: rgba(147, 51, 234, 0.1);
+}
+[data-theme="dark"] {
+  --cor-roxo: #c084fc;
+  --cor-roxo-bg: rgba(192, 132, 252, 0.15);
+}
+
+/* --- 1. CABEÇALHO DO EXAME (Alinhamento Título/Botão) --- */
+.exame-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center; /* Alinha verticalmente */
+  margin-bottom: 20px;
+  border-bottom: 1px solid var(--border);
+  padding-bottom: 10px;
+}
+
+.titulo-roxo {
+  color: var(--cor-roxo);
+  font-size: 1.1rem;
+  font-weight: 800; /* Mais grosso */
+  margin-bottom: 2px;
+}
+
+.subtitulo-exame {
+  font-size: 0.75rem;
+  color: var(--muted);
+  margin: 0;
+}
+
+.btn-limpar {
+  background: transparent;
+  border: 1px solid var(--border);
+  padding: 6px 12px;
+  border-radius: 20px;
+  font-size: 0.75rem;
+  color: var(--muted);
+  cursor: pointer;
+  white-space: nowrap; /* Não quebra linha */
+}
+
+/* --- 2. OS 5 PASSOS (Visual com Ícones) --- */
+.lista-passos-visual {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.passo-card {
+  display: flex;
+  align-items: flex-start;
+  gap: 15px;
+  padding: 10px;
+  border-radius: 12px;
+  background-color: transparent; /* Garante que não tenha fundo cinza indesejado */
+}
+
+.passo-icon-box {
+  background: var(--cor-roxo-bg);
+  color: var(--cor-roxo);
+  width: 40px;
+  height: 40px;
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0; /* Impede amassar o ícone */
+}
+
+.passo-content h4 {
+  font-size: 0.9rem;
+  margin: 0 0 2px 0;
+  color: var(--text);
+}
+
+.passo-content p {
+  font-size: 0.8rem;
+  color: var(--muted);
+  margin: 0;
+  line-height: 1.3;
+}
+
+/* --- 3. ACORDEÃO (DETAILS) ROXO --- */
+.exame-grupo.roxo {
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  margin-bottom: 10px;
+  background-color: var(--bg); /* Fundo sutil */
+  overflow: hidden;
+}
+
+.exame-grupo.roxo summary {
+  padding: 15px;
+  font-weight: 600;
+  color: var(--cor-roxo);
+  background-color: var(--cor-roxo-bg);
+  cursor: pointer;
+  list-style: none;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+/* Remove setinha padrão feia */
+.exame-grupo.roxo summary::-webkit-details-marker { display: none; }
+
+/* Seta Personalizada */
+.exame-grupo.roxo summary::after {
+  content: 'expand_more';
+  font-family: 'Material Symbols Rounded';
+  transition: transform 0.2s;
+}
+.exame-grupo.roxo[open] summary::after { transform: rotate(180deg); }
+
+/* --- 4. CHECKBOX ROXO --- */
+.check-roxo {
+  accent-color: var(--cor-roxo);
+  width: 18px;
+  height: 18px;
+  margin-top: 2px;
+}
+
+/* --- 5. BÍBLIA (Botões em Bloco) --- */
+.btn-livro {
+  background-color: var(--bg);
+  border: 1px solid var(--border);
+  color: var(--text);
+  border-radius: 12px;
+  padding: 0 5px;
+  height: 50px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  font-size: 0.8rem;
+  font-weight: 600;
+  width: 100%;
+  cursor: pointer;
+}
+
+/* --- 6. ORAÇÃO --- */
+.oracao-destaque {
+  background: var(--cor-roxo-bg);
+  padding: 20px;
+  border-radius: 12px;
+  text-align: center;
+  font-style: italic;
+  color: var(--text);
+  line-height: 1.5;
+}
+/* =======================================================
+   CORREÇÃO ESPECÍFICA: EXAME DE CONSCIÊNCIA
+   Cole no final do arquivo CSS
+   ======================================================= */
+
+/* 1. Cabeçalho do Card (Arruma o botão encavalado) */
+.exame-header {
+  display: flex;
+  justify-content: space-between; /* Título na ponta esq, Botão na dir */
+  align-items: center; /* Alinha o centro verticalmente */
+  gap: 15px; /* Garante espaço mínimo entre texto e botão */
+  margin-bottom: 15px;
+  padding-bottom: 10px;
+  border-bottom: 1px solid var(--border);
+}
+
+.titulo-roxo {
+  margin: 0;
+  line-height: 1.2;
+}
+
+.subtitulo-exame {
+  margin: 2px 0 0 0;
+  font-size: 0.75rem;
+  color: var(--muted);
+}
+
+.btn-limpar {
+  flex-shrink: 0; /* IMPEDE O BOTÃO DE ENCOLHER/ENCAVALAR */
+  background: transparent;
+  border: 1px solid var(--border);
+  padding: 6px 14px;
+  border-radius: 50px;
+  font-size: 0.7rem;
+  font-weight: 600;
+  color: var(--muted);
+  cursor: pointer;
+  white-space: nowrap; /* Garante que o texto não quebre linha */
+}
+
+/* 2. Lista de Pecados (Arruma os textos e checkboxes) */
+.lista-exame {
+  padding: 0;
+  margin: 0;
+}
+
+.lista-exame li {
+  list-style: none;
+  border-top: 1px solid var(--border);
+  padding: 12px 10px; /* Espaço interno confortável */
+}
+
+.lista-exame label {
+  display: flex; /* Alinha checkbox e texto lado a lado */
+  align-items: flex-start; /* Alinha checkbox com o TOPO do texto */
+  gap: 12px; /* Espaço entre o quadrado e a letra */
+  cursor: pointer;
+}
+
+/* 3. Checkbox Bonito */
+.check-roxo {
+  /* Tamanho fixo para não deformar */
+  width: 22px;
+  height: 22px;
+  min-width: 22px; /* OBRIGATÓRIO: Impede que ele esmague */
+  
+  margin-top: 2px; /* Pequeno ajuste para alinhar com a 1ª linha de texto */
+  accent-color: #9333ea; /* Pinta o check de roxo quando marcado */
+  cursor: pointer;
+  
+  /* Filtro para deixar menos "branco estourado" no dark mode se o navegador permitir */
+  filter: grayscale(0.2); 
+}
+
+.lista-exame span {
+  font-size: 0.9rem;
+  line-height: 1.5; /* Altura da linha para leitura fácil */
+  color: var(--text);
+  padding-top: 1px; /* Ajuste fino ótico */
+}
+/* =======================================================
+   CHECKBOX ARREDONDADA "PREMIUM"
+   (Substitui o quadrado padrão do navegador)
+   ======================================================= */
+
+.check-roxo {
+  /* 1. Remove o estilo feio padrão do Windows/Android/iOS */
+  -webkit-appearance: none;
+  appearance: none;
+  
+  /* 2. Cria o formato da bolinha */
+  width: 24px;
+  height: 24px;
+  min-width: 24px; /* Impede esmagar */
+  border: 2px solid var(--cor-roxo); /* Borda roxa */
+  border-radius: 50%; /* Faz virar um círculo perfeito */
+  background-color: transparent;
+  
+  /* 3. Posicionamento */
+  cursor: pointer;
+  display: grid;
+  place-content: center;
+  margin-top: 0; /* Alinhamento com o texto */
+  transition: all 0.2s ease-in-out;
+}
+
+/* 4. O Efeito ao Marcar (Fica Roxo Cheio) */
+.check-roxo:checked {
+  background-color: var(--cor-roxo);
+  box-shadow: 0 0 8px rgba(147, 51, 234, 0.4); /* Brilho suave */
+}
+
+/* 5. O Desenho do "V" (Check) Branco */
+.check-roxo::before {
+  content: "";
+  width: 10px;
+  height: 10px;
+  box-shadow: inset 1em 1em white; /* Preenche de branco */
+  transform-origin: center;
+  transform: scale(0); /* Começa invisível */
+  transition: 0.2s transform ease-in-out;
+  
+  /* Recorta no formato de V (Check icon via CSS) */
+  clip-path: polygon(14% 44%, 0 65%, 50% 100%, 100% 16%, 80% 0%, 43% 62%);
+}
+
+/* 6. Mostra o "V" quando marcado */
+.check-roxo:checked::before {
+  transform: scale(1);
+}
+
+/* 7. Ajuste Fino de Alinhamento com o Texto */
+.lista-exame label {
+  display: flex;
+  align-items: center; /* Centraliza verticalmente com o texto */
+  gap: 12px;
+  padding: 8px 0;
+  cursor: pointer;
+}
+
+.lista-exame span {
+  font-size: 0.95rem;
+  line-height: 1.4;
+  color: var(--text);
+  flex: 1; /* Ocupa o resto do espaço */
+}
+/* =======================================================
+   CARD ATO DE CONTRIÇÃO (FINAL)
+   ======================================================= */
+
+/* O Card em si */
+.card-oracao {
+  border: 1px solid var(--cor-roxo); /* Borda roxa fina e elegante */
+  background: linear-gradient(180deg, var(--card-bg) 0%, var(--cor-roxo-bg) 100%); /* Degradê sutil no final */
+  position: relative;
+  overflow: hidden;
+}
+
+/* Detalhe decorativo no topo (opcional, dá um charme) */
+.card-oracao::top {
+  content: "";
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 4px;
+  background: var(--cor-roxo);
+}
+
+/* O Texto da Oração */
+.texto-oracao {
+  text-align: center;
+  font-family: 'Georgia', serif; /* Fonte com serifa fica mais solene para orações */
+  font-size: 1rem;
+  line-height: 1.6;
+  color: var(--text);
+  padding: 0 10px;
+}
+
+.texto-oracao p {
+  margin-bottom: 15px;
+  font-style: italic; /* Itálico clássico de oração */
+}
+
+/* A Frase Final (Impacto) */
+.destaque-final {
+  font-family: 'Montserrat', sans-serif; /* Volta para a fonte moderna */
+  font-weight: 800;
+  color: var(--cor-roxo);
+  text-transform: uppercase;
+  font-size: 0.9rem;
+  letter-spacing: 1px;
+  margin-top: 20px;
+  padding-top: 15px;
+  border-top: 1px dashed rgba(147, 51, 234, 0.3); /* Linha pontilhada separadora */
+}
+/* =========================================
+   ESTILOS MENU E FERRAMENTAS
+   ========================================= */
+
+/* Calendário */
+.calendar-grid {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 5px;
+  text-align: center;
+}
+
+.calendar-day {
+  padding: 8px 0;
+  font-size: 0.9rem;
+  border-radius: 8px;
+  position: relative;
+  cursor: pointer;
+}
+
+.calendar-header {
+  font-weight: bold;
+  color: var(--muted);
+  font-size: 0.75rem;
+  margin-bottom: 5px;
+}
+
+.has-event {
+  background-color: rgba(var(--primary-rgb), 0.1);
+  color: var(--primary);
+  font-weight: bold;
+}
+
+/* Bolinha indicadora de evento */
+.has-event::after {
+  content: '';
+  position: absolute;
+  bottom: 4px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 4px;
+  height: 4px;
+  background-color: var(--primary);
+  border-radius: 50%;
+}
+
+.day-selected {
+  background-color: var(--primary) !important;
+  color: white !important;
+}
+
+/* Modal Notas (Tela Cheia Limpa) */
+#area-notas:focus {
+  outline: none;
+}
+/* =========================================
+   ESTILO DO MURAL DE ORAÇÃO
+   ========================================= */
+
+/* Cada cartão de pedido no feed */
+.card-pedido {
+  background-color: var(--bg);
+  border: 1px solid var(--border);
+  border-left: 4px solid #db2777; /* Faixa rosa na esquerda */
+  padding: 12px;
+  border-radius: 8px;
+  margin-bottom: 12px;
+  position: relative;
+  animation: slideIn 0.3s ease;
+}
+
+@keyframes slideIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+
+.pedido-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 6px;
+}
+
+.pedido-nome {
+  font-weight: 700;
+  font-size: 0.85rem;
+  color: #db2777;
+}
+
+.pedido-data {
+  font-size: 0.7rem;
+  color: var(--muted);
+}
+
+.pedido-texto {
+  font-size: 0.9rem;
+  color: var(--text);
+  line-height: 1.4;
+  white-space: pre-wrap; /* Mantém parágrafos */
+}
+
+.btn-rezar {
+  margin-top: 8px;
+  background: transparent;
+  border: 1px solid #db2777;
+  color: #db2777;
+  font-size: 0.75rem;
+  padding: 4px 10px;
+  border-radius: 20px;
+  cursor: pointer;
+  width: auto;
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+}
+.btn-rezar:active { background: #db2777; color: white; }
+/* Botão de Excluir Pedido (Lixeira) */
+.btn-excluir-pedido {
+  background: transparent;
+  border: none;
+  color: #ef4444; /* Vermelho */
+  cursor: pointer;
+  padding: 4px;
+  margin-left: auto; /* Empurra para a direita */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0.7;
+}
+
+.btn-excluir-pedido span {
+  font-size: 18px;
+}
+
+.btn-excluir-pedido:hover {
+  opacity: 1;
+  background-color: rgba(239, 68, 68, 0.1);
+  border-radius: 50%;
+}
+/* =================================================================
+   CORREÇÕES PONTUAIS (Cole no final do seu CSS antigo)
+   ================================================================= */
+
+/* 1. TRAVA DE FONTE (Resolve o texto estranho) */
+body, h1, h2, h3, h4, p, span, div, a, button, input, textarea, li {
+    font-family: 'Montserrat', sans-serif !important;
+}
+/* Libera apenas os ícones para usarem a fonte de símbolos */
+.material-symbols-rounded {
+    font-family: 'Material Symbols Rounded' !important;
+}
+
+/* 2. CHECKBOX REDONDO (Estilo "Bonitinho") */
+.check-roxo {
+    -webkit-appearance: none;
+    appearance: none;
+    /* Tamanho e Forma */
+    width: 22px;
+    height: 22px;
+    min-width: 22px; /* Impede esmagar */
+    border: 2px solid #9333ea;
+    border-radius: 50%; /* Círculo perfeito */
+    background-color: transparent;
+    cursor: pointer;
+    /* Centralizar o check */
+    display: grid;
+    place-content: center;
+    margin-right: 10px; /* Espaço pro texto */
+    transition: all 0.2s;
+}
+
+.check-roxo:checked {
+    background-color: #9333ea; /* Fundo Roxo ao marcar */
+    box-shadow: 0 0 5px rgba(147, 51, 234, 0.4);
+}
+
+/* O "V" de check desenhado com CSS */
+.check-roxo::before {
+    content: "";
+    width: 10px;
+    height: 10px;
+    background-color: white; /* Cor do V */
+    transform: scale(0);
+    clip-path: polygon(14% 44%, 0 65%, 50% 100%, 100% 16%, 80% 0%, 43% 62%);
+    transition: 0.2s transform;
+}
+
+.check-roxo:checked::before {
+    transform: scale(1);
+}
+
+/* Ajuste da lista para o check alinhar com texto */
+.lista-exame label {
+    display: flex;
+    align-items: center;
+    padding: 8px 0;
+    cursor: pointer;
+}
+
+/* 3. ALINHAMENTO DO EXAME E BOTÃO LIMPAR */
+.exame-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center; /* Alinha na vertical */
+    margin-bottom: 15px;
+    border-bottom: 1px solid #e2e8f0;
+    padding-bottom: 10px;
+}
+
+.btn-limpar {
+    flex-shrink: 0; /* IMPEDE O BOTÃO DE ENCOLHER */
+    background: transparent;
+    border: 1px solid #94a3b8;
+    color: #64748b;
+    padding: 6px 12px;
+    border-radius: 20px;
+    font-size: 0.75rem;
+    font-weight: 600;
+    cursor: pointer;
+}
+
+/* 4. MURAL DE ORAÇÃO (Novo Card) */
+.card-pedido {
+    background-color: var(--card-bg, #fff);
+    border: 1px solid #e2e8f0;
+    border-left: 4px solid #db2777; /* Faixa rosa */
+    padding: 12px;
+    border-radius: 8px;
+    margin-bottom: 10px;
+    position: relative;
+}
+
+.pedido-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 6px;
+}
+
+.pedido-nome {
+    font-weight: 700;
+    color: #db2777;
+    font-size: 0.85rem;
+}
+
+.pedido-texto {
+    font-size: 0.9rem;
+    color: var(--text, #333);
+    line-height: 1.4;
+}
+
+.btn-rezar {
+    background: transparent;
+    border: 1px solid #db2777;
+    color: #db2777;
+    border-radius: 20px;
+    padding: 4px 12px;
+    font-size: 0.7rem;
+    font-weight: 600;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    margin-top: 8px;
+}
+/* =======================================================
+   CORREÇÕES PONTUAIS - NÃO AFETA O RESTANTE DO APP
+   ======================================================= */
+
+/* 1. CORREÇÃO DA FONTE (O texto estranho/alienígena) */
+body, h1, h2, h3, h4, p, span, div, li, button, input, textarea {
+    font-family: 'Montserrat', sans-serif !important;
+}
+
+/* Garante que os ícones NÃO usem a fonte de texto */
+.material-symbols-rounded {
+    font-family: 'Material Symbols Rounded' !important;
+}
+
+/* 2. TEXTO DO MENU (Aparecer no modo claro) */
+.profile-header {
+    background: #2563eb !important; /* Azul sólido */
+}
+.profile-header h2, .profile-header p {
+    color: #ffffff !important;
+}
+
+/* 3. ALINHAMENTO DO GUIA (5 Passos da Confissão) */
+.passo-card {
+    display: flex !important;
+    align-items: center !important; /* Alinha ícone com o meio do texto */
+    gap: 15px !important;
+}
+
+/* 4. LINHA DO EXAME (Suavizar no modo escuro) */
+[data-theme="dark"] .exame-header {
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1) !important;
+}
+
+/* 5. CHECKBOX REDONDO E ROXO (Obrigatório) */
+.check-roxo {
+    -webkit-appearance: none !important;
+    appearance: none !important;
+    width: 24px !important;
+    height: 24px !important;
+    border: 2px solid #9333ea !important;
+    border-radius: 50% !important;
+    cursor: pointer !important;
+    display: grid !important;
+    place-content: center !important;
+}
+.check-roxo:checked {
+    background-color: #9333ea !important;
+}
+.check-roxo:checked::before {
+    content: "" !important;
+    width: 10px;
+    height: 10px;
+    box-shadow: inset 1em 1em white;
+    clip-path: polygon(14% 44%, 0 65%, 50% 100%, 100% 16%, 80% 0%, 43% 62%);
+}
+#modalMuralPedidos .btn-primary {
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    gap: 10px !important; /* Espaço entre o ícone e o texto */
+    padding: 12px 20px !important;
+}
+
+#modalMuralPedidos .btn-primary .material-symbols-rounded {
+    margin: 0 !important;
+    font-size: 20px !important; /* Ajuste o tamanho do ícone se necessário */
+    line-height: 1 !important;
+}
+.card-pedido {
+    position: relative !important;
+}
+
+.card-pedido button[onclick*="excluirMeuPedido"] {
+    position: absolute !important;
+    top: 10px !important;
+    right: 10px !important;
+    z-index: 10 !important;
+    background: rgba(239, 68, 68, 0.1) !important;
+    padding: 5px !important;
+    border-radius: 50% !important;
+}
+/* CORREÇÃO DO ARREDONDAMENTO DO MURAL */
+#modalMuralPedidos .modal-content {
+    border-radius: 20px !important; /* Arredonda todos os cantos */
+    overflow: hidden !important;    /* Garante que o fundo do feed não cubra o arredondamento */
+}
+
+/* Garante que o último item do feed não fique colado na borda */
+#feed-pedidos {
+    border-bottom-left-radius: 20px !important;
+    border-bottom-right-radius: 20px !important;
+    padding-bottom: 20px !important;
+}
+/* --- ESTILO DO PAINEL DE CONTROLE DO COORDENADOR --- */
+.item-admin-aviso {
+    background: var(--bg);
+    padding: 12px;
+    border-radius: 12px;
+    margin-bottom: 10px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border: 1px solid var(--border);
+    animation: fadeIn 0.3s ease;
+}
+
+.btn-delete-aviso {
+    background: rgba(239, 68, 68, 0.1) !important;
+    color: #ef4444 !important;
+    border: none !important;
+    width: 35px;
+    height: 35px;
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+}
+
+.btn-delete-aviso span {
+    font-size: 18px;
+}

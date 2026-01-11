@@ -2,197 +2,338 @@
 <html lang="pt-BR">
   <head>
     <meta charset="UTF-8" />
-    <meta
-      name="viewport"
-      content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"
-    />
-    <meta
-      name="description"
-      content="Liturgia diária, orações e avisos para a comunidade Ágape de Jovens."
-    />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+    <meta name="description" content="Liturgia diária e vida de oração para jovens católicos." />
     <meta name="theme-color" content="#ffffff" />
 
-    <link
-      rel="icon"
-      type="image/png"
-      sizes="32x32"
-      href="./favicon-32x32.png?v=1"
-    />
-    <link
-      rel="apple-touch-icon"
-      sizes="180x180"
-      href="./apple-touch-icon.png?v=1"
-    />
+    <link rel="icon" type="image/png" sizes="32x32" href="./favicon-32x32.png?v=1" />
+    <link rel="apple-touch-icon" sizes="180x180" href="./apple-touch-icon.png?v=1" />
     <link rel="manifest" href="./site.webmanifest?v=1" />
+    
     <title>Liturgia | Ágape de Jovens</title>
 
     <link rel="stylesheet" href="css/style.css" />
-    <link
-      rel="stylesheet"
-      href="https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200"
-    />
-
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    
     <meta name="mobile-web-app-capable" content="yes" />
     <meta name="apple-mobile-web-app-capable" content="yes" />
-    <meta
-      name="apple-mobile-web-app-status-bar-style"
-      content="black-translucent"
-    />
-    <meta name="apple-mobile-web-app-title" content="Liturgia Ágape" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
   </head>
 
   <body>
-    <div id="splash-screen" aria-hidden="true">
-      <img
-        src="logo-agape.png"
-        alt="Logo Ágape Carregando"
-        class="splash-logo"
-      />
+    <div id="splash-screen">
+      <img src="logo-agape.png" alt="Carregando..." class="splash-logo" />
     </div>
 
     <header class="topo" id="home">
-    <div class="header-container">
-        <img src="logo-agape.png" alt="Logo Ágape" class="logo-header" />
-        <h1>Liturgia | Ágape de Jovens</h1>
-        
+      <div class="header-container">
+        <img src="logo-agape.png" alt="Logo" class="logo-header" />
+        <h1>LITURGIA</h1>
         <button id="btn-tema" class="btn-icon" aria-label="Alternar Tema">
-            <span class="material-symbols-rounded">dark_mode</span>
+          <span class="material-symbols-rounded">dark_mode</span>
         </button>
-    </div>
-</header>
+      </div>
+    </header>
 
     <main>
       <div id="data-atual" class="data-atual">Carregando data...</div>
 
-      <section
-        class="card section-tempo"
-        id="santo"
-        aria-labelledby="label-tempo"
-      >
-        <div id="indicador-cor" class="circulo-liturgico">
-    <span id="emoji-tempo" class="material-symbols-rounded"></span>
-</div>
-
+      <div id="tab-inicio" class="conteudo-aba">
+        
+        <section class="card section-tempo" id="santo">
+          <div id="indicador-cor" class="circulo-liturgico">
+            <span id="emoji-tempo" class="material-symbols-rounded"></span>
+          </div>
           <div class="tempo-info">
-            <p class="label-pequeno" id="label-tempo">Tempo Litúrgico</p>
+            <p class="label-pequeno">Tempo Litúrgico</p>
             <h2 id="nome-santo">Carregando...</h2>
             <div class="cor-detalhe">
               <span id="badge-cor" class="badge-cor">...</span>
             </div>
           </div>
-        </div>
-        <a
-          href="https://santo.cancaonova.com"
-          target="_blank"
-          rel="noopener noreferrer"
-          class="btn-conhecer"
-        >
-          Conhecer o Santo do Dia ↗
-        </a>
-      </section>
+          <a href="https://santo.cancaonova.com" target="_blank" class="btn-conhecer">
+            Conhecer o Santo do Dia ↗
+          </a>
+        </section>
 
-      <section class="card" id="liturgia">
-        <h2>Liturgia do Dia</h2>
-
-        <div id="resumo-leituras" class="resumo-texto">
-          <p>Carregando leituras...</p>
-        </div>
-
-        <button class="btn-primary" id="btn-abrir-liturgia">
-          Ver Liturgia Completa
-        </button>
-
-        <hr class="card-divider" />
-
-        <div class="feedback-leitura">
-          <button id="btn-li-a-leitura" class="btn-outline">
-            <span class="material-symbols-rounded">check_circle</span>
-            <span>Eu li as leituras</span>
+        <section class="card" id="liturgia">
+          <h2>Liturgia do Dia</h2>
+          <div id="resumo-leituras" class="resumo-texto">
+            <p>Carregando leituras...</p>
+          </div>
+          <button class="btn-primary" id="btn-abrir-liturgia">
+            Ver Liturgia Completa
           </button>
-          <p id="texto-contador-leituras" class="text-small">...</p>
-        </div>
-      </section>
+          <hr class="card-divider" />
+          <div class="feedback-leitura">
+            <button id="btn-li-a-leitura" class="btn-outline">
+              <span class="material-symbols-rounded">check_circle</span>
+              <span>Eu li as leituras</span>
+            </button>
+            <p id="texto-contador-leituras" class="text-small">...</p>
+          </div>
+        </section>
 
-      <section class="card" id="terco">
-        <h2>Mistério do Dia</h2>
-        <div id="conteudo-terco" class="conteudo-centralizado">
-          <h3 id="titulo-misterio" class="titulo-destaque">Carregando...</h3>
-          <p id="descricao-misterio" class="texto-descricao"></p>
-        </div>
-      </section>
+        <section class="card" id="avisos">
+          <h2>Avisos</h2>
+          <ul id="lista-avisos" class="lista-limpa"></ul>
+        </section>
+      </div>
 
-      <section class="card" id="horas">
-        <h2>Liturgia das Horas</h2>
-        <div class="botoes-horas">
-          <button class="btn-hora" onclick="abrirHora('laudes')">Laudes</button>
-          <button class="btn-hora" onclick="abrirHora('vesperas')">
-            Vésperas
+      <div id="tab-oracoes" class="conteudo-aba" style="display: none">
+        <section class="card" id="terco">
+          <h2>Santo Terço</h2>
+          <div id="conteudo-terco" class="conteudo-centralizado">
+            <h3 id="titulo-misterio" class="titulo-destaque">Carregando...</h3>
+            <p id="descricao-misterio" class="texto-descricao"></p>
+          </div>
+        </section>
+
+        <section class="card" id="horas">
+          <h2>Liturgia das Horas</h2>
+          <div class="botoes-horas">
+            <button class="btn-hora" onclick="abrirHora('laudes')">Laudes</button>
+            <button class="btn-hora" onclick="abrirHora('vesperas')">Vésperas</button>
+            <button class="btn-hora" onclick="abrirHora('completas')">Completas</button>
+          </div>
+          <button class="btn-primary" id="btn-explicar-horas">
+            O que é a Liturgia das Horas?
           </button>
-          <button class="btn-hora" onclick="abrirHora('completas')">
-            Completas
-          </button>
-        </div>
-        <button class="btn-primary" id="btn-explicar-horas">
-          O que é a Liturgia das Horas/Ofício Divino?
-        </button>
-      </section>
+        </section>
+      </div>
 
-      <section class="card" id="avisos">
-        <h2>Avisos</h2>
-        <ul id="lista-avisos" class="lista-limpa"></ul>
-      </section>
+      <div id="tab-biblia" class="conteudo-aba" style="display: none">
+        <section class="card">
+          <div style="text-align: center; margin-bottom: 20px">
+            <span class="material-symbols-rounded" style="font-size: 40px; color: var(--primary)">menu_book</span>
+            <h2>Bíblia Ave Maria</h2>
+            <p style="color: var(--muted); font-size: 0.8rem">Antigo e Novo Testamento</p>
+          </div>
+
+          <div class="botoes-horas" style="margin-bottom: 20px">
+            <button class="btn-hora" onclick="alternarTestamento('novo')" id="btn-novo-test">Novo</button>
+            <button class="btn-hora" onclick="alternarTestamento('antigo')" id="btn-antigo-test" style="opacity: 0.5">Antigo</button>
+          </div>
+
+          <div id="grid-livros" class="menu-grid" style="grid-template-columns: repeat(3, 1fr); gap: 8px">
+            </div>
+        </section>
+      </div>
+
+      <div id="tab-confissao" class="conteudo-aba" style="display: none">
+        
+        <section class="card" style="text-align: center; background: linear-gradient(135deg, #581c87 0%, #9333ea 100%); color: white; padding: 25px 20px;">
+          <span class="material-symbols-rounded" style="font-size: 48px; margin-bottom: 10px; opacity: 0.9;">healing</span>
+          <h2 style="color: white; margin: 0; font-size: 1.5rem;">Sacramento da Reconciliação</h2>
+          <p style="font-size: 0.9rem; font-style: italic; margin-top: 10px; opacity: 0.95; line-height: 1.5;">
+            "Coragem, filho, os teus pecados estão perdoados."<br>
+            <span style="font-size: 0.75rem; font-weight: bold;">(Mateus 9, 2)</span>
+          </p>
+        </section>
+
+        <section class="card" style="padding-bottom: 5px;">
+          <h3 class="titulo-roxo">O Caminho da Graça</h3>
+          <p style="font-size: 0.8rem; color: var(--muted); margin-bottom: 20px;">Siga estes 5 passos:</p>
+          
+          <div class="lista-passos-visual">
+            <div class="passo-card">
+              <div class="passo-icon-box"><span class="material-symbols-rounded">manage_search</span></div>
+              <div class="passo-content"><h4>1. Exame</h4><p>Refletir onde errei contra Deus.</p></div>
+            </div>
+            <div class="passo-card">
+              <div class="passo-icon-box"><span class="material-symbols-rounded">sentiment_dissatisfied</span></div>
+              <div class="passo-content"><h4>2. Arrependimento</h4><p>Dor sincera no coração.</p></div>
+            </div>
+            <div class="passo-card">
+              <div class="passo-icon-box"><span class="material-symbols-rounded">verified</span></div>
+              <div class="passo-content"><h4>3. Propósito</h4><p>Decidir não pecar mais.</p></div>
+            </div>
+            <div class="passo-card">
+              <div class="passo-icon-box"><span class="material-symbols-rounded">record_voice_over</span></div>
+              <div class="passo-content"><h4>4. Confissão</h4><p>Dizer os pecados ao padre.</p></div>
+            </div>
+            <div class="passo-card">
+              <div class="passo-icon-box"><span class="material-symbols-rounded">task_alt</span></div>
+              <div class="passo-content"><h4>5. Penitência</h4><p>Cumprir o ato reparador.</p></div>
+            </div>
+          </div>
+        </section>
+
+        <section class="card">
+          <div class="exame-header">
+            <div>
+              <h3 class="titulo-roxo">Exame de Consciência</h3>
+              <p class="subtitulo-exame">Marque para lembrar:</p>
+            </div>
+            <button onclick="limparExame()" class="btn-limpar">Limpar tudo</button>
+          </div>
+
+          <details class="exame-grupo roxo">
+  <summary>
+    <div style="display:flex; align-items:center; gap:10px;">
+      <span class="material-symbols-rounded">church</span>
+      <span>Amar a Deus</span>
+    </div>
+  </summary>
+  <ul class="lista-exame">
+    <li><label><input type="checkbox" class="check-roxo"><span>Faltei à Missa aos domingos ou festas de preceito por culpa própria?</span></label></li>
+    <li><label><input type="checkbox" class="check-roxo"><span>Cheguei tarde à Missa habitualmente por descaso?</span></label></li>
+    <li><label><input type="checkbox" class="check-roxo"><span>Recebi a Eucaristia em estado de pecado grave (sem confessar antes)?</span></label></li>
+    <li><label><input type="checkbox" class="check-roxo"><span>Omiti algum pecado grave em confissões passadas por vergonha?</span></label></li>
+    <li><label><input type="checkbox" class="check-roxo"><span>Neguei minha fé ou tive vergonha de me posicionar como católico?</span></label></li>
+    <li><label><input type="checkbox" class="check-roxo"><span>Usei o nome de Deus em vão, fiz juramentos falsos ou blasfemei?</span></label></li>
+    <li><label><input type="checkbox" class="check-roxo"><span>Dediquei tempo diário à oração ou me esqueci de Deus na correria?</span></label></li>
+    <li><label><input type="checkbox" class="check-roxo"><span>Acreditei em superstições, horóscopos, tarô ou práticas de ocultismo?</span></label></li>
+  </ul>
+</details>
+
+<details class="exame-grupo roxo">
+  <summary>
+    <div style="display:flex; align-items:center; gap:10px;">
+      <span class="material-symbols-rounded">groups</span>
+      <span>Amar ao próximo</span>
+    </div>
+  </summary>
+  <ul class="lista-exame">
+    <li><label><input type="checkbox" class="check-roxo"><span>Fui desobediente, insolente ou falttei com o respeito aos meus pais?</span></label></li>
+    <li><label><input type="checkbox" class="check-roxo"><span>Tratei mal meus irmãos, amigos ou colegas?</span></label></li>
+    <li><label><input type="checkbox" class="check-roxo"><span>Guardei ódio, rancor ou desejei o mal a alguém?</span></label></li>
+    <li><label><input type="checkbox" class="check-roxo"><span>Fui motivo de escândalo para outros por minhas atitudes ou palavras?</span></label></li>
+    <li><label><input type="checkbox" class="check-roxo"><span>Fiz fofocas, calúnias ou espalhei boatos (mesmo que fossem verdade)?</span></label></li>
+    <li><label><input type="checkbox" class="check-roxo"><span>Menti para me beneficiar ou para prejudicar/enganar alguém?</span></label></li>
+    <li><label><input type="checkbox" class="check-roxo"><span>Fui egoísta e neguei ajuda a quem realmente precisava?</span></label></li>
+    <li><label><input type="checkbox" class="check-roxo"><span>Julguei os outros precipitadamente com malícia?</span></label></li>
+  </ul>
+</details>
+
+<details class="exame-grupo roxo">
+  <summary>
+    <div style="display:flex; align-items:center; gap:10px;">
+      <span class="material-symbols-rounded">favorite</span>
+      <span>Pureza e Temperança</span>
+    </div>
+  </summary>
+  <ul class="lista-exame">
+    <li><label><input type="checkbox" class="check-roxo"><span>Consenti em pensamentos ou desejos impuros deliberadamente?</span></label></li>
+    <li><label><input type="checkbox" class="check-roxo"><span>Assisti pornografia ou busquei conteúdos sensuais/eróticos na internet?</span></label></li>
+    <li><label><input type="checkbox" class="check-roxo"><span>Cometi atos de impureza comigo mesmo (masturbação)?</span></label></li>
+    <li><label><input type="checkbox" class="check-roxo"><span>Tive relações sexuais fora ou antes do matrimônio?</span></label></li>
+    <li><label><input type="checkbox" class="check-roxo"><span>No namoro, faltei com o respeito ou levei o outro a pecar?</span></label></li>
+    <li><label><input type="checkbox" class="check-roxo"><span>Vesti-me de forma vulgar ou usei minha imagem para provocar desejo alheio?</span></label></li>
+    <li><label><input type="checkbox" class="check-roxo"><span>Fui guloso, bebi demais ou usei drogas?</span></label></li>
+    <li><label><input type="checkbox" class="check-roxo"><span>Fui vaidoso, soberbo ou me senti superior aos outros?</span></label></li>
+  </ul>
+</details>
+
+<details class="exame-grupo roxo">
+  <summary>
+    <div style="display:flex; align-items:center; gap:10px;">
+      <span class="material-symbols-rounded">work</span>
+      <span>Deveres e Honestidade</span>
+    </div>
+  </summary>
+  <ul class="lista-exame">
+    <li><label><input type="checkbox" class="check-roxo"><span>Fui preguiçoso nos estudos ou no trabalho?</span></label></li>
+    <li><label><input type="checkbox" class="check-roxo"><span>Colei em provas ou apresentei trabalhos que não eram meus?</span></label></li>
+    <li><label><input type="checkbox" class="check-roxo"><span>Peguei dinheiro ou objetos que não me pertenciam sem permissão?</span></label></li>
+    <li><label><input type="checkbox" class="check-roxo"><span>Desperdicei dinheiro com coisas fúteis enquanto outros passam necessidade?</span></label></li>
+    <li><label><input type="checkbox" class="check-roxo"><span>Perdi tempo excessivo em redes sociais e jogos, negligenciando meus deveres?</span></label></li>
+    <li><label><input type="checkbox" class="check-roxo"><span>Fui invejoso em relação ao sucesso ou bens dos outros?</span></label></li>
+  </ul>
+</details>
+        </section>
+
+        <section class="card card-oracao">
+          <div style="text-align: center; margin-bottom: 15px;">
+            <span class="material-symbols-rounded" style="color: var(--cor-roxo); font-size: 32px; background: var(--cor-roxo-bg); padding: 8px; border-radius: 50%;">verified_user</span>
+            <h3 class="titulo-roxo" style="margin-top: 10px;">Ato de Contrição</h3>
+          </div>
+          <div class="texto-oracao">
+            <p>"Meu Deus, eu me arrependo de todo o coração de vos ter ofendido, porque sois tão bom e amável. Prometo, com a vossa graça, esforçar-me para ser bom e não mais pecar."</p>
+            <div class="destaque-final">Meu Jesus, misericórdia!</div>
+          </div>
+        </section>
+        
+        <div style="height: 100px;"></div>
+      </div>
+
+      <div id="tab-menu" class="conteudo-aba" style="display: none">
+        <section class="card profile-header" style="margin-bottom: 20px;">
+          <div class="profile-info" style="text-align: center; width: 100%;">
+            <h2 style="color: var(--text); margin: 0;">Menu & Ferramentas</h2>
+            <p style="color: var(--text); font-size: 0.8rem;">Ágape de Jovens</p>
+          </div>
+        </section>
+
+        <div class="menu-grid" style="grid-template-columns: 1fr 1fr; gap: 15px;">
+          <div class="card menu-item" onclick="abrirCalendario()">
+            <span class="material-symbols-rounded" style="font-size: 36px; color: #0284c7;">calendar_month</span>
+            <span style="margin-top: 10px; color: var(--text);">Calendário</span>
+          </div>
+          <div class="card menu-item" onclick="abrirMuralPedidos()">
+            <span class="material-symbols-rounded" style="font-size: 36px; color: #db2777;">volunteer_activism</span>
+            <span style="margin-top: 10px; color: var(--text);">Mural de Oração</span>
+          </div>
+          <div class="card menu-item" onclick="abrirNotas()">
+            <span class="material-symbols-rounded" style="font-size: 36px; color: #ca8a04;">edit_note</span>
+            <span style="margin-top: 10px; color: var(--text);">Anotações</span>
+          </div>
+          <div class="card menu-item" onclick="document.getElementById('modalSobreSite').style.display='flex'">
+            <span class="material-symbols-rounded" style="font-size: 36px; color: var(--muted);">info</span>
+            <span style="margin-top: 10px; color: var(--text);">Sobre</span>
+          </div>
+        </div>
+        
+        <div style="height: 100px;"></div>
+      </div>
     </main>
 
     <nav class="bottom-nav">
-      <a href="#" class="nav-item active" data-target="#liturgia">
-        <span class="material-symbols-rounded">book_5</span>
-        <span>Liturgia</span>
+      <a href="#" class="nav-item active" data-target="tab-inicio">
+        <span class="material-symbols-rounded">home</span>
+        <span>Início</span>
       </a>
-
-      <a href="#" class="nav-item" data-target="#terco">
-        <span class="material-symbols-rounded">flare</span>
-        <span>Terço</span>
+      <a href="#" class="nav-item" data-target="tab-oracoes">
+        <span class="material-symbols-rounded">auto_awesome</span>
+        <span>Orações</span>
       </a>
-
-      <a href="#" class="nav-item" data-target="#horas">
-        <div class="nav-icon-wrapper">
-          <span class="material-symbols-rounded" id="icon-horas">schedule</span>
-        </div>
-        <span>Horas</span>
+      <a href="#" class="nav-item" data-target="tab-biblia">
+        <span class="material-symbols-rounded">auto_stories</span>
+        <span>Bíblia</span>
       </a>
-
-      <a href="#" class="nav-item" data-target="#avisos" id="nav-avisos">
-        <span class="material-symbols-rounded">notifications</span>
-        <span>Avisos</span>
+      <a href="#" class="nav-item" data-target="tab-confissao">
+        <span class="material-symbols-rounded">healing</span>
+        <span>Confissão</span>
       </a>
-
-      <a href="#" class="nav-item" id="nav-sobre-site">
-        <span class="material-symbols-rounded">info</span>
-        <span>Sobre</span>
+      <a href="#" class="nav-item" data-target="tab-menu">
+        <span class="material-symbols-rounded">grid_view</span>
+        <span>Menu</span>
       </a>
     </nav>
 
-    <div id="modalGeral" class="modal" aria-hidden="true">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h3 id="modal-titulo">Conteúdo</h3>
-          <button class="close-modal" aria-label="Fechar">&times;</button>
+    <div id="modalCapitulos" class="modal">
+      <div class="modal-content modal-content-centered">
+        <div class="modal-header"><h3 id="titulo-livro-selecionado">Livro</h3><button class="close-modal">&times;</button></div>
+        <div class="modal-body">
+          <p style="margin-bottom: 10px; color: var(--muted)">Capítulo:</p>
+          <input type="number" id="input-capitulo" class="input-admin" placeholder="Ex: 1" min="1">
+          <button id="btn-ler-capitulo" class="btn-primary">Ler Agora 📖</button>
         </div>
+      </div>
+    </div>
+
+    <div id="modalGeral" class="modal">
+      <div class="modal-content">
+        <div class="modal-header"><h3 id="modal-titulo">Conteúdo</h3><button class="close-modal">&times;</button></div>
         <div id="modal-corpo" class="modal-body"></div>
       </div>
     </div>
 
-    <div id="modalExplicacaoHoras" class="modal" aria-hidden="true">
+    <div id="modalExplicacaoHoras" class="modal">
       <div class="modal-content">
-        <div class="modal-header">
-          <h3>Sobre a Liturgia das Horas</h3>
-          <button id="btn-fechar-explicacao" class="close-modal">
-            &times;
-          </button>
-        </div>
-        <div class="modal-body text-justify">
-          <p>
-            A <strong>Liturgia das Horas</strong> ou
+        <div class="modal-header"><h3>Liturgia das Horas</h3><button class="close-modal">&times;</button></div>
+        <div class="modal-body"> A <strong>Liturgia das Horas</strong> ou
             <strong>Ofício Divino</strong> é a oração oficial da Igreja Católica
             que tem como objetivo <strong>santificar</strong> o tempo ao longo
             do dia, unindo a oração pessoal dos fiéis à oração contínua da
@@ -203,93 +344,31 @@
             Por meio dessa prática, a Igreja prolonga o louvor celebrado na
             Eucaristia, convidando todos a manterem uma vida de oração
             constante.
-          </p>
-          <button class="btn-primary" id="btn-entendido-horas">
-            Entendido
-          </button>
+          </p></div>
+      </div>
+    </div>
+
+    <div id="modalMuralPedidos" class="modal">
+      <div class="modal-content modal-content-centered" style="max-height: 80vh; display: flex; flex-direction: column;">
+        <div class="modal-header"><h3 style="color: #db2777;">Mural de Intercessão</h3><button class="close-modal">&times;</button></div>
+        <div class="modal-body" style="padding: 0; display: flex; flex-direction: column; height: 100%;">
+          <div style="padding: 15px; background: var(--bg); border-bottom: 1px solid var(--border);">
+            <input type="text" id="nome-orante" class="input-admin" placeholder="Seu nome (Opcional)" style="margin-bottom: 8px;">
+            <textarea id="texto-pedido-publico" class="input-admin" placeholder="Escreva seu pedido..." style="height: 60px; margin-bottom: 8px;"></textarea>
+            <button onclick="postarPedido()" class="btn-primary" style="background-color: #db2777; margin: 0;"><span class="material-symbols-rounded">send</span> Publicar</button>
+          </div>
+          <div id="feed-pedidos" style="flex: 1; overflow-y: auto; padding: 15px; background: var(--card-bg);">
+            <p style="text-align: center; color: var(--muted); margin-top: 20px;">Carregando...</p>
+          </div>
         </div>
       </div>
     </div>
 
-    <div id="modalSobreSite" class="modal" aria-hidden="true">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h3>O Site Liturgia | Ágape de Jovens</h3>
-          <button class="close-modal">&times;</button>
-        </div>
-        <div class="modal-body">
-          <p>
-            Este sistema foi desenvolvido para facilitar o acesso à vida
-            litúrgica da nossa comunidade, o <strong>Ágape de Jovens</strong>.
-          </p>
-          <hr />
-          <p style="font-size: 0.8rem; color: var(--muted)">Liturgia - 2026.</p>
-          <button
-            id="btn-login-secreto"
-            class="btn-secondary"
-            style="margin-top: 20px; font-size: 0.7rem"
-          >
-            Área do Coordenador (Restrito)
-          </button>
-        </div>
-      </div>
-    </div>
-
-    <div id="modalLogin" class="modal" aria-hidden="true">
-      <div class="modal-content modal-content-centered">
-        <div class="modal-header">
-          <h3>Acesso Coordenador</h3>
-          <button class="close-modal">&times;</button>
-        </div>
-        <div class="modal-body">
-          <input
-            type="email"
-            id="login-email"
-            placeholder="E-mail"
-            class="input-admin"
-            autocomplete="email"
-          />
-          <input
-            type="password"
-            id="login-senha"
-            placeholder="Senha"
-            class="input-admin"
-            autocomplete="current-password"
-          />
-          <button id="btn-fazer-login" class="btn-primary">Entrar</button>
-        </div>
-      </div>
-    </div>
-
-    <div id="modalAdminAvisos" class="modal" aria-hidden="true">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h3>Painel de Avisos</h3>
-          <button class="close-modal">&times;</button>
-        </div>
-        <div class="modal-body">
-          <textarea
-            id="novo-aviso-texto"
-            placeholder="Digite o aviso aqui..."
-            class="input-admin"
-          ></textarea>
-          <label style="display: block; margin: 10px 0 5px; font-weight: bold"
-            >Expirar em:</label
-          >
-          <input
-            type="date"
-            id="aviso-data-expiracao"
-            class="input-admin"
-            style="margin-bottom: 15px"
-          />
-          <button id="btn-salvar-aviso" class="btn-primary">
-            Postar Aviso 🔥
-          </button>
-          <hr />
-          <div id="meus-avisos-lista"></div>
-        </div>
-      </div>
-    </div>
+    <div id="modalCalendario" class="modal"><div class="modal-content modal-content-centered"><div class="modal-header"><h3 id="mes-ano-calendario">Calendário</h3><button class="close-modal">&times;</button></div><div class="modal-body"><div id="calendario-grid" class="calendar-grid"></div><div id="lista-eventos-dia" style="margin-top: 20px; padding-top: 15px; border-top: 1px solid var(--border);"></div></div></div></div>
+    <div id="modalNotas" class="modal"><div class="modal-content"><div class="modal-header"><h3>Minhas Anotações</h3><button class="close-modal">&times;</button></div><div class="modal-body"><textarea id="area-notas" class="input-admin" style="height: 300px; border: none; background: transparent;" placeholder="Escreva aqui..."></textarea></div></div></div>
+    <div id="modalSobreSite" class="modal"><div class="modal-content"><div class="modal-header"><h3>Sobre</h3><button class="close-modal">&times;</button></div><div class="modal-body"><p>Ágape de Jovens v5.0</p><button id="btn-login-secreto" class="btn-secondary" style="margin-top:20px;">Admin</button></div></div></div>
+    <div id="modalLogin" class="modal"><div class="modal-content modal-content-centered"><div class="modal-header"><h3>Admin</h3><button class="close-modal">&times;</button></div><div class="modal-body"><input type="email" id="login-email" class="input-admin" placeholder="Email"><input type="password" id="login-senha" class="input-admin" placeholder="Senha"><button id="btn-fazer-login" class="btn-primary">Entrar</button></div></div></div>
+    <div id="modalAdminAvisos" class="modal"><div class="modal-content"><div class="modal-header"><h3>Avisos</h3><button class="close-modal">&times;</button></div><div class="modal-body"><textarea id="novo-aviso-texto" class="input-admin"></textarea><input type="date" id="aviso-data-expiracao" class="input-admin"><button id="btn-salvar-aviso" class="btn-primary">Salvar</button><div id="meus-avisos-lista"></div></div></div></div>
 
     <script type="module" src="./js/main.js"></script>
   </body>
