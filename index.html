@@ -15,7 +15,7 @@
     <link rel="stylesheet" href="css/style.css" />
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-    
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0&icon_names=book_5" />
     <meta name="mobile-web-app-capable" content="yes" />
     <meta name="apple-mobile-web-app-capable" content="yes" />
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
@@ -52,9 +52,10 @@
               <span id="badge-cor" class="badge-cor">...</span>
             </div>
           </div>
-          <a href="https://santo.cancaonova.com" target="_blank" class="btn-conhecer">
-            Conhecer o Santo do Dia ↗
-          </a>
+          <a href="https://santo.cancaonova.com" target="_blank" class="btn-conhecer" style="display: flex; align-items: center; justify-content: center; gap: 8px;">
+  Conhecer o Santo do Dia
+  <span class="material-symbols-rounded" style="font-size: 1.2rem;">north_east</span>
+</a>
         </section>
 
         <section class="card" id="liturgia">
@@ -321,7 +322,10 @@
         <div class="modal-body">
           <p style="margin-bottom: 10px; color: var(--muted)">Capítulo:</p>
           <input type="number" id="input-capitulo" class="input-admin" placeholder="Ex: 1" min="1">
-          <button id="btn-ler-capitulo" class="btn-primary">Ler Agora 📖</button>
+          <button id="btn-ler-capitulo" class="btn-primary" style="display: flex; align-items: center; justify-content: center; gap: 10px;">
+  Ler Agora
+  <span class="material-symbols-rounded">book_5</span>
+</button>
         </div>
       </div>
     </div>
@@ -375,9 +379,28 @@
 
     <div id="leitura-biblia-container" style="display:none; position:fixed; top:0; left:0; width:100vw; height:100vh; background:#0f172a; z-index:10000; overflow-y:auto; padding:20px;">
         <div style="max-width:650px; margin:0 auto; padding-bottom:50px;">
-            <button onclick="fecharLeitura()" style="background:rgba(255,255,255,0.1); color:white; border:none; padding:10px 15px; border-radius:10px; cursor:pointer;">
-            ← Voltar
-            </button>
+            <button onclick="fecharLeitura()" style="
+        position: fixed; 
+        bottom: 20px; 
+        left: 20px; 
+        z-index: 10001;
+        background: rgba(15, 23, 42, 0.9); /* Fundo escuro semi-transparente */
+        backdrop-filter: blur(10px);        /* Efeito de vidro */
+        color: white; 
+        border: 1px solid rgba(255,255,255,0.2); 
+        padding: 12px 20px; 
+        border-radius: 50px; 
+        cursor: pointer; 
+        display: flex; 
+        align-items: center; 
+        gap: 8px;
+        box-shadow: 0 4px 12px rgba(0,0,0,0.5); /* Sombra forte para destacar */
+        font-weight: 600;
+        font-size: 0.9rem;">
+        
+        <span class="material-symbols-rounded">arrow_back</span>
+        Voltar
+    </button>
             <h2 id="leitura-titulo" style="color:#3b82f6; margin:20px 0;"></h2>
             <div id="leitura-texto" style="line-height:1.8; color:#cbd5e1; text-align: justify;"></div>
         </div>
