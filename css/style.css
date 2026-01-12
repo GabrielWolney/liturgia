@@ -1569,3 +1569,63 @@ body, h1, h2, h3, h4, p, span, div, li, button, input, textarea {
 .btn-delete-aviso span {
     font-size: 18px;
 }
+/* ========================================= */
+/* ESTILO DOS BOTÕES DA BÍBLIA (UI Melhorada) */
+/* ========================================= */
+
+.btn-livro {
+    /* Layout Flex para centralizar texto */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 50px; /* Altura confortável para o dedo */
+    padding: 8px 5px;
+    
+    /* Tipografia */
+    font-size: 0.85rem;
+    font-weight: 600;
+    text-align: center;
+    
+    /* Forma */
+    border-radius: 12px;
+    cursor: pointer;
+    transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+    
+    /* Impede seleção de texto ao clicar rápido */
+    user-select: none;
+    -webkit-tap-highlight-color: transparent;
+}
+
+/* --- MODO CLARO (Onde estava feio) --- */
+/* Forçamos cores claras e sombras suaves para dar profundidade */
+[data-theme="light"] .btn-livro {
+    background-color: #ffffff;      /* Fundo branco puro */
+    color: #334155;                 /* Texto cinza chumbo (legível) */
+    border: 1px solid #e2e8f0;      /* Borda cinza muito sutil */
+    
+    /* Sombra suave estilo Apple/Material Design */
+    box-shadow: 0 2px 4px rgba(148, 163, 184, 0.15); 
+}
+
+/* Efeito Hover/Toque no Claro */
+[data-theme="light"] .btn-livro:active,
+[data-theme="light"] .btn-livro:hover {
+    border-color: var(--primary);   /* Borda fica da cor do tema */
+    color: var(--primary);          /* Texto fica da cor do tema */
+    background-color: #f8fafc;      /* Fundo levemente cinza */
+    transform: translateY(1px);     /* Efeito de "apertar" */
+    box-shadow: none;
+}
+
+/* --- MODO ESCURO (Preservando o contraste) --- */
+[data-theme="dark"] .btn-livro {
+    background-color: #1e293b;      /* Azul escuro profundo */
+    color: #e2e8f0;                 /* Texto quase branco */
+    border: 1px solid #334155;      /* Borda discreta */
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+[data-theme="dark"] .btn-livro:active {
+    background-color: #0f172a;
+    border-color: var(--primary);
+}

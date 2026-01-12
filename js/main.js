@@ -133,7 +133,6 @@ async function initApp() {
     carregarAvisos();
     ouvirContadorLeituras();
 
-    // Notificações em bloco try/catch para não parar o app
     try {
       configurarNotificacoes();
     } catch (e) {
@@ -147,115 +146,141 @@ async function initApp() {
     setInterval(configurarIconeDinamicoHoras, 300000);
   } catch (erroFatal) {
     console.error("Erro fatal na inicialização:", erroFatal);
-    // Remove splash mesmo com erro
     const splash = document.getElementById("splash-screen");
     if (splash) splash.remove();
   }
 }
 
 // =======================================================
-// MURAL DE ORAÇÃO (24H + EXCLUSÃO)
+// MURAL DE ORAÇÃO
 // =======================================================
 window.abrirMuralPedidos = () => {
   abrirModal("modalMuralPedidos");
   carregarMuralFirestore();
 };
 
-// 1. Postar e salvar o ID imediatamente
-// 1. Postar pedido e salvar ID localmente para permitir exclusão
-// 1. POSTAR: Garante que o ID seja salvo antes de qualquer outra coisa
 window.postarPedido = async () => {
-    const nomeInput = document.getElementById("nome-orante");
-    const textoInput = document.getElementById("texto-pedido-publico");
-    const nome = nomeInput.value.trim() || "Anônimo";
-    const texto = textoInput.value.trim();
+  const nomeInput = document.getElementById("nome-orante");
+  const textoInput = document.getElementById("texto-pedido-publico");
 
-    if (!texto) return alert("Escreva seu pedido!");
+  // Captura segura
+  const nome = nomeInput ? nomeInput.value.trim() || "Anônimo" : "Anônimo";
+  const texto = textoInput ? textoInput.value.trim() : "";
 
-    const btn = document.querySelector("#modalMuralPedidos .btn-primary");
-    try {
-        btn.disabled = true;
-        
-        const docRef = await addDoc(collection(db, "mural_oracoes"), {
-            nome: nome,
-            texto: texto,
-            data: new Date(),
-            rezaram: 0
-        });
+  if (!texto) return alert("Escreva seu pedido!");
 
-        // SALVAMENTO GARANTIDO
-        let meusIds = JSON.parse(localStorage.getItem("meus_pedidos_mural") || "[]");
-        meusIds.push(docRef.id);
-        localStorage.setItem("meus_pedidos_mural", JSON.stringify(meusIds));
-        
-        console.log("ID Salvo com sucesso:", docRef.id); // Debug para você no F12
-        textoInput.value = "";
-
-    } catch (e) {
-        console.error(e);
-    } finally {
-        btn.disabled = false;
-    }
-};
-
-// 2. RENDERIZAR: Garante que a lixeira apareça consultando o storage atualizado
-function carregarMuralFirestore() {
-    const feed = document.getElementById("feed-pedidos");
-    if (!feed) return;
-    if (unsubscribeMural) unsubscribeMural();
-
-    const ontem = new Date();
-    ontem.setHours(ontem.getHours() - 24);
-
-    const q = query(collection(db, "mural_oracoes"), where("data", ">", ontem), orderBy("data", "desc"));
-
-    unsubscribeMural = onSnapshot(q, (snapshot) => {
-        feed.innerHTML = "";
-        // Lê a lista atualizada de IDs toda vez que o banco muda
-        const meusIds = JSON.parse(localStorage.getItem("meus_pedidos_mural") || "[]");
-
-        snapshot.forEach((docSnap) => {
-            const dados = docSnap.data();
-            const id = docSnap.id;
-            const souDono = meusIds.includes(id);
-
-            const card = document.createElement("div");
-            card.className = "card-pedido";
-            card.innerHTML = `
-                <div class="pedido-header">
-                    <span class="pedido-nome">${dados.nome}</span>
-                    ${souDono ? `
-                        <button onclick="excluirMeuPedido('${id}')" class="btn-excluir-pedido">
-                            <span class="material-symbols-rounded">delete</span>
-                        </button>` : ''}
-                </div>
-                <p class="pedido-texto">${dados.texto}</p>
-            `;
-            feed.appendChild(card);
-        });
-    });
-}
-window.excluirMeuPedido = async (id) => {
-  if (!confirm("Deseja apagar seu pedido do mural?")) return;
+  const btn = document.querySelector("#modalMuralPedidos .btn-primary");
   try {
-    await deleteDoc(doc(db, "mural_oracoes", id));
-    removerIdMeusPedidos(id);
+    btn.disabled = true;
+
+    const docRef = await addDoc(collection(db, "mural_oracoes"), {
+      nome: nome,
+      texto: texto,
+      data: new Date(),
+      rezaram: 0,
+    });
+
+    let meusIds = JSON.parse(
+      localStorage.getItem("meus_pedidos_mural") || "[]"
+    );
+    meusIds.push(docRef.id);
+    localStorage.setItem("meus_pedidos_mural", JSON.stringify(meusIds));
+
+    textoInput.value = "";
   } catch (e) {
-    alert("Erro ao excluir.");
+    console.error(e);
+  } finally {
+    btn.disabled = false;
   }
 };
 
-// LocalStorage Helpers
-function salvarIdMeusPedidos(id) {
-  const lista = lerIdsMeusPedidos();
-  lista.push(id);
-  localStorage.setItem("meus_pedidos_mural", JSON.stringify(lista));
+function carregarMuralFirestore() {
+  const feed = document.getElementById("feed-pedidos");
+  if (!feed) return;
+  if (unsubscribeMural) unsubscribeMural();
+
+  // Filtra pedidos das últimas 24h
+  const ontem = new Date();
+  ontem.setHours(ontem.getHours() - 24);
+
+  const q = query(
+    collection(db, "mural_oracoes"),
+    where("data", ">", ontem),
+    orderBy("data", "desc")
+  );
+
+  unsubscribeMural = onSnapshot(q, (snapshot) => {
+    feed.innerHTML = "";
+    const meusIds = JSON.parse(
+      localStorage.getItem("meus_pedidos_mural") || "[]"
+    );
+
+    // === AQUI ESTÁ A PARTE QUE FALTOU (Estado Vazio) ===
+    if (snapshot.empty) {
+      feed.innerHTML = `
+                <div style="text-align: center; padding: 40px 20px; color: var(--muted); opacity: 0.8;">
+                    <span class="material-symbols-rounded" style="font-size: 50px; margin-bottom: 15px; color: #db2777;">volunteer_activism</span>
+                    <h3 style="font-size: 1.1rem; color: var(--text); margin-bottom: 5px;">Mural de Oração</h3>
+                    <p style="font-size: 0.9rem; line-height: 1.5;">
+                        Os pedidos ficam visíveis por apenas <strong>24 horas</strong>.<br>
+                        O mural está vazio agora...
+                    </p>
+                    <div style="margin-top: 20px; font-weight: bold; color: #db2777; background: rgba(219, 39, 119, 0.1); padding: 10px; border-radius: 10px;">
+                        Seja o primeiro a pedir oração hoje! 🙏
+                    </div>
+                </div>
+            `;
+      return;
+    }
+
+    // Se tiver pedidos, renderiza os cards
+    snapshot.forEach((docSnap) => {
+      const dados = docSnap.data();
+      const id = docSnap.id;
+      const souDono = meusIds.includes(id);
+
+      // Formata a hora (Ex: 14:30)
+      const dataPedido = dados.data.toDate();
+      const horaFormatada = dataPedido.toLocaleTimeString("pt-BR", {
+        hour: "2-digit",
+        minute: "2-digit",
+      });
+
+      const card = document.createElement("div");
+      card.className = "card-pedido";
+      card.innerHTML = `
+                <div class="pedido-header">
+                    <div style="display:flex; align-items:center; gap:8px;">
+                        <span class="pedido-nome" style="font-weight:bold; color:var(--primary);">${
+                          dados.nome
+                        }</span>
+                        <span style="font-size:0.7rem; color:var(--muted);">• ${horaFormatada}</span>
+                    </div>
+                    ${
+                      souDono
+                        ? `
+                        <button onclick="excluirMeuPedido('${id}')" class="btn-excluir-pedido" style="color:#ef4444; background:none; border:none; cursor:pointer;">
+                            <span class="material-symbols-rounded" style="font-size:18px;">delete</span>
+                        </button>`
+                        : ""
+                    }
+                </div>
+                <p class="pedido-texto" style="margin-top:8px; line-height:1.5; color:var(--text);">${
+                  dados.texto
+                }</p>
+            `;
+      feed.appendChild(card);
+    });
+
+    // Adiciona um rodapé discreto lembrando das 24h mesmo quando tem pedidos
+    const rodape = document.createElement("div");
+    rodape.innerHTML = `<p style="text-align:center; font-size:0.75rem; color:var(--muted); margin-top:20px; opacity:0.6; font-style:italic;">* Os pedidos somem automaticamente após 24h.</p>`;
+    feed.appendChild(rodape);
+  });
 }
-function lerIdsMeusPedidos() {
-  return JSON.parse(localStorage.getItem("meus_pedidos_mural") || "[]");
-}
+
 function removerIdMeusPedidos(id) {
-  let lista = lerIdsMeusPedidos();
+  let lista = JSON.parse(localStorage.getItem("meus_pedidos_mural") || "[]");
   lista = lista.filter((item) => item !== id);
   localStorage.setItem("meus_pedidos_mural", JSON.stringify(lista));
 }
@@ -268,103 +293,96 @@ window.abrirCalendario = () => {
   abrirModal("modalCalendario");
 };
 function renderizarCalendario() {
-  const grid = document.getElementById("calendario-grid");
-  const titulo = document.getElementById("mes-ano-calendario");
-  const listaEventos = document.getElementById("lista-eventos-dia");
-  if (!grid) return;
+    const grid = document.getElementById("calendario-grid");
+    const titulo = document.getElementById("mes-ano-calendario");
+    const listaEventos = document.getElementById("lista-eventos-dia");
+    
+    if (!grid || !listaEventos) return;
 
-  grid.innerHTML = "";
-  const hoje = new Date();
-  const ano = hoje.getFullYear();
-  const mes = hoje.getMonth();
-
-  titulo.innerText = hoje.toLocaleDateString("pt-BR", {
-    month: "long",
-    year: "numeric",
-  });
-
-  ["D", "S", "T", "Q", "Q", "S", "S"].forEach((d) => {
-    const el = document.createElement("div");
-    el.className = "calendar-header";
-    el.innerText = d;
-    grid.appendChild(el);
-  });
-
-  const primeiroDia = new Date(ano, mes, 1).getDay();
-  const diasNoMes = new Date(ano, mes + 1, 0).getDate();
-
-  for (let i = 0; i < primeiroDia; i++)
-    grid.appendChild(document.createElement("div"));
-
-  for (let dia = 1; dia <= diasNoMes; dia++) {
-    const el = document.createElement("div");
-    el.className = "calendar-day";
-    el.innerText = dia;
-    const dataStr = `${ano}-${String(mes + 1).padStart(2, "0")}-${String(
-      dia
-    ).padStart(2, "0")}`;
-
-    const temAviso = avisosGlobais.find((a) => a.dataExpiracao === dataStr);
-
-    if (temAviso) {
-      el.classList.add("has-event");
-      el.onclick = () => {
-        listaEventos.innerHTML = `
-                    <div class="aviso-carinhoso">
-                        <span class="material-symbols-rounded">event_available</span>
-                        <div>
-                            <strong>Aviso de ${dia}/${mes + 1}:</strong>
-                            <p>${temAviso.texto}</p>
-                        </div>
-                    </div>`;
-      };
-    } else {
-      el.onclick = () => {
-        listaEventos.innerHTML = `<p style="font-size: 0.8rem; color: var(--muted); text-align: center; font-style: italic;">Não há avisos para este dia. Que tal dedicar um tempo à oração pessoal? 🙏</p>`;
-      };
-    }
-
-    if (dia === hoje.getDate()) el.style.border = "2px solid var(--primary)";
-    grid.appendChild(el);
-  }
-
-  // INSTRUÇÃO NA PARTE DE BAIXO
-  if (
-    !listaEventos.innerHTML ||
-    listaEventos.innerHTML.includes("Clique em um dia")
-  ) {
+    grid.innerHTML = "";
+    
+    // === AQUI ESTÁ A CORREÇÃO (Texto Explicativo Padrão) ===
+    // Sempre que abrir, reseta para esta mensagem:
     listaEventos.innerHTML = `
-            <div style="display: flex; align-items: center; gap: 8px; justify-content: center; color: var(--muted); opacity: 0.8;">
-                <span class="material-symbols-rounded" style="font-size: 18px;">touch_app</span>
-                <p style="font-size: 0.75rem; font-weight: 500;">Toque nos dias marcados para ver os avisos do grupo.</p>
-            </div>`;
-  }
+        <div style="display: flex; align-items: center; justify-content: center; gap: 10px; color: var(--muted); margin-top: 15px; padding: 10px; background: rgba(0,0,0,0.03); border-radius: 8px;">
+            <span class="material-symbols-rounded" style="font-size: 20px;">touch_app</span>
+            <span style="font-size: 0.85rem;">Toque nos dias marcados para ver os avisos.</span>
+        </div>
+    `;
+
+    const hoje = new Date();
+    const ano = hoje.getFullYear();
+    const mes = hoje.getMonth();
+
+    titulo.innerText = hoje.toLocaleDateString("pt-BR", { month: "long", year: "numeric" });
+
+    // Cabeçalho dos dias (D, S, T...)
+    ["D", "S", "T", "Q", "Q", "S", "S"].forEach((d) => {
+        const el = document.createElement("div");
+        el.className = "calendar-header";
+        el.innerText = d;
+        grid.appendChild(el);
+    });
+
+    const primeiroDia = new Date(ano, mes, 1).getDay();
+    const diasNoMes = new Date(ano, mes + 1, 0).getDate();
+
+    // Dias vazios antes do dia 1
+    for (let i = 0; i < primeiroDia; i++) grid.appendChild(document.createElement("div"));
+
+    // Dias do mês
+    for (let dia = 1; dia <= diasNoMes; dia++) {
+        const el = document.createElement("div");
+        el.className = "calendar-day";
+        el.innerText = dia;
+        
+        // Formata data para comparar com avisos (YYYY-MM-DD)
+        const dataStr = `${ano}-${String(mes + 1).padStart(2, "0")}-${String(dia).padStart(2, "0")}`;
+        const temAviso = avisosGlobais.find((a) => a.dataExpiracao === dataStr);
+
+        if (temAviso) {
+            el.classList.add("has-event"); // Bolinha ou cor diferente definida no CSS
+            el.onclick = () => {
+                // Quando clica, substitui a instrução pelo aviso
+                listaEventos.innerHTML = `
+                    <div class="aviso-carinhoso" style="animation: fadeIn 0.3s ease;">
+                        <div style="display:flex; align-items:center; gap:10px; margin-bottom:5px;">
+                            <span class="material-symbols-rounded" style="color:var(--primary);">event_available</span>
+                            <strong style="color:var(--primary);">Aviso para dia ${dia}:</strong>
+                        </div>
+                        <p style="font-size: 1rem; color: var(--text); line-height: 1.5;">${temAviso.texto}</p>
+                    </div>`;
+            };
+        } else {
+            el.onclick = () => {
+                listaEventos.innerHTML = `
+                    <p style="font-size: 0.9rem; color: var(--muted); text-align: center; margin-top:15px; font-style: italic;">
+                        Nada agendado para o dia ${dia}.<br>Que tal um momento de oração? 🙏
+                    </p>`;
+            };
+        }
+
+        if (dia === hoje.getDate()) el.style.border = "2px solid var(--primary)";
+        grid.appendChild(el);
+    }
 }
 
 window.abrirNotas = () => abrirModal("modalNotas");
 function configurarNotas() {
-    const area = document.getElementById("area-notas");
-    if(!area) return;
-
-    // placeholder com sugestões do que anotar
-    const sugestoes = [
-        "O que Deus falou ao seu coração hoje? ✨",
-        "Sugestão: Anote pontos da pregação ou do Evangelho...",
-        "Espaço para suas orações, dúvidas ou resoluções espirituais...",
-        "Anote aqui seus compromissos com o grupo Ágape..."
-    ];
-    
-    // Escolhe uma sugestão aleatória toda vez que abre
-    if(!area.value) {
-        area.placeholder = sugestoes[Math.floor(Math.random() * sugestoes.length)];
-    }
-
-    const salvo = localStorage.getItem("minhas_notas_agape");
-    if(salvo) area.value = salvo;
-
-    area.addEventListener("input", () => {
-        localStorage.setItem("minhas_notas_agape", area.value);
-    });
+  const area = document.getElementById("area-notas");
+  if (!area) return;
+  const sugestoes = [
+    "O que Deus falou ao seu coração hoje?",
+    "Pontos da pregação...",
+    "Orações...",
+  ];
+  if (!area.value)
+    area.placeholder = sugestoes[Math.floor(Math.random() * sugestoes.length)];
+  const salvo = localStorage.getItem("minhas_notas_agape");
+  if (salvo) area.value = salvo;
+  area.addEventListener("input", () => {
+    localStorage.setItem("minhas_notas_agape", area.value);
+  });
 }
 
 // =======================================================
@@ -374,11 +392,10 @@ async function gerenciarLiturgia() {
   renderizarSkeletons();
   try {
     const controller = new AbortController();
-    const timeoutId = setTimeout(() => controller.abort(), 3000);
+    setTimeout(() => controller.abort(), 3000);
     const response = await fetch("https://liturgia.up.railway.app/", {
       signal: controller.signal,
     });
-    clearTimeout(timeoutId);
     if (!response.ok) throw new Error("API Principal Falhou");
     dadosLiturgia = await response.json();
     if (!dadosLiturgia || !dadosLiturgia.primeiraLeitura)
@@ -440,8 +457,7 @@ function preencherResumoInicio(dados) {
 
   const getText = (d) => {
     if (!d) return "---";
-    if (typeof d === "string") return d;
-    return d.referencia || "---";
+    return typeof d === "string" ? d : d.referencia || "---";
   };
   if (resumo) {
     const l1 = getText(dados.primeiraLeitura);
@@ -563,6 +579,7 @@ window.alternarTestamento = (tipo) => {
     renderizarLivros(bibliaCatolica.antigo);
   }
 };
+
 function renderizarLivros(lista) {
   const grid = document.getElementById("grid-livros");
   if (!grid) return;
@@ -577,27 +594,160 @@ function renderizarLivros(lista) {
     grid.appendChild(btn);
   });
 }
+
+// =======================================================
+// LÓGICA DA BÍBLIA (LOCAL - ESTRUTURA CORRETA)
+// =======================================================
+let cacheBiblia = null;
+
+// 1. Carrega o arquivo localmente
+async function carregarBibliaLocal() {
+  if (cacheBiblia) return cacheBiblia;
+
+  try {
+    const response = await fetch("./js/bibliaAveMaria.json");
+    if (!response.ok) throw new Error("Arquivo não encontrado (404)");
+
+    cacheBiblia = await response.json();
+    console.log("Bíblia carregada com sucesso!");
+    return cacheBiblia;
+  } catch (e) {
+    console.error(e);
+    alert(
+      "Erro: Certifique-se de que 'bibliaAveMaria.json' está na pasta 'js'."
+    );
+    return null;
+  }
+}
+
+// 2. Abre o Modal de Capítulo
 function abrirModalCapitulo(livroObj) {
   const modal = document.getElementById("modalCapitulos");
   const titulo = document.getElementById("titulo-livro-selecionado");
   const input = document.getElementById("input-capitulo");
   const btnLer = document.getElementById("btn-ler-capitulo");
+
   if (titulo) titulo.innerText = livroObj.nome;
   if (input) input.value = "";
   if (modal) modal.style.display = "flex";
-  if (btnLer) {
-    btnLer.onclick = () => {
-      const cap = input.value;
-      if (!cap || cap < 1) return alert("Digite um capítulo válido!");
-      window.open(
-        `https://www.bibliacatolica.com.br/biblia-ave-maria/${livroObj.slug}/${cap}/`,
-        "_blank"
+
+  // Clone para limpar eventos antigos
+  const novoBtn = btnLer.cloneNode(true);
+  btnLer.parentNode.replaceChild(novoBtn, btnLer);
+
+  novoBtn.onclick = async () => {
+    const cap = input.value.trim();
+    if (!cap || cap < 1) return alert("Capítulo inválido");
+    // Passa o objeto completo (nome e slug)
+    await executarLeituraLocal(livroObj, cap);
+  };
+}
+
+// 3. Busca e Renderiza (Adaptado para a estrutura do seu JSON)
+async function executarLeituraLocal(livroObj, capitulo) {
+  const container = document.getElementById("leitura-biblia-container");
+  const textoDiv = document.getElementById("leitura-texto");
+  const tituloDiv = document.getElementById("leitura-titulo");
+
+  try {
+    // UI Loading
+    document.getElementById("modalCapitulos").style.display = "none";
+    container.style.display = "block";
+    document.body.style.overflow = "hidden";
+    textoDiv.innerHTML =
+      "<div style='text-align:center; padding:20px;'><span class='material-symbols-rounded' style='animation:spin 1s infinite'>autorenew</span><br>Abrindo as Escrituras...</div>";
+
+    // Carrega Dados
+    const dados = await carregarBibliaLocal();
+    if (!dados) throw new Error("Base de dados vazia.");
+
+    // === PASSO A: JUNTAR OS DOIS TESTAMENTOS ===
+    // O seu JSON separa em "antigoTestamento" e "novoTestamento".
+    // Vamos juntar tudo numa lista só para facilitar a busca.
+    let todosLivros = [];
+    if (dados.antigoTestamento)
+      todosLivros = todosLivros.concat(dados.antigoTestamento);
+    if (dados.novoTestamento)
+      todosLivros = todosLivros.concat(dados.novoTestamento);
+
+    // === PASSO B: ENCONTRAR O LIVRO ===
+    // Normalizamos tudo para minúsculo e sem acento para garantir o match
+    // Ex: "São Mateus" (JSON) vs "sao-mateus" (Slug) vs "Mateus" (Nome)
+    const slugLimpo = livroObj.slug.replace(/-/g, " ").toLowerCase(); // "sao mateus"
+    const nomeLimpo = removerAcentos(livroObj.nome).toLowerCase(); // "mateus"
+
+    const livroEncontrado = todosLivros.find((l) => {
+      const nomeJson = removerAcentos(l.nome).toLowerCase(); // "sao mateus"
+      return (
+        nomeJson === slugLimpo ||
+        nomeJson === nomeLimpo ||
+        nomeJson.includes(slugLimpo)
       );
-      if (modal) modal.style.display = "none";
-    };
+    });
+
+    if (!livroEncontrado) {
+      throw new Error(`Livro '${livroObj.nome}' não encontrado no arquivo.`);
+    }
+
+    // === PASSO C: ENCONTRAR O CAPÍTULO ===
+    // No seu JSON, 'capitulos' é uma lista de objetos: [{ "capitulo": 1, "versiculos": [...] }]
+    // Tentamos pegar direto pelo índice (capitulo - 1) ou procurando pelo número.
+    let capituloObj = livroEncontrado.capitulos[parseInt(capitulo) - 1];
+
+    // Segurança extra: se o índice falhar, procura pelo número exato
+    if (!capituloObj || capituloObj.capitulo != capitulo) {
+      capituloObj = livroEncontrado.capitulos.find(
+        (c) => c.capitulo == capitulo
+      );
+    }
+
+    if (!capituloObj) {
+      throw new Error(
+        `O livro de ${livroEncontrado.nome} não possui o capítulo ${capitulo}.`
+      );
+    }
+
+    // === PASSO D: RENDERIZAR VERSÍCULOS ===
+    // No seu JSON, 'versiculos' é uma lista de objetos: [{ "versiculo": 1, "texto": "..." }]
+    tituloDiv.innerText = `${livroEncontrado.nome} ${capitulo}`;
+
+    textoDiv.innerHTML = capituloObj.versiculos
+      .map(
+        (v) =>
+          `<p style="margin-bottom:10px; font-size: 1.1rem; text-align: justify;">
+                <b style="color:var(--primary); font-size:0.8rem; margin-right:8px; vertical-align: super;">${v.versiculo}</b>
+                ${v.texto}
+            </p>`
+      )
+      .join("");
+
+    container.scrollTo(0, 0);
+  } catch (e) {
+    console.error(e);
+    textoDiv.innerHTML = `
+            <div style="text-align:center; color: #ef4444; padding: 20px;">
+                <span class="material-symbols-rounded" style="font-size: 48px;">error</span>
+                <p style="margin-top:10px; font-weight:bold;">Não foi possível abrir.</p>
+                <p>${e.message}</p>
+                <button onclick="fecharLeitura(); document.getElementById('modalCapitulos').style.display='flex'" class="btn-primary" style="margin-top:15px; background:#333;">Tentar outro</button>
+            </div>`;
   }
 }
 
+// Auxiliar para normalizar texto
+function removerAcentos(str) {
+  if (!str) return "";
+  return str.normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+}
+// 4. Botão Voltar
+window.fecharLeitura = () => {
+  document.getElementById("leitura-biblia-container").style.display = "none";
+  document.body.style.overflow = "auto";
+};
+
+// =======================================================
+// UTILITÁRIOS GERAIS
+// =======================================================
 function renderizarSkeletons() {
   const elSanto = document.getElementById("nome-santo");
   if (elSanto)
@@ -606,6 +756,7 @@ function renderizarSkeletons() {
   if (resumo)
     resumo.innerHTML = `<div class="skeleton skeleton-text" style="width: 60%; margin: 0 auto 10px auto;"></div><div class="skeleton skeleton-text" style="width: 80%; margin: 0 auto 10px auto;"></div>`;
 }
+
 function configurarNavegação() {
   const navItems = document.querySelectorAll(".nav-item");
   const abas = document.querySelectorAll(".conteudo-aba");
@@ -624,6 +775,7 @@ function configurarNavegação() {
     };
   });
 }
+
 function configurarTema() {
   const btnTema = document.getElementById("btn-tema");
   const html = document.documentElement;
@@ -651,6 +803,7 @@ function configurarTema() {
     };
   }
 }
+
 function configurarIconeDinamicoHoras() {
   const iconElement = document.getElementById("icon-horas");
   if (!iconElement) return;
@@ -661,6 +814,7 @@ function configurarIconeDinamicoHoras() {
   else if (hora >= 18 && hora < 22) novoIcone = "clear_night";
   if (iconElement.innerText !== novoIcone) iconElement.innerText = novoIcone;
 }
+
 const configurarTercoUI = () => {
   const tituloEl = document.getElementById("titulo-misterio");
   const descEl = document.getElementById("descricao-misterio");
@@ -675,84 +829,72 @@ const configurarTercoUI = () => {
   }</div>`;
 };
 
-// Modais
+// Listeners Modais
 function configurarListenersAdmin() {
-    setupClick("btn-fazer-login", async () => {
-        const e = document.getElementById("login-email").value;
-        const s = document.getElementById("login-senha").value;
-        
-        const btn = document.getElementById("btn-fazer-login");
-        const originalText = btn.innerText;
+  setupClick("btn-fazer-login", async () => {
+    const e = document.getElementById("login-email").value;
+    const s = document.getElementById("login-senha").value;
+    const btn = document.getElementById("btn-fazer-login");
+    const originalText = btn.innerText;
 
-        try {
-            btn.innerText = "Verificando...";
-            btn.disabled = true;
+    try {
+      btn.innerText = "Verificando...";
+      btn.disabled = true;
+      await signInWithEmailAndPassword(auth, e, s);
+      document.getElementById("modalLogin").style.display = "none";
+      abrirModal("modalAdminAvisos");
+      gerenciarAvisosPainel();
+    } catch (err) {
+      alert("Acesso negado: Verifique seu e-mail e senha de Coordenador.");
+    } finally {
+      btn.innerText = originalText;
+      btn.disabled = false;
+    }
+  });
 
-            // 1. Tenta autenticar no Firebase
-            await signInWithEmailAndPassword(auth, e, s);
-            
-            // 2. Se chegou aqui, o login deu certo. Fecha o login e abre o admin.
-            document.getElementById("modalLogin").style.display = "none";
-            abrirModal("modalAdminAvisos");
-            
-            // 3. CARREGA A LISTA DE EXCLUSÃO (Essencial para aparecer o lixinho)
-            gerenciarAvisosPainel();
+  setupClick("btn-salvar-aviso", async () => {
+    const inp = document.getElementById("novo-aviso-texto");
+    const dataExp = document.getElementById("aviso-data-expiracao");
+    if (!inp.value || !dataExp.value)
+      return alert("Preencha o texto e a data!");
 
-        } catch (err) {
-            console.error("Erro de login:", err);
-            alert("Acesso negado: Verifique seu e-mail e senha de Coordenador.");
-        } finally {
-            btn.innerText = originalText;
-            btn.disabled = false;
-        }
-    });
-
-    setupClick("btn-salvar-aviso", async () => {
-        const inp = document.getElementById("novo-aviso-texto");
-        const dataExp = document.getElementById("aviso-data-expiracao");
-        if (!inp.value || !dataExp.value) return alert("Preencha o texto e a data!");
-        
-        try {
-            await addDoc(collection(db, "avisos"), {
-                texto: inp.value,
-                dataExpiracao: dataExp.value,
-                dataCriacao: new Date()
-            });
-            inp.value = "";
-            alert("Aviso publicado com sucesso! ✨");
-        } catch (e) {
-            alert("Erro ao salvar aviso.");
-        }
-    });
+    try {
+      await addDoc(collection(db, "avisos"), {
+        texto: inp.value,
+        dataExpiracao: dataExp.value,
+        dataCriacao: new Date(),
+      });
+      inp.value = "";
+      alert("Aviso publicado com sucesso! ✨");
+    } catch (e) {
+      alert("Erro ao salvar aviso.");
+    }
+  });
 }
 
-// --- FUNÇÃO PARA POPULAR A LISTA COM BOTÃO DE EXCLUIR ---
 const gerenciarAvisosPainel = () => {
-    const listaAdmin = document.getElementById("meus-avisos-lista");
-    if (!listaAdmin) return;
+  const listaAdmin = document.getElementById("meus-avisos-lista");
+  if (!listaAdmin) return;
+  const hojeLocal = new Date().toLocaleDateString("en-CA");
+  const q = query(
+    collection(db, "avisos"),
+    where("dataExpiracao", ">=", hojeLocal),
+    orderBy("dataExpiracao", "asc")
+  );
 
-    // Busca apenas avisos que ainda não expiraram
-    const hojeLocal = new Date().toLocaleDateString("en-CA");
-    const q = query(
-        collection(db, "avisos"), 
-        where("dataExpiracao", ">=", hojeLocal), 
-        orderBy("dataExpiracao", "asc")
-    );
-
-    onSnapshot(q, (snapshot) => {
-        listaAdmin.innerHTML = "<h4 style='margin: 15px 0 10px; font-size:0.9rem;'>Avisos Ativos (Toque no 🗑️ para apagar):</h4>";
-        
-        if (snapshot.empty) {
-            listaAdmin.innerHTML += "<p style='font-size:0.8rem; color:gray;'>Nenhum aviso no sistema.</p>";
-            return;
-        }
-
-        snapshot.forEach((documento) => {
-            const dados = documento.data();
-            const item = document.createElement("div");
-            item.className = "item-admin-aviso"; // Estilo abaixo
-            
-            item.innerHTML = `
+  onSnapshot(q, (snapshot) => {
+    listaAdmin.innerHTML =
+      "<h4 style='margin: 15px 0 10px; font-size:0.9rem;'>Avisos Ativos (Toque no 🗑️ para apagar):</h4>";
+    if (snapshot.empty) {
+      listaAdmin.innerHTML +=
+        "<p style='font-size:0.8rem; color:gray;'>Nenhum aviso no sistema.</p>";
+      return;
+    }
+    snapshot.forEach((documento) => {
+      const dados = documento.data();
+      const item = document.createElement("div");
+      item.className = "item-admin-aviso";
+      item.innerHTML = `
                 <div style="flex: 1; padding-right: 10px;">
                     <p style="font-size: 0.85rem; font-weight: 600; margin: 0; color:var(--text);">${dados.texto}</p>
                     <small style="color: var(--muted);">Expira em: ${dados.dataExpiracao}</small>
@@ -761,25 +903,24 @@ const gerenciarAvisosPainel = () => {
                     <span class="material-symbols-rounded">delete</span>
                 </button>
             `;
-            listaAdmin.appendChild(item);
-        });
-
-        // Adiciona evento de clique nos botões de excluir avisos
-        listaAdmin.querySelectorAll(".btn-delete-aviso").forEach((btn) => {
-            btn.onclick = async (e) => {
-                const idAviso = e.currentTarget.getAttribute("data-id");
-                if (confirm("Tem certeza que deseja remover este aviso do mural?")) {
-                    try {
-                        await deleteDoc(doc(db, "avisos", idAviso));
-                        alert("Aviso removido!");
-                    } catch (err) {
-                        alert("Erro ao excluir aviso.");
-                    }
-                }
-            };
-        });
+      listaAdmin.appendChild(item);
     });
+
+    listaAdmin.querySelectorAll(".btn-delete-aviso").forEach((btn) => {
+      btn.onclick = async (e) => {
+        const idAviso = e.currentTarget.getAttribute("data-id");
+        if (confirm("Remover aviso?")) {
+          try {
+            await deleteDoc(doc(db, "avisos", idAviso));
+          } catch (err) {
+            alert("Erro ao excluir.");
+          }
+        }
+      };
+    });
+  });
 };
+
 function configurarListenersModais() {
   setupClick("btn-abrir-liturgia", abrirModalLiturgia);
   setupClick("btn-explicar-horas", () => abrirModal("modalExplicacaoHoras"));
@@ -797,14 +938,14 @@ function configurarListenersModais() {
     if (e.target.classList.contains("modal")) fechar();
   };
 }
+
 function abrirModal(id) {
   const modal = document.getElementById(id);
   if (modal) modal.style.display = "flex";
 }
+
 function abrirModalLiturgia() {
-  if (!dadosLiturgia) {
-    usarDadosBackup();
-  }
+  if (!dadosLiturgia) usarDadosBackup();
   logEvent(analytics, "visualizou_liturgia_completa", {
     liturgia_titulo: dadosLiturgia.liturgia,
   });
@@ -813,14 +954,8 @@ function abrirModalLiturgia() {
   const titulo = document.getElementById("modal-titulo");
   if (modal && corpo) {
     titulo.innerText = "Liturgia da Palavra";
-    const getText = (d) => {
-      if (!d) return "Texto não disponível";
-      return d.texto || d || "Texto não disponível";
-    };
-    const getRef = (d) => {
-      if (!d) return "Ref";
-      return d.referencia || "Referência";
-    };
+    const getText = (d) => (d ? d.texto || d : "Texto não disponível");
+    const getRef = (d) => (d ? d.referencia || "Referência" : "Ref");
     let html = `<div class="leitura-bloco"><h4>1ª Leitura</h4><p style="color: #64748b; font-weight: bold; margin-bottom: 10px;">${getRef(
       dadosLiturgia.primeiraLeitura
     )}</p><p>${getText(dadosLiturgia.primeiraLeitura)}</p></div><hr>`;
@@ -830,11 +965,10 @@ function abrirModalLiturgia() {
     if (
       dadosLiturgia.segundaLeitura &&
       !JSON.stringify(dadosLiturgia.segundaLeitura).includes("Não há")
-    ) {
+    )
       html += `<div class="leitura-bloco"><h4>2ª Leitura</h4><p style="color: #64748b; font-weight: bold;">${getRef(
         dadosLiturgia.segundaLeitura
       )}</p><p>${getText(dadosLiturgia.segundaLeitura)}</p></div><hr>`;
-    }
     html += `<div class="leitura-bloco"><h4>Evangelho</h4><p style="color: #64748b; font-weight: bold; margin-bottom: 10px;">${getRef(
       dadosLiturgia.evangelho
     )}</p><p>${getText(dadosLiturgia.evangelho)}</p></div>`;
@@ -843,6 +977,7 @@ function abrirModalLiturgia() {
     abrirModal("modalGeral");
   }
 }
+
 window.abrirHora = (tipo) => {
   logEvent(analytics, "rezou_liturgia_horas", { tipo_hora: tipo });
   const modal = document.getElementById("modalGeral");
@@ -869,6 +1004,7 @@ window.abrirHora = (tipo) => {
     abrirModal("modalGeral");
   }
 };
+
 window.compartilharEvangelho = async function () {
   if (!dadosLiturgia) return;
   const texto = `📖 *Evangelho do Dia*\n\nConfira a liturgia completa no App Ágape!\n${window.location.href}`;
@@ -879,9 +1015,7 @@ window.compartilharEvangelho = async function () {
         text: texto,
         url: window.location.href,
       });
-    } catch (err) {
-      console.log("Cancelado");
-    }
+    } catch (err) {}
   } else {
     try {
       await navigator.clipboard.writeText(texto);
@@ -891,6 +1025,7 @@ window.compartilharEvangelho = async function () {
     }
   }
 };
+
 onMessage(messaging, (payload) => {
   alert(`Novo Aviso do Ágape: ${payload.notification.body}`);
 });
@@ -901,7 +1036,6 @@ window.limparExame = () => {
     .forEach((d) => d.removeAttribute("open"));
 };
 
-// Rede de segurança (Splash)
 setTimeout(() => {
   const splash = document.getElementById("splash-screen");
   if (splash) {
