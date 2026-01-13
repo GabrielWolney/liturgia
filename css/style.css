@@ -842,7 +842,8 @@ textarea.input-admin {
 
 .passo-card {
   display: flex !important;
-  align-items: center !important;
+  align-items: left !important;
+  text-align: left;
   gap: 15px !important;
   padding: 10px;
   border-radius: 12px;
@@ -1315,27 +1316,28 @@ textarea.input-admin {
     height: 24px;
     color: var(--muted, #94a3b8);
     transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+ 
 }
 
 /* 1. REGRA GERAL: Tudo vira LINHA (Stroke) */
 .icone-oracao-custom path {
     fill: none;
-    stroke: currentColor; /* Pega a cor do pai */
-    stroke-width: 45;     /* Engrossa a linha para ver no celular */
+    stroke: currentColor; 
+    stroke-width: 35;    
     stroke-linecap: round;
     stroke-linejoin: round;
 }
 
 /* 2. EXCEÇÃO: O detalhe da cruz vira SÓLIDO (Fill) */
 .icone-oracao-custom path.classe-fill {
-    fill: currentColor;   /* Pinta o miolo */
-    stroke: none;         /* Remove a borda */
+    fill: currentColor;   
+    stroke: none;         
 }
 
 /* ESTADO ATIVO (Clicado) */
 .nav-item.active .icone-oracao-custom {
     transform: translateY(-2px);
-    /* Herda a cor padrão (Azul/Primary) definida no .nav-item.active */
+    
 }
 
 /* MODO ESCURO */
@@ -1383,24 +1385,21 @@ textarea.input-admin {
     flex-direction: column !important;
     align-items: center !important;
     justify-content: center !important;
-    
-    /* O SEGREDO: Define um espaço fixo exato entre ícone e texto */
-    gap: 6px !important; 
-    
+    gap: 6px !important;   
     height: 55px !important;
-    padding-bottom: 2px; /* Ajuste fino ótico */
+    padding-bottom: 2px;
 }
 
 /* 1. Normaliza os Ícones de Fonte (Google) */
 .nav-item .material-symbols-rounded {
-    display: flex !important; /* Faz ele agir como caixa, não texto */
+    display: flex !important;
     align-items: center;
     justify-content: center;
     width: 24px !important;
     height: 24px !important;
     font-size: 24px !important;
-    line-height: 1 !important; /* Remove entrelinha extra */
-    margin: 0 !important;      /* Remove margens antigas */
+    line-height: 1 !important;
+    margin: 0 !important;     
 }
 
 /* 2. Normaliza os Ícones SVG (Confissão/Oração) */
@@ -1408,17 +1407,42 @@ textarea.input-admin {
     display: block !important;
     width: 24px !important;
     height: 24px !important;
-    margin: 0 !important;      /* Remove margens antigas */
+    margin: 0 !important;     
 }
 
 /* 3. Normaliza o Texto */
 .nav-item span:not(.material-symbols-rounded) {
     display: block !important;
-    line-height: 1 !important; /* Altura de linha compacta */
-    margin: 0 !important;      /* Remove margens antigas */
-    padding-top: 0 !important; /* Remove paddings antigos */
+    line-height: 1 !important; 
+    margin: 0 !important;    
+    padding-top: 0 !important;
     
     /* Garante alinhamento visual */
     position: relative;
     top: -1px; 
+}
+/* ========================================= */
+/* CORREÇÃO BLINDADA: ÍCONES VAZIOS          */
+/* ========================================= */
+
+/* 1. REGRA MESTRA (Material Symbols - Google) */
+.material-symbols-rounded {
+    /* Define o estado padrão como VAZIO (FILL 0) */
+    font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24 !important;
+
+    transition: font-variation-settings 0.6s ease-in-out !important; 
+}
+
+/* 2. ÍCONES DENTRO DA NAV (Inativos) */
+.nav-item .material-symbols-rounded {
+    font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24 !important;
+    color: var(--muted);
+    transition: all 0.6s ease-in-out !important; /* Aplica lentidão na cor também */
+}
+
+/* 3. ÍCONE DENTRO DA NAV (Ativo) */
+.nav-item.active .material-symbols-rounded {
+    /* Enche lentamente */
+    font-variation-settings: 'FILL' 1, 'wght' 400, 'GRAD' 0, 'opsz' 24 !important;
+    color: var(--primary);
 }

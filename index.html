@@ -13,9 +13,7 @@
     <title>Liturgia | Ágape de Jovens.</title>
 
     <link rel="stylesheet" href="css/style.css" />
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
-    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0&icon_names=book_5" />
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700;800&family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
     <meta name="mobile-web-app-capable" content="yes" />
     <meta name="apple-mobile-web-app-capable" content="yes" />
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
@@ -82,27 +80,73 @@
         </section>
       </div>
 
-      <div id="tab-oracoes" class="conteudo-aba" style="display: none">
-        <section class="card" id="terco">
-          <h2>Santo Terço</h2>
-          <div id="conteudo-terco" class="conteudo-centralizado">
-            <h3 id="titulo-misterio" class="titulo-destaque">Carregando...</h3>
-            <p id="descricao-misterio" class="texto-descricao"></p>
-          </div>
-        </section>
+      <section id="tab-oracao" class="conteudo-aba" style="display: none;">
 
-        <section class="card" id="horas">
-          <h2>Liturgia das Horas</h2>
-          <div class="botoes-horas">
+    <div class="card">
+        <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 10px;">
+             <h2 style="margin: 0;">Santo Terço</h2>
+        </div>
+        
+        <h3 id="titulo-misterio" style="color: var(--text); font-size: 1rem; margin-top: 5px;">Carregando Mistério...</h3>
+        <div id="descricao-misterio" style="font-size: 0.9rem; color: var(--muted); margin-bottom: 15px;">
+            Verificando o dia da semana...
+        </div>
+    </div>
+
+    <div class="card" id="horas">
+        <div style="display: flex; align-items: center; justify-content: center; gap: 10px; margin-bottom: 15px; width: 100%;">
+            <span class="material-symbols-rounded" style="color: var(--primary); font-size: 28px;">schedule</span>
+            <h2 style="margin: 0;">Liturgia das Horas</h2>
+        </div>
+
+        <div class="botoes-horas">
             <button class="btn-hora" onclick="abrirHora('laudes')">Laudes</button>
             <button class="btn-hora" onclick="abrirHora('vesperas')">Vésperas</button>
             <button class="btn-hora" onclick="abrirHora('completas')">Completas</button>
-          </div>
-          <button class="btn-primary" id="btn-explicar-horas">
+        </div>
+        
+        <button class="btn-primary" id="btn-explicar-horas">
             O que é a Liturgia das Horas?
           </button>
-        </section>
-      </div>
+    </div>
+
+    <div class="card" style="border-left: 4px solid #db2777;">
+        <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 10px;">
+            <span class="material-symbols-rounded" style="color: #db2777; font-size: 28px;">volunteer_activism</span>
+            <h2 style="margin: 0; color: #db2777;">Mural de Intercessão</h2>
+        </div>
+        
+        <p style="font-size: 0.9rem; margin-bottom: 15px;">
+            Peça orações à comunidade ou reze por alguém que precisa hoje.
+        </p>
+
+        <button class="btn-primary" onclick="abrirMuralPedidos()" style="background-color: #db2777;">
+            Ver Pedidos e Rezar
+        </button>
+    </div>
+
+    <div class="card">
+        <h2>Orações Essenciais</h2>
+        
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px; width: 100%; margin-top: 10px;">
+            
+            <button class="btn-livro" onclick="abrirOracao('pai-nosso')">Pai Nosso</button>
+            <button class="btn-livro" onclick="abrirOracao('ave-maria')">Ave Maria</button>
+            <button class="btn-livro" onclick="abrirOracao('gloria-pai')">Glória ao Pai</button>
+            <button class="btn-livro" onclick="abrirOracao('credo')">Credo</button>
+            <button class="btn-livro" onclick="abrirOracao('salve-rainha')">Salve Rainha</button>    
+            <button class="btn-livro" onclick="abrirOracao('santo-anjo')">Santo Anjo</button>
+            <button class="btn-livro" onclick="abrirOracao('sao-miguel')">São Miguel</button>
+            <button class="btn-livro" onclick="abrirOracao('sao-bento')">São Bento</button>        
+            <button class="btn-livro" onclick="abrirOracao('vinde-espirito')">Espírito Santo</button>
+            <button class="btn-livro" onclick="abrirOracao('alma-cristo')">Alma de Cristo</button>
+
+        </div>
+    </div>
+    
+    <div style="height: 100px;"></div>
+
+</section>
 
      <div id="tab-biblia" class="conteudo-aba" style="display: none;">
         
@@ -435,6 +479,21 @@
             <div id="leitura-texto" style="line-height:1.8; color:#cbd5e1; text-align: justify;"></div>
         </div>
     </div>
+    <div id="modalGeral" class="modal" style="display: none;">
+    <div class="modal-content modal-content-centered">
+        
+        <div class="modal-header">
+            <h3 id="modal-titulo" style="margin: 0; color: var(--primary);">Título</h3>
+            <button class="close-modal" onclick="document.getElementById('modalGeral').style.display='none'">
+                <span class="material-symbols-rounded">close</span>
+            </button>
+        </div>
+
+        <div id="modal-corpo" class="modal-body">
+            </div>
+
+    </div>
+</div>
 
     <script type="module" src="./js/main.js"></script>
   </body>
