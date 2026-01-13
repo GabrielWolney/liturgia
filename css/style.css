@@ -1,8 +1,8 @@
-/* =========================================
-   1. VARIÁVEIS E TEMA
-   ========================================= */
+/* =================================================================
+   1. VARIÁVEIS E TEMA (Design System)
+   ================================================================= */
 :root {
-  /* TEMA CLARO */
+  /* TEMA CLARO (Padrão) */
   --bg: #f1f5f9;
   --card-bg: #ffffff;
   --text: #1e293b;
@@ -12,12 +12,14 @@
   --border: #e2e8f0;
   --shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
 
-  /* Layout */
+  /* Layout & Dimensões */
   --nav-height: 70px;
   --header-max-width: 600px;
+  --cor-roxo: #9333ea;
+  --cor-roxo-bg: rgba(147, 51, 234, 0.1);
 }
 
-/* TEMA ESCURO */
+/* TEMA ESCURO (Dark Mode) */
 [data-theme="dark"] {
   --bg: #0f172a;
   --card-bg: #1e293b;
@@ -26,11 +28,13 @@
   --border: #334155;
   --shadow: none;
   --primary-light: rgba(37, 99, 235, 0.35);
+  --cor-roxo: #c084fc;
+  --cor-roxo-bg: rgba(192, 132, 252, 0.15);
 }
 
-/* =========================================
-   2. RESET E TIPOGRAFIA
-   ========================================= */
+/* =================================================================
+   2. RESET E TIPOGRAFIA GLOBAL
+   ================================================================= */
 * {
   margin: 0;
   padding: 0;
@@ -38,12 +42,33 @@
   -webkit-tap-highlight-color: transparent;
 }
 
+/* Força fonte Montserrat globalmente (Override de segurança) */
+body,
+h1,
+h2,
+h3,
+h4,
+p,
+span,
+div,
+a,
+button,
+input,
+textarea,
+li {
+  font-family: "Montserrat", sans-serif !important;
+}
+
+/* Exceção para ícones do Google Fonts */
+.material-symbols-rounded {
+  font-family: "Material Symbols Rounded" !important;
+}
+
 html,
 body {
   height: 100%;
-  overflow: hidden;
+  overflow: hidden; /* Scroll gerenciado pelo Main */
   background: var(--bg);
-  font-family: "Inter", -apple-system, BlinkMacSystemFont, sans-serif;
   transition: background-color 0.3s ease, color 0.3s ease;
 }
 
@@ -53,9 +78,9 @@ body {
   color: var(--text);
 }
 
-/* =========================================
-   3. COMPONENTES GLOBAIS
-   ========================================= */
+/* =================================================================
+   3. TELA DE SPLASH (Carregamento)
+   ================================================================= */
 #splash-screen {
   position: fixed;
   top: 0;
@@ -69,12 +94,14 @@ body {
   z-index: 999999;
   overflow: hidden;
 }
+
 .splash-logo {
   width: 100px;
   height: 100px;
   object-fit: contain;
   animation: girarLogo 2s linear infinite;
 }
+
 @keyframes girarLogo {
   from {
     transform: rotate(0deg);
@@ -84,9 +111,9 @@ body {
   }
 }
 
-/* =========================================
-   HEADER "APP NATIVO" (LOGO ESQ / TEXTO MEIO / BTN DIR)
-   ========================================= */
+/* =================================================================
+   4. HEADER DA APLICAÇÃO (Estilo App Nativo)
+   ================================================================= */
 .topo {
   position: fixed;
   top: 15px;
@@ -94,7 +121,7 @@ body {
   transform: translateX(-50%);
   width: 92%;
   max-width: 450px;
-  height: 60px; /* Um pouco mais fina para ser elegante */
+  height: 60px;
   border-radius: 50px;
   background: var(--card-bg);
   box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
@@ -111,11 +138,11 @@ body {
   padding: 0 15px;
   display: flex;
   align-items: center;
-  justify-content: space-between; /* Joga Logo pra Esq e Botão pra Dir */
-  position: relative; /* Necessário para o título flutuar no meio */
+  justify-content: space-between;
+  position: relative;
 }
 
-/* 1. LOGO (ESQUERDA) */
+/* Logo (Esquerda) */
 .logo-header {
   width: 32px;
   height: 32px;
@@ -123,24 +150,23 @@ body {
   object-fit: contain;
 }
 
-/* 2. TÍTULO (CENTRO ABSOLUTO) */
+/* Título (Centralização Absoluta) */
 .header-container h1 {
-  position: absolute; /* O Pulo do Gato: Tira ele do fluxo */
+  position: absolute;
   left: 50%;
   top: 50%;
-  transform: translate(-50%, -50%); /* Centraliza exato */
-  
-  font-family: 'Poppins', sans-serif;
-  font-size: 0.9rem; /* Tamanho elegante */
-  font-weight: 800; /* Extra grosso */
+  transform: translate(-50%, -50%); /* Centraliza nos dois eixos */
+  font-family: "Poppins", sans-serif;
+  font-size: 0.9rem;
+  font-weight: 800;
   color: var(--primary);
   text-transform: uppercase;
-  letter-spacing: 2px; /* Espaçamento "Premium" */
+  letter-spacing: 2px;
   margin: 0;
   white-space: nowrap;
 }
 
-/* 3. BOTÃO (DIREITA) */
+/* Botão Tema (Direita) */
 #btn-tema {
   background: transparent !important;
   border: none !important;
@@ -153,26 +179,24 @@ body {
   border-radius: 50%;
 }
 
-/* Conteúdo */
-main {
-    padding-top: 100px !important;
-}
-/* =========================================
-   4. ÁREA PRINCIPAL E ABAS (NOVO)
-   ========================================= */
+/* =================================================================
+   5. ÁREA PRINCIPAL (MAIN) E NAVEGAÇÃO
+   ================================================================= */
 main {
   flex: 1;
   overflow-y: auto;
   padding: 1rem;
-  padding-bottom: 100px !important;
-  -webkit-overflow-scrolling: touch;
+  padding-top: 100px !important; /* Compensação do Header */
+  padding-bottom: 120px !important; /* Compensação da Bottom Nav */
+  -webkit-overflow-scrolling: touch; /* Scroll suave no iOS */
   scroll-behavior: smooth;
 }
 
-/* ESTILO DAS ABAS */
+/* Animação de transição de abas */
 .conteudo-aba {
   animation: fadeIn 0.3s ease-out;
 }
+
 @keyframes fadeIn {
   from {
     opacity: 0;
@@ -192,12 +216,13 @@ main {
   letter-spacing: 0.5px;
 }
 
-/* GRID DO MENU (NOVO) */
+/* Grid do Menu Inicial */
 .menu-grid {
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: 15px;
 }
+
 .menu-item {
   display: flex;
   flex-direction: column;
@@ -207,17 +232,19 @@ main {
   cursor: pointer;
   gap: 10px;
 }
+
 .menu-item:active {
   transform: scale(0.98);
 }
+
 .menu-item span {
   font-weight: 600;
   font-size: 0.9rem;
 }
 
-/* =========================================
-   5. CARDS E CONTEÚDO
-   ========================================= */
+/* =================================================================
+   6. CARDS E ELEMENTOS DE UI
+   ================================================================= */
 .card {
   background: var(--card-bg);
   border-radius: 20px;
@@ -231,12 +258,14 @@ main {
   align-items: center;
   transition: background-color 0.3s ease;
 }
+
 .card h2 {
   font-size: 0.95rem;
   font-weight: 700;
   margin-bottom: 1rem;
   color: var(--text);
 }
+
 hr,
 .card-divider {
   width: 60% !important;
@@ -246,9 +275,7 @@ hr,
   opacity: 1 !important;
 }
 
-/* =========================================
-   6. COMPONENTES ESPECÍFICOS
-   ========================================= */
+/* Box Youtube */
 .box-destaque-youtube {
   background-color: var(--bg);
   border: 1px solid var(--border);
@@ -257,6 +284,8 @@ hr,
   margin-top: 15px;
   color: var(--text);
 }
+
+/* Componentes Litúrgicos */
 .circulo-liturgico {
   width: 80px;
   height: 80px;
@@ -269,6 +298,7 @@ hr,
   margin-bottom: 10px;
   transition: all 0.3s ease;
 }
+
 .icone-liturgico-img {
   width: 100%;
   height: 100%;
@@ -319,6 +349,8 @@ hr,
   color: var(--text);
   margin-bottom: 4px;
 }
+
+/* Badges de Cor */
 .badge-cor {
   padding: 4px 12px;
   border-radius: 20px;
@@ -347,14 +379,15 @@ hr,
   background: #fdf2f8;
   color: #9d174d;
 }
+
 #texto-contador-leituras {
-  font-size: 0.7rem; /* Letra bem pequena */
+  font-size: 0.7rem;
   color: var(--muted);
   margin-top: 4px;
   font-weight: 500;
 }
 
-/* Tipografia */
+/* Estilo Missal/Folheto */
 .leitura-bloco p {
   font-size: 0.95rem;
   line-height: 1.6;
@@ -364,6 +397,17 @@ hr,
 .leitura-bloco h4 {
   color: var(--primary);
   margin-bottom: 5px;
+}
+.rubrica {
+  color: #ef4444;
+  font-size: 0.75rem;
+  font-style: italic;
+  font-weight: 600;
+  margin: 15px 0 5px 0;
+  text-transform: uppercase;
+}
+.folheto-conteudo strong {
+  color: var(--primary);
 }
 
 /* Terço */
@@ -382,9 +426,9 @@ hr,
   text-align: center;
 }
 
-/* =========================================
-   7. BOTÕES E INPUTS
-   ========================================= */
+/* =================================================================
+   7. BOTÕES E FORMULÁRIOS
+   ================================================================= */
 .btn-primary {
   width: 100%;
   background: var(--primary);
@@ -397,6 +441,7 @@ hr,
   transition: 0.2s;
   margin-top: 10px;
 }
+
 .btn-secondary {
   width: 100%;
   background: transparent;
@@ -409,6 +454,7 @@ hr,
   margin-top: 12px;
   cursor: pointer;
 }
+
 .btn-conhecer {
   text-decoration: none;
   background: transparent;
@@ -421,6 +467,7 @@ hr,
   display: inline-block;
   margin-top: 15px;
 }
+
 .botoes-horas {
   display: flex;
   gap: 10px;
@@ -438,6 +485,8 @@ hr,
   font-size: 0.8rem;
   cursor: pointer;
 }
+
+/* Botão Outline com Ícone */
 .btn-outline {
   display: inline-flex;
   align-items: center;
@@ -454,14 +503,18 @@ hr,
   cursor: pointer;
   width: auto !important;
 }
+
 .btn-outline .material-symbols-rounded {
-  font-size: 16px !important; /* Força ele a ficar pequeno (16px) */
-  line-height: 1; /* Garante que não empurre o texto para baixo */
+  font-size: 16px !important;
+  line-height: 1;
 }
+
 .btn-outline.lido {
   color: #22c55e !important;
   border-color: #22c55e !important;
 }
+
+/* Inputs Administrativos */
 .input-admin {
   width: 100%;
   padding: 12px;
@@ -476,9 +529,9 @@ textarea.input-admin {
   resize: none;
 }
 
-/* =========================================
-   8. MODAIS E BOTTOM NAV
-   ========================================= */
+/* =================================================================
+   8. MODAIS
+   ================================================================= */
 .modal {
   display: none;
   position: fixed;
@@ -492,6 +545,7 @@ textarea.input-admin {
   align-items: center;
   padding: 10px;
 }
+
 .modal-content {
   background: var(--card-bg);
   width: 100%;
@@ -501,12 +555,14 @@ textarea.input-admin {
   flex-direction: column;
   border: 1px solid var(--border);
 }
+
 .modal-content-centered {
   max-height: 50vh;
   width: 90%;
   margin: 0 auto;
   align-self: center;
 }
+
 .modal-header {
   padding: 1.5rem;
   border-bottom: 1px solid var(--border);
@@ -514,16 +570,17 @@ textarea.input-admin {
   justify-content: space-between;
   align-items: center;
 }
+
 .modal-body {
   padding: 1.5rem;
   overflow-y: auto;
   flex: 1;
 }
+
 .modal-body strong {
-  color: var(
-    --primary
-  ) !important; /* O !important garante que não fique branco */
+  color: var(--primary) !important;
 }
+
 .close-modal {
   background: #f1f5f9;
   border: none;
@@ -535,39 +592,30 @@ textarea.input-admin {
   color: #1e293b;
 }
 
+/* =================================================================
+   9. NAVEGAÇÃO INFERIOR (BOTTOM NAV)
+   ================================================================= */
 .bottom-nav {
-  /* Posição e Flutuação */
   position: fixed;
-  bottom: 20px; /* Distância do fundo da tela */
+  bottom: 20px;
   left: 50%;
-  transform: translateX(-50%); /* Centraliza perfeitamente */
-
-  /* Tamanho e Forma */
-  width: 92%; /* Não encosta nas bordas laterais */
-  max-width: 450px; /* Limite para não ficar gigante em telas grandes */
-  height: 65px; /* Um pouco mais compacta */
-  border-radius: 50px; /* Borda totalmente redonda (Pill shape) */
-
-  /* Visual */
-  background: var(--card-bg); /* Respeita o Dark Mode */
-  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15); /* Sombra mais forte para destacar */
-  border: 1px solid var(--border); /* Borda sutil */
-
-  /* Layout interno */
+  transform: translateX(-50%);
+  width: 92%;
+  max-width: 450px;
+  height: 65px;
+  border-radius: 50px;
+  background: var(--card-bg);
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
+  border: 1px solid var(--border);
   display: flex;
   justify-content: space-around;
   align-items: center;
-  padding: 0 5px; /* Respiro nas laterais */
+  padding: 0 5px;
   z-index: 1000;
-
-  /* Suavização */
   transition: all 0.3s ease;
-
-  /* Ajuste para iPhones sem botão (Home Indicator) */
   margin-bottom: env(safe-area-inset-bottom);
 }
 
-/* Ajuste fino nos itens para ficarem centralizados na pílula */
 .nav-item {
   display: flex;
   flex-direction: column;
@@ -576,18 +624,16 @@ textarea.input-admin {
   flex: 1;
   text-decoration: none;
   color: var(--muted);
-  border-radius: 50%; /* Feedback de clique redondo */
-  height: 55px; /* Altura do toque */
+  border-radius: 50%;
+  height: 55px;
   transition: all 0.2s;
 }
 
-/* Efeito ao tocar */
-.nav-item:active { 
+.nav-item:active {
   background-color: transparent !important;
   transform: scale(0.95);
 }
 
-/* Ícone */
 .nav-item .material-symbols-rounded {
   font-size: 24px;
   margin-bottom: 2px;
@@ -595,24 +641,25 @@ textarea.input-admin {
   transition: color 0.3s;
 }
 
-/* Texto */
 .nav-item span:not(.material-symbols-rounded) {
-  font-size: 9px; /* Texto levemente menor para caber bem */
+  font-size: 9px;
   font-weight: 600;
   margin-top: 0;
 }
 
-/* Estado Ativo */
+/* Estados Ativos da Navegação */
 .nav-item.active .material-symbols-rounded {
   color: var(--primary);
   font-variation-settings: "FILL" 1;
-  transform: translateY(-2px); /* Leve pulinho para cima */
+  transform: translateY(-2px);
 }
 .nav-item.active span {
   color: var(--primary);
 }
 
-/* Skeleton */
+/* =================================================================
+   10. EFEITOS DE CARREGAMENTO (SKELETON)
+   ================================================================= */
 .skeleton {
   background: linear-gradient(90deg, #f1f5f9 0px, #e2e8f0 50%, #f1f5f9 100%);
   background-size: 200% 100%;
@@ -648,286 +695,118 @@ textarea.input-admin {
   width: 80px;
   border-radius: 20px;
 }
-/* =========================================
-   REMOVER BARRA DE ROLAGEM VISUAL (Global)
-   ========================================= */
 
-/* Para Chrome, Safari e Edge (Webkit) */
+/* =================================================================
+   11. OTIMIZAÇÃO DE SCROLL (Esconder Barra)
+   ================================================================= */
+/* Webkit (Chrome, Safari, Edge) */
 ::-webkit-scrollbar {
-  display: none !important; /* Some com a barra */
+  display: none !important;
   width: 0px !important;
   background: transparent !important;
 }
-
-/* Para Firefox */
+/* Firefox */
 * {
   scrollbar-width: none !important;
 }
 
-/* Garante que o scroll funcione, mas sem mostrar a barra */
-main {
-  overflow-y: auto;
-  -webkit-overflow-scrolling: touch; /* Rolagem macia no iPhone */
-  padding-bottom: 120px !important; 
-}
-
-/* Garante que o card da liturgia tenha espaço para respirar */
+/* Card Liturgia - ajuste de altura */
 #liturgia-card,
 #liturgia {
-  min-height: auto; /* Não força altura fixa */
+  min-height: auto;
   height: auto;
 }
-/* Estilo de Missal */
-.rubrica {
-    color: #ef4444; /* Vermelho litúrgico */
-    font-size: 0.75rem;
-    font-style: italic;
-    font-weight: 600;
-    margin: 15px 0 5px 0;
-    text-transform: uppercase;
-}
-.folheto-conteudo strong {
-    color: var(--primary);
-}
-/* =========================================
-   CORREÇÃO VISUAL DA ABA BÍBLIA
-   ========================================= */
 
-/* 1. Resolve o problema do conteúdo cortado no final */
+/* =================================================================
+   12. ABA BÍBLIA
+   ================================================================= */
 #tab-biblia {
-  padding-bottom: 120px; /* Garante que o último livro não fique atrás do menu */
+  padding-bottom: 120px;
 }
 
-/* 2. Melhora a grade de livros */
 #grid-livros {
   display: grid;
-  grid-template-columns: repeat(3, 1fr); /* 3 colunas fixas */
-  gap: 12px; /* Mais espaço entre os botões */
+  grid-template-columns: repeat(3, 1fr);
+  gap: 12px;
   margin-top: 15px;
 }
 
-/* 3. Estilo Novo dos Botões de Livro (Mais fácil de clicar) */
 .btn-livro {
-  background-color: rgba(var(--primary-rgb), 0.1); /* Fundo azulzinho bem leve */
-  border: 1px solid var(--border); /* Borda sutil */
-  color: var(--text);
-  border-radius: 12px;
-  padding: 0 5px; /* Padding lateral pequeno */
-  height: 50px; /* Altura fixa para todos ficarem iguais */
-  
-  /* Centraliza o texto */
   display: flex;
   align-items: center;
   justify-content: center;
-  
-  font-size: 0.8rem;
+  min-height: 50px;
+  padding: 8px 5px;
+  font-size: 0.85rem;
   font-weight: 600;
-  text-transform: capitalize;
-  transition: all 0.2s ease;
+  text-align: center;
+  border-radius: 12px;
   cursor: pointer;
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  user-select: none;
+  -webkit-tap-highlight-color: transparent;
   width: 100%;
 }
 
-/* Efeito ao tocar */
-.btn-livro:active {
-  background-color: var(--primary);
-  color: #fff;
-  transform: scale(0.95);
+/* Botões de Livro - Modo Claro */
+[data-theme="light"] .btn-livro {
+  background-color: #ffffff;
+  color: #334155;
+  border: 1px solid #e2e8f0;
+  box-shadow: 0 2px 4px rgba(148, 163, 184, 0.15);
 }
 
-/* Ajuste dos Botões de Testamento (Novo/Antigo) */
-#btn-novo-test, #btn-antigo-test {
+/* Botões de Livro - Modo Escuro */
+[data-theme="dark"] .btn-livro {
+  background-color: #1e293b;
+  color: #e2e8f0;
+  border: 1px solid #334155;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+/* Interação */
+[data-theme="light"] .btn-livro:active,
+[data-theme="light"] .btn-livro:hover {
+  border-color: var(--primary);
+  color: var(--primary);
+  background-color: #f8fafc;
+  transform: translateY(1px);
+  box-shadow: none;
+}
+[data-theme="dark"] .btn-livro:active {
+  background-color: #0f172a;
+  border-color: var(--primary);
+}
+
+#btn-novo-test,
+#btn-antigo-test {
   transition: opacity 0.3s, background-color 0.3s;
-  flex: 1; /* Para ocuparem o mesmo tamanho */
+  flex: 1;
 }
-/* =========================================
-   TEMA ROXO (CONFISSÃO)
-   ========================================= */
 
-/* Títulos Roxos */
+/* =================================================================
+   13. GUIA DE CONFISSÃO (Tema Roxo)
+   ================================================================= */
+
+/* Tipografia e Headers */
 .titulo-roxo {
-  color: #7e22ce; /* Roxo Escuro */
+  color: var(--cor-roxo);
   font-size: 1.1rem;
-  font-weight: 700;
-  margin-bottom: 10px;
+  font-weight: 800;
+  margin: 0;
+  line-height: 1.2;
 }
 
-/* Bolinhas dos Passos em Roxo */
 .passo-numero {
-  background-color: #9333ea !important; /* Roxo Vibrante */
+  background-color: #9333ea !important;
 }
 
-/* Accordion (Details) com tema Roxo */
-.exame-grupo.roxo summary {
-  color: #6b21a8;
-  background-color: rgba(147, 51, 234, 0.08);
-}
-
-/* Checkbox Personalizado Roxo */
-.check-roxo {
-  accent-color: #9333ea; /* Muda a cor do "check" nativo do navegador para roxo */
-  width: 18px;
-  height: 18px;
-  cursor: pointer;
-}
-/* =========================================
-   NOVO VISUAL DOS 5 PASSOS (PREMIUM)
-   ========================================= */
-
-.lista-passos-visual {
-  display: flex;
-  flex-direction: column;
-  gap: 15px; /* Espaço entre os cartões */
-}
-
-.passo-card {
-  display: flex;
-  align-items: flex-start; /* Alinha no topo */
-  gap: 15px;
-  padding: 10px;
-  border-radius: 12px;
-  transition: background-color 0.2s ease;
-}
-
-/* Efeito ao tocar no passo (opcional, mas legal) */
-.passo-card:active {
-  background-color: rgba(var(--primary-rgb), 0.05);
-}
-
-/* Caixa do Ícone (Quadrado Arredondado Roxo) */
-.passo-icon-box {
-  background: rgba(147, 51, 234, 0.1); /* Fundo Roxo Transparente */
-  color: #9333ea; /* Ícone Roxo */
-  width: 45px;
-  height: 45px;
-  border-radius: 12px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  flex-shrink: 0; /* Impede que o ícone esmague */
-}
-
-.passo-icon-box span {
-  font-size: 24px;
-}
-
-/* Conteúdo de Texto */
-.passo-content {
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  padding-top: 2px; /* Pequeno ajuste visual */
-}
-
-.passo-content h4 {
-  margin: 0 0 4px 0;
-  font-size: 0.95rem;
-  font-weight: 700;
-  color: var(--text);
-}
-
-.passo-content p {
-  margin: 0;
-  font-size: 0.85rem;
-  color: var(--muted);
-  line-height: 1.4;
-}
-/* =======================================================
-   ADICIONAIS ESPECÍFICOS (CONFISSÃO E BÍBLIA)
-   Cole isso no final do seu arquivo CSS
-   ======================================================= */
-
-/* --- VARIÁVEIS ROXAS (Caso não tenha) --- */
-:root {
-  --cor-roxo: #9333ea;
-  --cor-roxo-bg: rgba(147, 51, 234, 0.1);
-}
-[data-theme="dark"] {
-  --cor-roxo: #c084fc;
-  --cor-roxo-bg: rgba(192, 132, 252, 0.15);
-}
-
-/* --- 1. CABEÇALHO DO EXAME (Alinhamento Título/Botão) --- */
-.exame-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center; /* Alinha verticalmente */
-  margin-bottom: 20px;
-  border-bottom: 1px solid var(--border);
-  padding-bottom: 10px;
-}
-
-.titulo-roxo {
-  color: var(--cor-roxo);
-  font-size: 1.1rem;
-  font-weight: 800; /* Mais grosso */
-  margin-bottom: 2px;
-}
-
-.subtitulo-exame {
-  font-size: 0.75rem;
-  color: var(--muted);
-  margin: 0;
-}
-
-.btn-limpar {
-  background: transparent;
-  border: 1px solid var(--border);
-  padding: 6px 12px;
-  border-radius: 20px;
-  font-size: 0.75rem;
-  color: var(--muted);
-  cursor: pointer;
-  white-space: nowrap; /* Não quebra linha */
-}
-
-/* --- 2. OS 5 PASSOS (Visual com Ícones) --- */
-.lista-passos-visual {
-  display: flex;
-  flex-direction: column;
-  gap: 12px;
-}
-
-.passo-card {
-  display: flex;
-  align-items: flex-start;
-  gap: 15px;
-  padding: 10px;
-  border-radius: 12px;
-  background-color: transparent; /* Garante que não tenha fundo cinza indesejado */
-}
-
-.passo-icon-box {
-  background: var(--cor-roxo-bg);
-  color: var(--cor-roxo);
-  width: 40px;
-  height: 40px;
-  border-radius: 10px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  flex-shrink: 0; /* Impede amassar o ícone */
-}
-
-.passo-content h4 {
-  font-size: 0.9rem;
-  margin: 0 0 2px 0;
-  color: var(--text);
-}
-
-.passo-content p {
-  font-size: 0.8rem;
-  color: var(--muted);
-  margin: 0;
-  line-height: 1.3;
-}
-
-/* --- 3. ACORDEÃO (DETAILS) ROXO --- */
+/* Acordeão (Details) */
 .exame-grupo.roxo {
   border: 1px solid var(--border);
   border-radius: 12px;
   margin-bottom: 10px;
-  background-color: var(--bg); /* Fundo sutil */
+  background-color: var(--bg);
   overflow: hidden;
 }
 
@@ -942,73 +821,77 @@ main {
   justify-content: space-between;
   align-items: center;
 }
-
-/* Remove setinha padrão feia */
-.exame-grupo.roxo summary::-webkit-details-marker { display: none; }
-
-/* Seta Personalizada */
+.exame-grupo.roxo summary::-webkit-details-marker {
+  display: none;
+}
 .exame-grupo.roxo summary::after {
-  content: 'expand_more';
-  font-family: 'Material Symbols Rounded';
+  content: "expand_more";
+  font-family: "Material Symbols Rounded";
   transition: transform 0.2s;
 }
-.exame-grupo.roxo[open] summary::after { transform: rotate(180deg); }
-
-/* --- 4. CHECKBOX ROXO --- */
-.check-roxo {
-  accent-color: var(--cor-roxo);
-  width: 18px;
-  height: 18px;
-  margin-top: 2px;
+.exame-grupo.roxo[open] summary::after {
+  transform: rotate(180deg);
 }
 
-/* --- 5. BÍBLIA (Botões em Bloco) --- */
-.btn-livro {
-  background-color: var(--bg);
-  border: 1px solid var(--border);
-  color: var(--text);
+/* Visual dos 5 Passos */
+.lista-passos-visual {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.passo-card {
+  display: flex !important;
+  align-items: center !important;
+  gap: 15px !important;
+  padding: 10px;
   border-radius: 12px;
-  padding: 0 5px;
-  height: 50px;
+  transition: background-color 0.2s ease;
+}
+
+.passo-card:active {
+  background-color: rgba(var(--primary-rgb), 0.05);
+}
+
+.passo-icon-box {
+  background: var(--cor-roxo-bg);
+  color: var(--cor-roxo);
+  width: 40px;
+  height: 40px;
+  border-radius: 10px;
   display: flex;
   align-items: center;
   justify-content: center;
-  text-align: center;
-  font-size: 0.8rem;
-  font-weight: 600;
-  width: 100%;
-  cursor: pointer;
+  flex-shrink: 0;
+}
+.passo-icon-box span {
+  font-size: 24px;
 }
 
-/* --- 6. ORAÇÃO --- */
-.oracao-destaque {
-  background: var(--cor-roxo-bg);
-  padding: 20px;
-  border-radius: 12px;
-  text-align: center;
-  font-style: italic;
+.passo-content h4 {
+  font-size: 0.9rem;
+  margin: 0 0 2px 0;
   color: var(--text);
-  line-height: 1.5;
 }
-/* =======================================================
-   CORREÇÃO ESPECÍFICA: EXAME DE CONSCIÊNCIA
-   Cole no final do arquivo CSS
-   ======================================================= */
+.passo-content p {
+  font-size: 0.8rem;
+  color: var(--muted);
+  margin: 0;
+  line-height: 1.3;
+}
 
-/* 1. Cabeçalho do Card (Arruma o botão encavalado) */
+/* Header do Exame de Consciência */
 .exame-header {
   display: flex;
-  justify-content: space-between; /* Título na ponta esq, Botão na dir */
-  align-items: center; /* Alinha o centro verticalmente */
-  gap: 15px; /* Garante espaço mínimo entre texto e botão */
+  justify-content: space-between;
+  align-items: center;
+  gap: 15px;
   margin-bottom: 15px;
   padding-bottom: 10px;
   border-bottom: 1px solid var(--border);
 }
-
-.titulo-roxo {
-  margin: 0;
-  line-height: 1.2;
+[data-theme="dark"] .exame-header {
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1) !important;
 }
 
 .subtitulo-exame {
@@ -1018,7 +901,7 @@ main {
 }
 
 .btn-limpar {
-  flex-shrink: 0; /* IMPEDE O BOTÃO DE ENCOLHER/ENCAVALAR */
+  flex-shrink: 0;
   background: transparent;
   border: 1px solid var(--border);
   padding: 6px 14px;
@@ -1027,154 +910,105 @@ main {
   font-weight: 600;
   color: var(--muted);
   cursor: pointer;
-  white-space: nowrap; /* Garante que o texto não quebre linha */
+  white-space: nowrap;
 }
 
-/* 2. Lista de Pecados (Arruma os textos e checkboxes) */
+/* Lista de Pecados e Checkbox Personalizado */
 .lista-exame {
   padding: 0;
   margin: 0;
 }
-
 .lista-exame li {
   list-style: none;
   border-top: 1px solid var(--border);
-  padding: 12px 10px; /* Espaço interno confortável */
+  padding: 12px 10px;
 }
-
-.lista-exame label {
-  display: flex; /* Alinha checkbox e texto lado a lado */
-  align-items: flex-start; /* Alinha checkbox com o TOPO do texto */
-  gap: 12px; /* Espaço entre o quadrado e a letra */
-  cursor: pointer;
-}
-
-/* 3. Checkbox Bonito */
-.check-roxo {
-  /* Tamanho fixo para não deformar */
-  width: 22px;
-  height: 22px;
-  min-width: 22px; /* OBRIGATÓRIO: Impede que ele esmague */
-  
-  margin-top: 2px; /* Pequeno ajuste para alinhar com a 1ª linha de texto */
-  accent-color: #9333ea; /* Pinta o check de roxo quando marcado */
-  cursor: pointer;
-  
-  /* Filtro para deixar menos "branco estourado" no dark mode se o navegador permitir */
-  filter: grayscale(0.2); 
-}
-
-.lista-exame span {
-  font-size: 0.9rem;
-  line-height: 1.5; /* Altura da linha para leitura fácil */
-  color: var(--text);
-  padding-top: 1px; /* Ajuste fino ótico */
-}
-/* =======================================================
-   CHECKBOX ARREDONDADA "PREMIUM"
-   (Substitui o quadrado padrão do navegador)
-   ======================================================= */
-
-.check-roxo {
-  /* 1. Remove o estilo feio padrão do Windows/Android/iOS */
-  -webkit-appearance: none;
-  appearance: none;
-  
-  /* 2. Cria o formato da bolinha */
-  width: 24px;
-  height: 24px;
-  min-width: 24px; /* Impede esmagar */
-  border: 2px solid var(--cor-roxo); /* Borda roxa */
-  border-radius: 50%; /* Faz virar um círculo perfeito */
-  background-color: transparent;
-  
-  /* 3. Posicionamento */
-  cursor: pointer;
-  display: grid;
-  place-content: center;
-  margin-top: 0; /* Alinhamento com o texto */
-  transition: all 0.2s ease-in-out;
-}
-
-/* 4. O Efeito ao Marcar (Fica Roxo Cheio) */
-.check-roxo:checked {
-  background-color: var(--cor-roxo);
-  box-shadow: 0 0 8px rgba(147, 51, 234, 0.4); /* Brilho suave */
-}
-
-/* 5. O Desenho do "V" (Check) Branco */
-.check-roxo::before {
-  content: "";
-  width: 10px;
-  height: 10px;
-  box-shadow: inset 1em 1em white; /* Preenche de branco */
-  transform-origin: center;
-  transform: scale(0); /* Começa invisível */
-  transition: 0.2s transform ease-in-out;
-  
-  /* Recorta no formato de V (Check icon via CSS) */
-  clip-path: polygon(14% 44%, 0 65%, 50% 100%, 100% 16%, 80% 0%, 43% 62%);
-}
-
-/* 6. Mostra o "V" quando marcado */
-.check-roxo:checked::before {
-  transform: scale(1);
-}
-
-/* 7. Ajuste Fino de Alinhamento com o Texto */
 .lista-exame label {
   display: flex;
-  align-items: center; /* Centraliza verticalmente com o texto */
+  align-items: center;
   gap: 12px;
   padding: 8px 0;
   cursor: pointer;
 }
-
 .lista-exame span {
   font-size: 0.95rem;
   line-height: 1.4;
   color: var(--text);
-  flex: 1; /* Ocupa o resto do espaço */
+  flex: 1;
 }
-/* =======================================================
-   CARD ATO DE CONTRIÇÃO (FINAL)
-   ======================================================= */
 
-/* O Card em si */
+/* Checkbox Roxo Redondo */
+.check-roxo {
+  -webkit-appearance: none !important;
+  appearance: none !important;
+  width: 24px !important;
+  height: 24px !important;
+  min-width: 24px;
+  border: 2px solid #9333ea !important;
+  border-radius: 50% !important;
+  background-color: transparent;
+  cursor: pointer !important;
+  display: grid !important;
+  place-content: center !important;
+  transition: all 0.2s ease-in-out;
+  margin-right: 0;
+}
+
+.check-roxo:checked {
+  background-color: #9333ea !important;
+  box-shadow: 0 0 8px rgba(147, 51, 234, 0.4);
+}
+
+.check-roxo::before {
+  content: "" !important;
+  width: 10px;
+  height: 10px;
+  background-color: white;
+  transform: scale(0);
+  transition: 0.2s transform ease-in-out;
+  clip-path: polygon(14% 44%, 0 65%, 50% 100%, 100% 16%, 80% 0%, 43% 62%);
+}
+
+.check-roxo:checked::before {
+  transform: scale(1);
+}
+
+/* Card Ato de Contrição */
 .card-oracao {
-  border: 1px solid var(--cor-roxo); /* Borda roxa fina e elegante */
-  background: linear-gradient(180deg, var(--card-bg) 0%, var(--cor-roxo-bg) 100%); /* Degradê sutil no final */
+  border: 1px solid var(--cor-roxo);
+  background: linear-gradient(
+    180deg,
+    var(--card-bg) 0%,
+    var(--cor-roxo-bg) 100%
+  );
   position: relative;
   overflow: hidden;
 }
-
-/* Detalhe decorativo no topo (opcional, dá um charme) */
 .card-oracao::top {
   content: "";
   position: absolute;
-  top: 0; left: 0; right: 0;
+  top: 0;
+  left: 0;
+  right: 0;
   height: 4px;
   background: var(--cor-roxo);
 }
 
-/* O Texto da Oração */
 .texto-oracao {
   text-align: center;
-  font-family: 'Georgia', serif; /* Fonte com serifa fica mais solene para orações */
+  font-family: "Georgia", serif !important;
   font-size: 1rem;
   line-height: 1.6;
   color: var(--text);
   padding: 0 10px;
 }
-
 .texto-oracao p {
   margin-bottom: 15px;
-  font-style: italic; /* Itálico clássico de oração */
+  font-style: italic;
 }
 
-/* A Frase Final (Impacto) */
 .destaque-final {
-  font-family: 'Montserrat', sans-serif; /* Volta para a fonte moderna */
+  font-family: "Montserrat", sans-serif !important;
   font-weight: 800;
   color: var(--cor-roxo);
   text-transform: uppercase;
@@ -1182,13 +1016,12 @@ main {
   letter-spacing: 1px;
   margin-top: 20px;
   padding-top: 15px;
-  border-top: 1px dashed rgba(147, 51, 234, 0.3); /* Linha pontilhada separadora */
+  border-top: 1px dashed rgba(147, 51, 234, 0.3);
 }
-/* =========================================
-   ESTILOS MENU E FERRAMENTAS
-   ========================================= */
 
-/* Calendário */
+/* =================================================================
+   14. CALENDÁRIO E FERRAMENTAS
+   ================================================================= */
 .calendar-grid {
   display: grid;
   grid-template-columns: repeat(7, 1fr);
@@ -1216,10 +1049,8 @@ main {
   color: var(--primary);
   font-weight: bold;
 }
-
-/* Bolinha indicadora de evento */
 .has-event::after {
-  content: '';
+  content: "";
   position: absolute;
   bottom: 4px;
   left: 50%;
@@ -1235,51 +1066,56 @@ main {
   color: white !important;
 }
 
-/* Modal Notas (Tela Cheia Limpa) */
 #area-notas:focus {
   outline: none;
 }
-/* =========================================
-   ESTILO DO MURAL DE ORAÇÃO
-   ========================================= */
 
-/* Cada cartão de pedido no feed */
+/* =================================================================
+   15. MURAL DE ORAÇÃO E ADMIN
+   ================================================================= */
 .card-pedido {
-  background-color: var(--bg);
-  border: 1px solid var(--border);
-  border-left: 4px solid #db2777; /* Faixa rosa na esquerda */
+  background-color: var(--card-bg, #fff);
+  border: 1px solid #e2e8f0;
+  border-left: 4px solid #db2777;
   padding: 12px;
   border-radius: 8px;
-  margin-bottom: 12px;
-  position: relative;
+  margin-bottom: 10px;
+  position: relative !important;
   animation: slideIn 0.3s ease;
 }
 
-@keyframes slideIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+@keyframes slideIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
 
 .pedido-header {
   display: flex;
   justify-content: space-between;
-  align-items: center;
+  align-items: flex-start;
   margin-bottom: 6px;
 }
 
 .pedido-nome {
   font-weight: 700;
-  font-size: 0.85rem;
   color: #db2777;
+  font-size: 0.85rem;
 }
-
 .pedido-data {
   font-size: 0.7rem;
   color: var(--muted);
 }
-
 .pedido-texto {
   font-size: 0.9rem;
-  color: var(--text);
+  color: var(--text, #333);
   line-height: 1.4;
-  white-space: pre-wrap; /* Mantém parágrafos */
+  white-space: pre-wrap;
 }
 
 .btn-rezar {
@@ -1287,436 +1123,302 @@ main {
   background: transparent;
   border: 1px solid #db2777;
   color: #db2777;
-  font-size: 0.75rem;
-  padding: 4px 10px;
+  font-size: 0.7rem;
+  padding: 4px 12px;
   border-radius: 20px;
   cursor: pointer;
-  width: auto;
   display: inline-flex;
   align-items: center;
   gap: 4px;
+  width: auto;
 }
-.btn-rezar:active { background: #db2777; color: white; }
-/* Botão de Excluir Pedido (Lixeira) */
+.btn-rezar:active {
+  background: #db2777;
+  color: white;
+}
+
+/* Botão Excluir Pedido */
+.card-pedido button[onclick*="excluirMeuPedido"] {
+  position: absolute !important;
+  top: 10px !important;
+  right: 10px !important;
+  z-index: 10 !important;
+  background: rgba(239, 68, 68, 0.1) !important;
+  padding: 5px !important;
+  border-radius: 50% !important;
+}
+
 .btn-excluir-pedido {
   background: transparent;
   border: none;
-  color: #ef4444; /* Vermelho */
+  color: #ef4444;
   cursor: pointer;
   padding: 4px;
-  margin-left: auto; /* Empurra para a direita */
   display: flex;
   align-items: center;
   justify-content: center;
   opacity: 0.7;
 }
-
-.btn-excluir-pedido span {
-  font-size: 18px;
-}
-
 .btn-excluir-pedido:hover {
   opacity: 1;
-  background-color: rgba(239, 68, 68, 0.1);
-  border-radius: 50%;
-}
-/* =================================================================
-   CORREÇÕES PONTUAIS (Cole no final do seu CSS antigo)
-   ================================================================= */
-
-/* 1. TRAVA DE FONTE (Resolve o texto estranho) */
-body, h1, h2, h3, h4, p, span, div, a, button, input, textarea, li {
-    font-family: 'Montserrat', sans-serif !important;
-}
-/* Libera apenas os ícones para usarem a fonte de símbolos */
-.material-symbols-rounded {
-    font-family: 'Material Symbols Rounded' !important;
 }
 
-/* 2. CHECKBOX REDONDO (Estilo "Bonitinho") */
-.check-roxo {
-    -webkit-appearance: none;
-    appearance: none;
-    /* Tamanho e Forma */
-    width: 22px;
-    height: 22px;
-    min-width: 22px; /* Impede esmagar */
-    border: 2px solid #9333ea;
-    border-radius: 50%; /* Círculo perfeito */
-    background-color: transparent;
-    cursor: pointer;
-    /* Centralizar o check */
-    display: grid;
-    place-content: center;
-    margin-right: 10px; /* Espaço pro texto */
-    transition: all 0.2s;
-}
-
-.check-roxo:checked {
-    background-color: #9333ea; /* Fundo Roxo ao marcar */
-    box-shadow: 0 0 5px rgba(147, 51, 234, 0.4);
-}
-
-/* O "V" de check desenhado com CSS */
-.check-roxo::before {
-    content: "";
-    width: 10px;
-    height: 10px;
-    background-color: white; /* Cor do V */
-    transform: scale(0);
-    clip-path: polygon(14% 44%, 0 65%, 50% 100%, 100% 16%, 80% 0%, 43% 62%);
-    transition: 0.2s transform;
-}
-
-.check-roxo:checked::before {
-    transform: scale(1);
-}
-
-/* Ajuste da lista para o check alinhar com texto */
-.lista-exame label {
-    display: flex;
-    align-items: center;
-    padding: 8px 0;
-    cursor: pointer;
-}
-
-/* 3. ALINHAMENTO DO EXAME E BOTÃO LIMPAR */
-.exame-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center; /* Alinha na vertical */
-    margin-bottom: 15px;
-    border-bottom: 1px solid #e2e8f0;
-    padding-bottom: 10px;
-}
-
-.btn-limpar {
-    flex-shrink: 0; /* IMPEDE O BOTÃO DE ENCOLHER */
-    background: transparent;
-    border: 1px solid #94a3b8;
-    color: #64748b;
-    padding: 6px 12px;
-    border-radius: 20px;
-    font-size: 0.75rem;
-    font-weight: 600;
-    cursor: pointer;
-}
-
-/* 4. MURAL DE ORAÇÃO (Novo Card) */
-.card-pedido {
-    background-color: var(--card-bg, #fff);
-    border: 1px solid #e2e8f0;
-    border-left: 4px solid #db2777; /* Faixa rosa */
-    padding: 12px;
-    border-radius: 8px;
-    margin-bottom: 10px;
-    position: relative;
-}
-
-.pedido-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: flex-start;
-    margin-bottom: 6px;
-}
-
-.pedido-nome {
-    font-weight: 700;
-    color: #db2777;
-    font-size: 0.85rem;
-}
-
-.pedido-texto {
-    font-size: 0.9rem;
-    color: var(--text, #333);
-    line-height: 1.4;
-}
-
-.btn-rezar {
-    background: transparent;
-    border: 1px solid #db2777;
-    color: #db2777;
-    border-radius: 20px;
-    padding: 4px 12px;
-    font-size: 0.7rem;
-    font-weight: 600;
-    cursor: pointer;
-    display: inline-flex;
-    align-items: center;
-    gap: 4px;
-    margin-top: 8px;
-}
-/* =======================================================
-   CORREÇÕES PONTUAIS - NÃO AFETA O RESTANTE DO APP
-   ======================================================= */
-
-/* 1. CORREÇÃO DA FONTE (O texto estranho/alienígena) */
-body, h1, h2, h3, h4, p, span, div, li, button, input, textarea {
-    font-family: 'Montserrat', sans-serif !important;
-}
-
-/* Garante que os ícones NÃO usem a fonte de texto */
-.material-symbols-rounded {
-    font-family: 'Material Symbols Rounded' !important;
-}
-
-/* 2. TEXTO DO MENU (Aparecer no modo claro) */
-.profile-header {
-    background: #2563eb !important; /* Azul sólido */
-}
-.profile-header h2, .profile-header p {
-    color: #ffffff !important;
-}
-
-/* 3. ALINHAMENTO DO GUIA (5 Passos da Confissão) */
-.passo-card {
-    display: flex !important;
-    align-items: center !important; /* Alinha ícone com o meio do texto */
-    gap: 15px !important;
-}
-
-/* 4. LINHA DO EXAME (Suavizar no modo escuro) */
-[data-theme="dark"] .exame-header {
-    border-bottom: 1px solid rgba(255, 255, 255, 0.1) !important;
-}
-
-/* 5. CHECKBOX REDONDO E ROXO (Obrigatório) */
-.check-roxo {
-    -webkit-appearance: none !important;
-    appearance: none !important;
-    width: 24px !important;
-    height: 24px !important;
-    border: 2px solid #9333ea !important;
-    border-radius: 50% !important;
-    cursor: pointer !important;
-    display: grid !important;
-    place-content: center !important;
-}
-.check-roxo:checked {
-    background-color: #9333ea !important;
-}
-.check-roxo:checked::before {
-    content: "" !important;
-    width: 10px;
-    height: 10px;
-    box-shadow: inset 1em 1em white;
-    clip-path: polygon(14% 44%, 0 65%, 50% 100%, 100% 16%, 80% 0%, 43% 62%);
-}
-#modalMuralPedidos .btn-primary {
-    display: flex !important;
-    align-items: center !important;
-    justify-content: center !important;
-    gap: 10px !important; /* Espaço entre o ícone e o texto */
-    padding: 12px 20px !important;
-}
-
-#modalMuralPedidos .btn-primary .material-symbols-rounded {
-    margin: 0 !important;
-    font-size: 20px !important; /* Ajuste o tamanho do ícone se necessário */
-    line-height: 1 !important;
-}
-.card-pedido {
-    position: relative !important;
-}
-
-.card-pedido button[onclick*="excluirMeuPedido"] {
-    position: absolute !important;
-    top: 10px !important;
-    right: 10px !important;
-    z-index: 10 !important;
-    background: rgba(239, 68, 68, 0.1) !important;
-    padding: 5px !important;
-    border-radius: 50% !important;
-}
-/* CORREÇÃO DO ARREDONDAMENTO DO MURAL */
+/* Modal Mural e Painel Admin */
 #modalMuralPedidos .modal-content {
-    border-radius: 20px !important; /* Arredonda todos os cantos */
-    overflow: hidden !important;    /* Garante que o fundo do feed não cubra o arredondamento */
+  border-radius: 20px !important;
+  overflow: hidden !important;
+}
+#feed-pedidos {
+  border-bottom-left-radius: 20px !important;
+  border-bottom-right-radius: 20px !important;
+  padding-bottom: 20px !important;
 }
 
-/* Garante que o último item do feed não fique colado na borda */
-#feed-pedidos {
-    border-bottom-left-radius: 20px !important;
-    border-bottom-right-radius: 20px !important;
-    padding-bottom: 20px !important;
+#modalMuralPedidos .btn-primary {
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  gap: 10px !important;
+  padding: 12px 20px !important;
 }
-/* --- ESTILO DO PAINEL DE CONTROLE DO COORDENADOR --- */
+#modalMuralPedidos .btn-primary .material-symbols-rounded {
+  margin: 0 !important;
+  font-size: 20px !important;
+  line-height: 1 !important;
+}
+
 .item-admin-aviso {
-    background: var(--bg);
-    padding: 12px;
-    border-radius: 12px;
-    margin-bottom: 10px;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    border: 1px solid var(--border);
-    animation: fadeIn 0.3s ease;
+  background: var(--bg);
+  padding: 12px;
+  border-radius: 12px;
+  margin-bottom: 10px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border: 1px solid var(--border);
+  animation: fadeIn 0.3s ease;
 }
 
 .btn-delete-aviso {
-    background: rgba(239, 68, 68, 0.1) !important;
-    color: #ef4444 !important;
-    border: none !important;
-    width: 35px;
-    height: 35px;
-    border-radius: 8px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    cursor: pointer;
+  background: rgba(239, 68, 68, 0.1) !important;
+  color: #ef4444 !important;
+  border: none !important;
+  width: 35px;
+  height: 35px;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
 }
-
 .btn-delete-aviso span {
-    font-size: 18px;
-}
-/* ========================================= */
-/* ESTILO DOS BOTÕES DA BÍBLIA (UI Melhorada) */
-/* ========================================= */
-
-.btn-livro {
-    /* Layout Flex para centralizar texto */
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    min-height: 50px; /* Altura confortável para o dedo */
-    padding: 8px 5px;
-    
-    /* Tipografia */
-    font-size: 0.85rem;
-    font-weight: 600;
-    text-align: center;
-    
-    /* Forma */
-    border-radius: 12px;
-    cursor: pointer;
-    transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
-    
-    /* Impede seleção de texto ao clicar rápido */
-    user-select: none;
-    -webkit-tap-highlight-color: transparent;
+  font-size: 18px;
 }
 
-/* --- MODO CLARO (Onde estava feio) --- */
-/* Forçamos cores claras e sombras suaves para dar profundidade */
-[data-theme="light"] .btn-livro {
-    background-color: #ffffff;      /* Fundo branco puro */
-    color: #334155;                 /* Texto cinza chumbo (legível) */
-    border: 1px solid #e2e8f0;      /* Borda cinza muito sutil */
-    
-    /* Sombra suave estilo Apple/Material Design */
-    box-shadow: 0 2px 4px rgba(148, 163, 184, 0.15); 
+.profile-header {
+  background: #2563eb !important;
+}
+.profile-header h2,
+.profile-header p {
+  color: #ffffff !important;
 }
 
-/* Efeito Hover/Toque no Claro */
-[data-theme="light"] .btn-livro:active,
-[data-theme="light"] .btn-livro:hover {
-    border-color: var(--primary);   /* Borda fica da cor do tema */
-    color: var(--primary);          /* Texto fica da cor do tema */
-    background-color: #f8fafc;      /* Fundo levemente cinza */
-    transform: translateY(1px);     /* Efeito de "apertar" */
-    box-shadow: none;
-}
+/* =================================================================
+   16. ÍCONE DE ESTOLA E OVERRIDE DE NAVEGAÇÃO
+   ================================================================= */
 
-/* --- MODO ESCURO (Preservando o contraste) --- */
-[data-theme="dark"] .btn-livro {
-    background-color: #1e293b;      /* Azul escuro profundo */
-    color: #e2e8f0;                 /* Texto quase branco */
-    border: 1px solid #334155;      /* Borda discreta */
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
-}
-
-[data-theme="dark"] .btn-livro:active {
-    background-color: #0f172a;
-    border-color: var(--primary);
-}
-/* ========================================= */
-/* ÍCONE ESTOLA LINEAR (CORES CORRIGIDAS)    */
-/* ========================================= */
-
+/* Estilo do Ícone SVG */
 .icone-estola-linear {
-    width: 24px;
-    height: 24px;
-    /* Aqui está o segredo: O ícone herda a cor do elemento pai (.nav-item) */
-    color: var(--muted, #94a3b8); 
-    transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  width: 24px;
+  height: 24px;
+  /* Herança de cor via currentColor */
+  color: var(--muted, #94a3b8);
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 .icone-estola-linear .traco-estola {
-    fill: none;
-    /* Mágica: usa a cor definida no 'color' acima */
-    stroke: currentColor; 
-    
-    stroke-width: 40;
-    stroke-linecap: round;
-    stroke-linejoin: round;
-    
-    /* Removemos a transição daqui e passamos para o elemento pai */
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 40;
+  stroke-linecap: round;
+  stroke-linejoin: round;
 }
 
-/* ESTADO ATIVO (Clicado) */
+/* Interação com estado Ativo */
 .nav-item.active .icone-estola-linear {
-    transform: translateY(-2px);
-    
-    /* Quando ativo, muda a cor para a Variável Primária do seu app */
-    color: #9333ea; 
+  transform: translateY(-2px);
+  color: #9333ea;
 }
 
-/* MODO ESCURO */
-/* Não precisamos mais de código específico aqui! */
-/* Como ele usa 'var(--muted)' e 'var(--primary)', ele já vai 
-   pegar as cores certas que você definiu no seu :root para o modo escuro. */
-   
+/* Compatibilidade Modo Escuro */
 [data-theme="dark"] .nav-item:not(.active) .icone-estola-linear {
-    /* Garante o cinza claro do modo escuro se não estiver ativo */
-    color: var(--text-muted, #cbd5e1); 
+  color: var(--text-muted, #cbd5e1);
+}
+
+/* Override de Cores da Navegação */
+/* 1. Regra Geral (Azul Padrão) */
+.nav-item.active {
+  color: var(--primary);
+}
+.nav-item.active span {
+  color: currentColor;
+  font-weight: 600;
+}
+
+/* 2. Regra Específica: Confissão (Roxo) */
+.nav-item[data-target="tab-confissao"].active {
+  color: #9333ea !important;
+}
+.nav-item[data-target="tab-confissao"].active span {
+  color: #9333ea !important;
+}
+.nav-item[data-target="tab-confissao"].active .icone-estola-linear {
+  color: #9333ea !important;
+}
+.nav-item[data-target="tab-confissao"].active
+  .icone-estola-linear
+  .traco-estola {
+  stroke: #9333ea !important;
 }
 
 /* 4. VERSÃO GRANDE (CARD) */
+
 .svg-card-grande {
+
     width: 48px !important;
+
     height: 48px !important;
+
     margin-bottom: 10px;
+
 }
+
 .svg-card-grande .parte-tecido {
+
     fill: white !important;
+
     opacity: 0.95;
+
 }
+
 .svg-card-grande .parte-cruz {
-    fill: #ffffff !important; /* Cruz roxa dentro da estola branca */
+
+    fill: #ffffff !important; 
+
 }
 /* ========================================= */
-/* 1. REGRA GERAL (Para Início, Bíblia, etc...)*/
+/* ÍCONE ORAÇÃO (AJUSTE DE COR E FILL)       */
 /* ========================================= */
 
-/* Todos os itens ativos ficam com a cor padrão (provavelmente seu Azul) */
-.nav-item.active {
-    color: var(--primary); /* Ou coloque o código do seu azul aqui */
+.icone-oracao-custom {
+    width: 24px;
+    height: 24px;
+    color: var(--muted, #94a3b8);
+    transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
-.nav-item.active span {
-    color: currentColor; /* Herda o azul do pai */
-    font-weight: 600;
+/* 1. REGRA GERAL: Tudo vira LINHA (Stroke) */
+.icone-oracao-custom path {
+    fill: none;
+    stroke: currentColor; /* Pega a cor do pai */
+    stroke-width: 45;     /* Engrossa a linha para ver no celular */
+    stroke-linecap: round;
+    stroke-linejoin: round;
 }
 
+/* 2. EXCEÇÃO: O detalhe da cruz vira SÓLIDO (Fill) */
+.icone-oracao-custom path.classe-fill {
+    fill: currentColor;   /* Pinta o miolo */
+    stroke: none;         /* Remove a borda */
+}
 
+/* ESTADO ATIVO (Clicado) */
+.nav-item.active .icone-oracao-custom {
+    transform: translateY(-2px);
+    /* Herda a cor padrão (Azul/Primary) definida no .nav-item.active */
+}
+
+/* MODO ESCURO */
+[data-theme="dark"] .nav-item:not(.active) .icone-oracao-custom {
+    color: var(--text-muted, #cbd5e1);
+}
 /* ========================================= */
-/* 2. EXCEÇÃO: SÓ A CONFISSÃO FICA ROXA      */
+/* FORÇAR AZUL NA ABA ORAÇÃO (ATIVO)         */
 /* ========================================= */
 
-/* O seletor [data-target] garante que isso só afete o botão da Confissão */
-.nav-item[data-target="tab-confissao"].active {
-    color: #9333ea !important;
+/* 1. Texto e Container ficam Azuis */
+.nav-item[data-target="tab-oracao"].active {
+    color: var(--primary, #2563eb) !important;
 }
 
-.nav-item[data-target="tab-confissao"].active span {
-    color: #9333ea !important;
+.nav-item[data-target="tab-oracao"].active span {
+    color: var(--primary, #2563eb) !important;
+    font-weight: 700;
 }
 
-/* Força o ícone da estola a ficar roxo também */
-.nav-item[data-target="tab-confissao"].active .icone-estola-linear {
-    color: #9333ea !important;
+/* 2. O Ícone fica Azul */
+.nav-item[data-target="tab-oracao"].active .icone-oracao-custom {
+    color: var(--primary, #2563eb) !important;
+    transform: translateY(-2px); /* Pulinho */
 }
 
-.nav-item[data-target="tab-confissao"].active .icone-estola-linear .traco-estola {
-    stroke: #9333ea !important;
+/* 3. As Linhas do desenho (Mãos) ficam Azuis */
+.nav-item[data-target="tab-oracao"].active .icone-oracao-custom path {
+    stroke: var(--primary, #2563eb) !important;
+    opacity: 1 !important;
+}
+
+/* 4. O Preenchimento (Cruz/Detalhes) fica Azul Sólido */
+.nav-item[data-target="tab-oracao"].active .icone-oracao-custom path.classe-fill {
+    fill: var(--primary, #2563eb) !important;
+    stroke: none !important;
+}
+/* ========================================= */
+/* CORREÇÃO DEFINITIVA DE ALINHAMENTO (NAV)  */
+/* ========================================= */
+
+.nav-item {
+    /* Força o layout flexível vertical */
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: center !important;
+    justify-content: center !important;
+    
+    /* O SEGREDO: Define um espaço fixo exato entre ícone e texto */
+    gap: 6px !important; 
+    
+    height: 55px !important;
+    padding-bottom: 2px; /* Ajuste fino ótico */
+}
+
+/* 1. Normaliza os Ícones de Fonte (Google) */
+.nav-item .material-symbols-rounded {
+    display: flex !important; /* Faz ele agir como caixa, não texto */
+    align-items: center;
+    justify-content: center;
+    width: 24px !important;
+    height: 24px !important;
+    font-size: 24px !important;
+    line-height: 1 !important; /* Remove entrelinha extra */
+    margin: 0 !important;      /* Remove margens antigas */
+}
+
+/* 2. Normaliza os Ícones SVG (Confissão/Oração) */
+.nav-item svg {
+    display: block !important;
+    width: 24px !important;
+    height: 24px !important;
+    margin: 0 !important;      /* Remove margens antigas */
+}
+
+/* 3. Normaliza o Texto */
+.nav-item span:not(.material-symbols-rounded) {
+    display: block !important;
+    line-height: 1 !important; /* Altura de linha compacta */
+    margin: 0 !important;      /* Remove margens antigas */
+    padding-top: 0 !important; /* Remove paddings antigos */
+    
+    /* Garante alinhamento visual */
+    position: relative;
+    top: -1px; 
 }

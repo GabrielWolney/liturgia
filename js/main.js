@@ -1,5 +1,6 @@
 /**
  * Main Controller - Versão 5.0 (Final - Gold Master)
+ * Gerenciador principal da aplicação Ágape
  */
 
 import { db, auth, messaging, analytics } from "./firebase-config.js";
@@ -110,7 +111,7 @@ const bibliaCatolica = {
 };
 
 // =======================================================
-// INICIALIZAÇÃO
+// INICIALIZAÇÃO DA APLICAÇÃO
 // =======================================================
 document.addEventListener("DOMContentLoaded", () => {
   initApp();
@@ -127,7 +128,7 @@ async function initApp() {
     alternarTestamento("novo");
     configurarNotas();
 
-    // Liturgia com tratamento de erro
+    // Carrega liturgia com tratamento de falhas
     await gerenciarLiturgia();
 
     carregarAvisos();
@@ -136,13 +137,14 @@ async function initApp() {
     try {
       configurarNotificacoes();
     } catch (e) {
-      console.warn("Notificações desativadas");
+      console.warn("Notificações desativadas ou não suportadas.");
     }
 
     logEvent(analytics, "page_view", { page_title: "Home Liturgia Ágape" });
     configurarListenersAdmin();
     configurarListenersModais();
 
+    // Atualiza ícone de horas a cada 5 minutos
     setInterval(configurarIconeDinamicoHoras, 300000);
   } catch (erroFatal) {
     console.error("Erro fatal na inicialização:", erroFatal);
@@ -163,7 +165,7 @@ window.postarPedido = async () => {
   const nomeInput = document.getElementById("nome-orante");
   const textoInput = document.getElementById("texto-pedido-publico");
 
-  // Captura segura
+  // Tratamento seguro de inputs
   const nome = nomeInput ? nomeInput.value.trim() || "Anônimo" : "Anônimo";
   const texto = textoInput ? textoInput.value.trim() : "";
 
@@ -215,7 +217,7 @@ function carregarMuralFirestore() {
       localStorage.getItem("meus_pedidos_mural") || "[]"
     );
 
-    // === AQUI ESTÁ A PARTE QUE FALTOU (Estado Vazio) ===
+    // Renderiza estado vazio se não houver pedidos recentes
     if (snapshot.empty) {
       feed.innerHTML = `
                 <div style="text-align: center; padding: 40px 20px; color: var(--muted); opacity: 0.8;">
@@ -233,7 +235,7 @@ function carregarMuralFirestore() {
       return;
     }
 
-    // Se tiver pedidos, renderiza os cards
+    // Renderiza os cards de pedidos existentes
     snapshot.forEach((docSnap) => {
       const dados = docSnap.data();
       const id = docSnap.id;
@@ -272,7 +274,7 @@ function carregarMuralFirestore() {
       feed.appendChild(card);
     });
 
-    // Adiciona um rodapé discreto lembrando das 24h mesmo quando tem pedidos
+    // Rodapé informativo
     const rodape = document.createElement("div");
     rodape.innerHTML = `<p style="text-align:center; font-size:0.75rem; color:var(--muted); margin-top:20px; opacity:0.6; font-style:italic;">* Os pedidos somem automaticamente após 24h.</p>`;
     feed.appendChild(rodape);
@@ -286,65 +288,71 @@ function removerIdMeusPedidos(id) {
 }
 
 // =======================================================
-// FERRAMENTAS MENU
+// FERRAMENTAS E CALENDÁRIO
 // =======================================================
 window.abrirCalendario = () => {
   renderizarCalendario();
   abrirModal("modalCalendario");
 };
-function renderizarCalendario() {
-    const grid = document.getElementById("calendario-grid");
-    const titulo = document.getElementById("mes-ano-calendario");
-    const listaEventos = document.getElementById("lista-eventos-dia");
-    
-    if (!grid || !listaEventos) return;
 
-    grid.innerHTML = "";
-    
-    // === AQUI ESTÁ A CORREÇÃO (Texto Explicativo Padrão) ===
-    // Sempre que abrir, reseta para esta mensagem:
-    listaEventos.innerHTML = `
+function renderizarCalendario() {
+  const grid = document.getElementById("calendario-grid");
+  const titulo = document.getElementById("mes-ano-calendario");
+  const listaEventos = document.getElementById("lista-eventos-dia");
+
+  if (!grid || !listaEventos) return;
+
+  grid.innerHTML = "";
+
+  // Define a mensagem instrucional padrão ao abrir o calendário
+  listaEventos.innerHTML = `
         <div style="display: flex; align-items: center; justify-content: center; gap: 10px; color: var(--muted); margin-top: 15px; padding: 10px; background: rgba(0,0,0,0.03); border-radius: 8px;">
             <span class="material-symbols-rounded" style="font-size: 20px;">touch_app</span>
             <span style="font-size: 0.85rem;">Toque nos dias marcados para ver os avisos.</span>
         </div>
     `;
 
-    const hoje = new Date();
-    const ano = hoje.getFullYear();
-    const mes = hoje.getMonth();
+  const hoje = new Date();
+  const ano = hoje.getFullYear();
+  const mes = hoje.getMonth();
 
-    titulo.innerText = hoje.toLocaleDateString("pt-BR", { month: "long", year: "numeric" });
+  titulo.innerText = hoje.toLocaleDateString("pt-BR", {
+    month: "long",
+    year: "numeric",
+  });
 
-    // Cabeçalho dos dias (D, S, T...)
-    ["D", "S", "T", "Q", "Q", "S", "S"].forEach((d) => {
-        const el = document.createElement("div");
-        el.className = "calendar-header";
-        el.innerText = d;
-        grid.appendChild(el);
-    });
+  // Cabeçalho dos dias da semana
+  ["D", "S", "T", "Q", "Q", "S", "S"].forEach((d) => {
+    const el = document.createElement("div");
+    el.className = "calendar-header";
+    el.innerText = d;
+    grid.appendChild(el);
+  });
 
-    const primeiroDia = new Date(ano, mes, 1).getDay();
-    const diasNoMes = new Date(ano, mes + 1, 0).getDate();
+  const primeiroDia = new Date(ano, mes, 1).getDay();
+  const diasNoMes = new Date(ano, mes + 1, 0).getDate();
 
-    // Dias vazios antes do dia 1
-    for (let i = 0; i < primeiroDia; i++) grid.appendChild(document.createElement("div"));
+  // Preenchimento dos dias vazios
+  for (let i = 0; i < primeiroDia; i++)
+    grid.appendChild(document.createElement("div"));
 
-    // Dias do mês
-    for (let dia = 1; dia <= diasNoMes; dia++) {
-        const el = document.createElement("div");
-        el.className = "calendar-day";
-        el.innerText = dia;
-        
-        // Formata data para comparar com avisos (YYYY-MM-DD)
-        const dataStr = `${ano}-${String(mes + 1).padStart(2, "0")}-${String(dia).padStart(2, "0")}`;
-        const temAviso = avisosGlobais.find((a) => a.dataExpiracao === dataStr);
+  // Renderização dos dias do mês
+  for (let dia = 1; dia <= diasNoMes; dia++) {
+    const el = document.createElement("div");
+    el.className = "calendar-day";
+    el.innerText = dia;
 
-        if (temAviso) {
-            el.classList.add("has-event"); // Bolinha ou cor diferente definida no CSS
-            el.onclick = () => {
-                // Quando clica, substitui a instrução pelo aviso
-                listaEventos.innerHTML = `
+    // Formata data para comparação (YYYY-MM-DD)
+    const dataStr = `${ano}-${String(mes + 1).padStart(2, "0")}-${String(
+      dia
+    ).padStart(2, "0")}`;
+    const temAviso = avisosGlobais.find((a) => a.dataExpiracao === dataStr);
+
+    if (temAviso) {
+      el.classList.add("has-event"); // Indicador visual de evento
+      el.onclick = () => {
+        // Exibe o aviso ao clicar no dia
+        listaEventos.innerHTML = `
                     <div class="aviso-carinhoso" style="animation: fadeIn 0.3s ease;">
                         <div style="display:flex; align-items:center; gap:10px; margin-bottom:5px;">
                             <span class="material-symbols-rounded" style="color:var(--primary);">event_available</span>
@@ -352,19 +360,19 @@ function renderizarCalendario() {
                         </div>
                         <p style="font-size: 1rem; color: var(--text); line-height: 1.5;">${temAviso.texto}</p>
                     </div>`;
-            };
-        } else {
-            el.onclick = () => {
-                listaEventos.innerHTML = `
+      };
+    } else {
+      el.onclick = () => {
+        listaEventos.innerHTML = `
                     <p style="font-size: 0.9rem; color: var(--muted); text-align: center; margin-top:15px; font-style: italic;">
                         Nada agendado para o dia ${dia}.<br>Que tal um momento de oração? 🙏
                     </p>`;
-            };
-        }
-
-        if (dia === hoje.getDate()) el.style.border = "2px solid var(--primary)";
-        grid.appendChild(el);
+      };
     }
+
+    if (dia === hoje.getDate()) el.style.border = "2px solid var(--primary)";
+    grid.appendChild(el);
+  }
 }
 
 window.abrirNotas = () => abrirModal("modalNotas");
@@ -386,7 +394,7 @@ function configurarNotas() {
 }
 
 // =======================================================
-// LITURGIA E API
+// LITURGIA E INTEGRAÇÃO API
 // =======================================================
 async function gerenciarLiturgia() {
   renderizarSkeletons();
@@ -564,7 +572,7 @@ function atualizarEstadoBotaoLeitura(btn, lido) {
 }
 
 // =======================================================
-// UI E UTILITÁRIOS
+// UI E INTERFACE DO USUÁRIO
 // =======================================================
 window.alternarTestamento = (tipo) => {
   const btnNovo = document.getElementById("btn-novo-test");
@@ -596,11 +604,11 @@ function renderizarLivros(lista) {
 }
 
 // =======================================================
-// LÓGICA DA BÍBLIA (LOCAL - ESTRUTURA CORRETA)
+// LÓGICA DA BÍBLIA (LOCAL)
 // =======================================================
 let cacheBiblia = null;
 
-// 1. Carrega o arquivo localmente
+// 1. Carrega o arquivo JSON localmente
 async function carregarBibliaLocal() {
   if (cacheBiblia) return cacheBiblia;
 
@@ -620,7 +628,7 @@ async function carregarBibliaLocal() {
   }
 }
 
-// 2. Abre o Modal de Capítulo
+// 2. Prepara e exibe o Modal de Seleção de Capítulo
 function abrirModalCapitulo(livroObj) {
   const modal = document.getElementById("modalCapitulos");
   const titulo = document.getElementById("titulo-livro-selecionado");
@@ -631,7 +639,7 @@ function abrirModalCapitulo(livroObj) {
   if (input) input.value = "";
   if (modal) modal.style.display = "flex";
 
-  // Clone para limpar eventos antigos
+  // Clone para limpar listeners de eventos antigos
   const novoBtn = btnLer.cloneNode(true);
   btnLer.parentNode.replaceChild(novoBtn, btnLer);
 
@@ -643,14 +651,14 @@ function abrirModalCapitulo(livroObj) {
   };
 }
 
-// 3. Busca e Renderiza (Adaptado para a estrutura do seu JSON)
+// 3. Busca e Renderiza o conteúdo do capítulo selecionado
 async function executarLeituraLocal(livroObj, capitulo) {
   const container = document.getElementById("leitura-biblia-container");
   const textoDiv = document.getElementById("leitura-texto");
   const tituloDiv = document.getElementById("leitura-titulo");
 
   try {
-    // UI Loading
+    // UI de Carregamento
     document.getElementById("modalCapitulos").style.display = "none";
     container.style.display = "block";
     document.body.style.overflow = "hidden";
@@ -661,18 +669,18 @@ async function executarLeituraLocal(livroObj, capitulo) {
     const dados = await carregarBibliaLocal();
     if (!dados) throw new Error("Base de dados vazia.");
 
-    // === PASSO A: JUNTAR OS DOIS TESTAMENTOS ===
-    // O seu JSON separa em "antigoTestamento" e "novoTestamento".
-    // Vamos juntar tudo numa lista só para facilitar a busca.
+    // === PASSO A: UNIFICAÇÃO ===
+    // O JSON separa em "antigoTestamento" e "novoTestamento".
+    // Unifica os arrays para facilitar a busca do livro.
     let todosLivros = [];
     if (dados.antigoTestamento)
       todosLivros = todosLivros.concat(dados.antigoTestamento);
     if (dados.novoTestamento)
       todosLivros = todosLivros.concat(dados.novoTestamento);
 
-    // === PASSO B: ENCONTRAR O LIVRO ===
-    // Normalizamos tudo para minúsculo e sem acento para garantir o match
-    // Ex: "São Mateus" (JSON) vs "sao-mateus" (Slug) vs "Mateus" (Nome)
+    // === PASSO B: LOCALIZAÇÃO DO LIVRO ===
+    // Normaliza strings para comparação (minúsculo e sem acento)
+    // Ex: "São Mateus" (JSON) vs "sao-mateus" (Slug)
     const slugLimpo = livroObj.slug.replace(/-/g, " ").toLowerCase(); // "sao mateus"
     const nomeLimpo = removerAcentos(livroObj.nome).toLowerCase(); // "mateus"
 
@@ -689,9 +697,9 @@ async function executarLeituraLocal(livroObj, capitulo) {
       throw new Error(`Livro '${livroObj.nome}' não encontrado no arquivo.`);
     }
 
-    // === PASSO C: ENCONTRAR O CAPÍTULO ===
-    // No seu JSON, 'capitulos' é uma lista de objetos: [{ "capitulo": 1, "versiculos": [...] }]
-    // Tentamos pegar direto pelo índice (capitulo - 1) ou procurando pelo número.
+    // === PASSO C: LOCALIZAÇÃO DO CAPÍTULO ===
+    // A estrutura 'capitulos' é uma lista de objetos.
+    // Tenta acesso direto pelo índice ou busca pelo número exato.
     let capituloObj = livroEncontrado.capitulos[parseInt(capitulo) - 1];
 
     // Segurança extra: se o índice falhar, procura pelo número exato
@@ -707,8 +715,8 @@ async function executarLeituraLocal(livroObj, capitulo) {
       );
     }
 
-    // === PASSO D: RENDERIZAR VERSÍCULOS ===
-    // No seu JSON, 'versiculos' é uma lista de objetos: [{ "versiculo": 1, "texto": "..." }]
+    // === PASSO D: RENDERIZAÇÃO DE VERSÍCULOS ===
+    // Itera sobre a lista de versículos para construir o HTML
     tituloDiv.innerText = `${livroEncontrado.nome} ${capitulo}`;
 
     textoDiv.innerHTML = capituloObj.versiculos
@@ -829,7 +837,9 @@ const configurarTercoUI = () => {
   }</div>`;
 };
 
-// Listeners Modais
+// =======================================================
+// ADMINISTRAÇÃO E PAINEL
+// =======================================================
 function configurarListenersAdmin() {
   setupClick("btn-fazer-login", async () => {
     const e = document.getElementById("login-email").value;
