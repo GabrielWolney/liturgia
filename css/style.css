@@ -1629,3 +1629,94 @@ body, h1, h2, h3, h4, p, span, div, li, button, input, textarea {
     background-color: #0f172a;
     border-color: var(--primary);
 }
+/* ========================================= */
+/* ÍCONE ESTOLA LINEAR (CORES CORRIGIDAS)    */
+/* ========================================= */
+
+.icone-estola-linear {
+    width: 24px;
+    height: 24px;
+    /* Aqui está o segredo: O ícone herda a cor do elemento pai (.nav-item) */
+    color: var(--muted, #94a3b8); 
+    transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.icone-estola-linear .traco-estola {
+    fill: none;
+    /* Mágica: usa a cor definida no 'color' acima */
+    stroke: currentColor; 
+    
+    stroke-width: 40;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+    
+    /* Removemos a transição daqui e passamos para o elemento pai */
+}
+
+/* ESTADO ATIVO (Clicado) */
+.nav-item.active .icone-estola-linear {
+    transform: translateY(-2px);
+    
+    /* Quando ativo, muda a cor para a Variável Primária do seu app */
+    color: #9333ea; 
+}
+
+/* MODO ESCURO */
+/* Não precisamos mais de código específico aqui! */
+/* Como ele usa 'var(--muted)' e 'var(--primary)', ele já vai 
+   pegar as cores certas que você definiu no seu :root para o modo escuro. */
+   
+[data-theme="dark"] .nav-item:not(.active) .icone-estola-linear {
+    /* Garante o cinza claro do modo escuro se não estiver ativo */
+    color: var(--text-muted, #cbd5e1); 
+}
+
+/* 4. VERSÃO GRANDE (CARD) */
+.svg-card-grande {
+    width: 48px !important;
+    height: 48px !important;
+    margin-bottom: 10px;
+}
+.svg-card-grande .parte-tecido {
+    fill: white !important;
+    opacity: 0.95;
+}
+.svg-card-grande .parte-cruz {
+    fill: #ffffff !important; /* Cruz roxa dentro da estola branca */
+}
+/* ========================================= */
+/* 1. REGRA GERAL (Para Início, Bíblia, etc.)*/
+/* ========================================= */
+
+/* Todos os itens ativos ficam com a cor padrão (provavelmente seu Azul) */
+.nav-item.active {
+    color: var(--primary); /* Ou coloque o código do seu azul aqui */
+}
+
+.nav-item.active span {
+    color: currentColor; /* Herda o azul do pai */
+    font-weight: 600;
+}
+
+
+/* ========================================= */
+/* 2. EXCEÇÃO: SÓ A CONFISSÃO FICA ROXA      */
+/* ========================================= */
+
+/* O seletor [data-target] garante que isso só afete o botão da Confissão */
+.nav-item[data-target="tab-confissao"].active {
+    color: #9333ea !important;
+}
+
+.nav-item[data-target="tab-confissao"].active span {
+    color: #9333ea !important;
+}
+
+/* Força o ícone da estola a ficar roxo também */
+.nav-item[data-target="tab-confissao"].active .icone-estola-linear {
+    color: #9333ea !important;
+}
+
+.nav-item[data-target="tab-confissao"].active .icone-estola-linear .traco-estola {
+    stroke: #9333ea !important;
+}
