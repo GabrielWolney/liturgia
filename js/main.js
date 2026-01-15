@@ -1191,6 +1191,161 @@ setInterval(() => {
     }
 }, 3600000); // 3.600.000 ms = 1 hora
 
+// =========================================
+// LÓGICA DAS NOVENAS (COMPLETA)
+// =========================================
+
+let cacheNovenas = null;
+
+// 1. Carrega o arquivo JSON
+async function carregarNovenas() {
+    if (cacheNovenas) return cacheNovenas;
+    try {
+        const response = await fetch('./js/novenas.json');
+        if (!response.ok) throw new Error("Erro ao carregar novenas");
+        cacheNovenas = await response.json();
+        return cacheNovenas;
+    } catch (erro) {
+        console.error("Erro:", erro);
+        alert("Erro ao carregar o banco de novenas.");
+        return null;
+    }
+}
+
+// 2. Abre a Lista de Novenas (Calendário)
+window.abrirListaNovenas = async () => {
+    const db = await carregarNovenas();
+    if (!db) return;
+
+    const modal = document.getElementById("modalGeral");
+    const titulo = document.getElementById("modal-titulo");
+    const corpo = document.getElementById("modal-corpo");
+
+    titulo.innerText = "Calendário de Novenas";
+    
+    // Meses para exibição
+    const meses = ["Janeiro", "Fevereiro", "Março", "Abril", "Maio", "Junho", "Julho", "Agosto", "Setembro", "Outubro", "Novembro", "Dezembro"];
+    const mesAtual = new Date().getMonth();
+
+    // Gera o HTML da lista
+    const listaHtml = db.calendario
+        .sort((a, b) => a.mes - b.mes)
+        .map(n => {
+            const destaque = n.mes === mesAtual ? "border: 2px solid var(--primary);" : "";
+            // Verifica se existe texto cadastrado para essa novena
+            const disponivel = db.detalhes[n.id] ? true : false;
+            const statusIcon = disponivel ? '<span class="material-symbols-rounded" style="color:var(--primary)">chevron_right</span>' : '<span style="font-size:0.8rem; opacity:0.6">Em breve</span>';
+            const clickAction = disponivel ? `onclick="abrirDetalhesNovena('${n.id}')"` : `onclick="alert('O conteúdo desta novena será liberado próximo à data.')"`;
+
+            return `
+            <div ${clickAction} style="background: var(--card-bg); padding: 15px; border-radius: 12px; margin-bottom: 10px; cursor: pointer; ${destaque} display: flex; justify-content: space-between; align-items: center;">
+                <div>
+                    <strong style="display:block; font-size: 1rem;">${n.nome}</strong>
+                    <span style="font-size: 0.8rem; color: var(--muted);">${meses[n.mes]} • Início: ${n.inicio.split('-').reverse().join('/')}</span>
+                </div>
+                ${statusIcon}
+            </div>`;
+        }).join("");
+
+    corpo.innerHTML = `<div style="max-height: 60vh; overflow-y: auto;">${listaHtml}</div>`;
+    
+    // Abre o modal
+    if (typeof abrirModal === 'function') abrirModal("modalGeral");
+    else modal.style.display = 'flex';
+};
+
+// 3. Abre os Detalhes (Grade de 9 Dias)
+window.abrirDetalhesNovena = async (id) => {
+    const db = await carregarNovenas();
+    const novena = db.detalhes[id];
+
+    if (!novena) return;
+
+    const titulo = document.getElementById("modal-titulo");
+    const corpo = document.getElementById("modal-corpo");
+    
+    titulo.innerText = novena.titulo;
+    
+    // Recupera progresso do usuário
+    const progresso = JSON.parse(localStorage.getItem(`novena_${id}`)) || [];
+
+    let html = `<p style="color:var(--muted); margin-bottom:20px; font-style:italic;">${novena.intro}</p>`;
+    
+    // Grid de botões
+    html += `<div style="display:grid; grid-template-columns: repeat(3, 1fr); gap:10px;">`;
+
+    novena.dias.forEach((diaObj, index) => {
+        const feito = progresso.includes(index);
+        // Estilo condicional: Verde se feito, Normal se não
+        const estilo = feito 
+            ? 'background: var(--primary); color: #fff; border:none;' 
+            : 'background: var(--bg); border: 1px solid var(--border); color: var(--text);';
+        
+        const conteudoBotao = feito 
+            ? '<span class="material-symbols-rounded">check</span>' 
+            : `${index + 1}º Dia`;
+
+        html += `
+            <button onclick="lerDiaNovena('${id}', ${index})" 
+                    style="padding: 15px; border-radius: 10px; cursor: pointer; font-weight:bold; ${estilo}">
+                ${conteudoBotao}
+            </button>
+        `;
+    });
+    html += `</div>`;
+    
+    // Botão Voltar
+    html += `
+        <br>
+        <button onclick="abrirListaNovenas()" class="btn-livro" style="width:100%; justify-content:center; margin-top:10px;">
+            ⬅ Voltar para Calendário
+        </button>
+    `;
+
+    corpo.innerHTML = html;
+};
+
+// 4. Lê o Dia Específico (Oração Inicial + Texto + Final)
+window.lerDiaNovena = async (id, index) => {
+    const db = await carregarNovenas();
+    const novena = db.detalhes[id];
+    const diaObj = novena.dias[index];
+    
+    // Salva o progresso automaticamente ao abrir
+    let progresso = JSON.parse(localStorage.getItem(`novena_${id}`)) || [];
+    if (!progresso.includes(index)) {
+        progresso.push(index);
+        localStorage.setItem(`novena_${id}`, JSON.stringify(progresso));
+    }
+
+    const corpo = document.getElementById("modal-corpo");
+    
+    corpo.innerHTML = `
+        <h4 style="color:var(--primary); text-align:center; margin-bottom: 20px;">${index + 1}º Dia</h4>
+        
+        <div style="margin-bottom: 20px; padding-bottom: 10px; border-bottom: 1px solid var(--border);">
+            <p style="font-weight:bold; color:var(--muted); font-size: 0.8rem; text-transform: uppercase; margin-bottom:5px;">Oração Inicial</p>
+            <p style="font-style: italic;">${novena.oracaoInicial}</p>
+        </div>
+
+        <div style="background: var(--bg); padding: 20px; border-radius: 12px; margin: 20px 0; text-align: justify; line-height: 1.7; border-left: 4px solid var(--primary);">
+            ${diaObj.texto}
+        </div>
+
+        <div style="margin-top: 20px; padding-top: 10px; border-top: 1px solid var(--border);">
+            <p style="font-weight:bold; color:var(--muted); font-size: 0.8rem; text-transform: uppercase; margin-bottom:5px;">Oração Final</p>
+            <p style="font-style: italic;">${novena.oracaoFinal}</p>
+        </div>
+        
+        <br>
+        <button class="btn-primary" onclick="abrirDetalhesNovena('${id}')">Concluir Dia</button>
+    `;
+
+    // Rola para o topo do modal
+    const modalContent = document.querySelector('.modal-content');
+    if(modalContent) modalContent.scrollTop = 0;
+};
+
 setTimeout(() => {
   const splash = document.getElementById("splash-screen");
   if (splash) {
