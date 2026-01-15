@@ -1158,6 +1158,38 @@ const dbOracoes = {
         texto: `Alma de Cristo, santificai-me.<br>Corpo de Cristo, salvai-me.<br>Sangue de Cristo, inebriai-me.<br>Água do lado de Cristo, lavai-me.<br>Paixão de Cristo, confortai-me.<br>Ó bom Jesus, ouvi-me.<br>Dentro de vossas chagas, escondei-me.<br>Não permitais que eu me separe de vós.<br>Do inimigo maligno, defendei-me.<br>Na hora da minha morte, chamai-me.<br>E mandai-me ir para vós,<br>para que com vossos Santos vos louve,<br>por todos os séculos dos séculos.<br><br>Amém.`
     }
 };
+// =========================================
+// AUTO-ATUALIZAÇÃO INTELIGENTE
+// =========================================
+
+// 1. Guarda o dia em que a página foi carregada
+let diaCarregamento = new Date().getDate();
+
+// 2. O Evento 'visibilitychange' dispara quando você troca de aba ou desbloqueia o celular
+document.addEventListener("visibilitychange", () => {
+    
+    // Só nos importamos se a aba ficou VISÍVEL de novo
+    if (document.visibilityState === "visible") {
+        
+        const diaAtual = new Date().getDate();
+
+        // 3. Se o dia de hoje for diferente do dia carregado...
+        if (diaAtual !== diaCarregamento) {
+            console.log("O dia virou! Atualizando a página...");
+            
+            // ...Recarrega a página para puxar a nova liturgia
+            window.location.reload(); 
+        }
+    }
+});
+
+// (Opcional) Checagem a cada hora para quem deixa o PC ligado direto
+setInterval(() => {
+    const diaAtual = new Date().getDate();
+    if (diaAtual !== diaCarregamento) {
+        window.location.reload();
+    }
+}, 3600000); // 3.600.000 ms = 1 hora
 
 setTimeout(() => {
   const splash = document.getElementById("splash-screen");
