@@ -1425,7 +1425,7 @@ textarea.input-admin {
 /* CORREÇÃO BLINDADA: ÍCONES VAZIOS          */
 /* ========================================= */
 
-/* 1. REGRA MESTRA (Material Symbols - Google) */
+/* 1. REGRA MESTRA */
 .material-symbols-rounded {
     /* Define o estado padrão como VAZIO (FILL 0) */
     font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24 !important;
@@ -1437,12 +1437,36 @@ textarea.input-admin {
 .nav-item .material-symbols-rounded {
     font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24 !important;
     color: var(--muted);
-    transition: all 0.6s ease-in-out !important; /* Aplica lentidão na cor também */
+    transition: all 0.6s ease-in-out !important; 
 }
 
 /* 3. ÍCONE DENTRO DA NAV (Ativo) */
 .nav-item.active .material-symbols-rounded {
-    /* Enche lentamente */
-    font-variation-settings: 'FILL' 1, 'wght' 400, 'GRAD' 0, 'opsz' 24 !important;
+    /* Enche lentamente */    font-variation-settings: 'FILL' 1, 'wght' 400, 'GRAD' 0, 'opsz' 24 !important;
     color: var(--primary);
+}
+/* ========================================= */
+/* FIX: LEITOR BÍBLICO (TEMA DINÂMICO)       */
+/* ========================================= */
+
+#leitura-biblia-container {
+ 
+    background-color: var(--bg) !important;
+    color: var(--text) !important;
+    transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+#leitura-header,
+.leitura-header {
+    background-color: var(--card-bg) !important;
+    border-bottom: 1px solid var(--border) !important;
+}
+
+#leitura-texto p {
+    color: var(--text) !important;
+}
+
+#btn-fechar-leitura {
+    color: var(--primary) !important;
+    background: transparent !important;
 }
