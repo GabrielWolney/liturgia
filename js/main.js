@@ -437,7 +437,26 @@ function preencherResumoInicio(dados) {
   const elEmoji = document.getElementById("emoji-tempo");
   const resumo = document.getElementById("resumo-leituras");
 
-  const corAPI = (dados.cor || "Branco").toLowerCase();
+  // --- INÍCIO DA CORREÇÃO (PATCH) ---
+  
+  // 1. Pega a cor da API e o Título
+  let corAPI = (dados.cor || "Branco").toLowerCase();
+  const tituloLiturgia = (dados.liturgia || "").toLowerCase();
+
+  // 2. Regra de Correção: Se tem "Tempo Comum", TEM que ser verde!
+  if (tituloLiturgia.includes("tempo comum")) {
+    corAPI = "verde";
+  } 
+  // Regras extras de segurança (opcional, mas recomendado)
+  else if (tituloLiturgia.includes("quaresma") || tituloLiturgia.includes("advento")) {
+    corAPI = "roxo";
+  }
+  else if (tituloLiturgia.includes("mártir") || tituloLiturgia.includes("paixão")) {
+    corAPI = "vermelho";
+  }
+
+  // --- FIM DA CORREÇÃO ---
+
   const configCores = {
     branco: { classe: "branco", img: "./liturgia-icons/branco.png" },
     verde: { classe: "verde", img: "./liturgia-icons/verde.png" },
@@ -445,28 +464,36 @@ function preencherResumoInicio(dados) {
     vermelho: { classe: "vermelho", img: "./liturgia-icons/vermelho.png" },
     rosa: { classe: "rosa", img: "./liturgia-icons/rosa.png" },
   };
+
+  // Seleciona a configuração usando a corAPI já corrigida
   const config =
     configCores[Object.keys(configCores).find((key) => corAPI.includes(key))] ||
     configCores.branco;
 
   if (elSanto) elSanto.innerText = dados.liturgia || "Tempo Comum";
+  
   if (elBadge) {
-    elBadge.innerText = dados.cor || "Cor";
+    // Atualizei aqui para escrever "Verde" no texto também, senão ficaria escrito "Branco" com fundo verde
+    const nomeCorFormatada = corAPI.charAt(0).toUpperCase() + corAPI.slice(1);
+    elBadge.innerText = nomeCorFormatada; 
     elBadge.className = `badge-cor ${config.classe}`;
   }
+  
   if (elCirculo) {
     elCirculo.className = `circulo-liturgico ${config.classe}`;
     elCirculo.style.border = "none";
   }
+  
   if (elEmoji) {
     elEmoji.style.display = "block";
-    elEmoji.innerHTML = `<img src="${config.img}" alt="${dados.cor}" class="icone-liturgico-img">`;
+    elEmoji.innerHTML = `<img src="${config.img}" alt="${corAPI}" class="icone-liturgico-img">`;
   }
 
   const getText = (d) => {
     if (!d) return "---";
     return typeof d === "string" ? d : d.referencia || "---";
   };
+  
   if (resumo) {
     const l1 = getText(dados.primeiraLeitura);
     const sal = getText(dados.salmo);
@@ -1045,7 +1072,7 @@ window.limparExame = () => {
     .querySelectorAll("details.exame-grupo")
     .forEach((d) => d.removeAttribute("open"));
 };
-// Função Global para Abrir o Modal
+// Função Global para Abrir o Modal (Visual Limpo)
 window.abrirOracao = (chave) => {
     const oracao = dbOracoes[chave];
     
