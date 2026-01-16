@@ -1192,12 +1192,13 @@ setInterval(() => {
 }, 3600000); // 3.600.000 ms = 1 hora
 
 // =========================================
-// LÓGICA DAS NOVENAS (COMPLETA)
+// LÓGICA DAS NOVENAS (VISUAL LIMPO + NAVEGAÇÃO CORRIGIDA)
 // =========================================
 
 let cacheNovenas = null;
+let filtroAtual = 'agora'; 
 
-// 1. Carrega o arquivo JSON
+// 1. Carrega o JSON
 async function carregarNovenas() {
     if (cacheNovenas) return cacheNovenas;
     try {
@@ -1207,12 +1208,11 @@ async function carregarNovenas() {
         return cacheNovenas;
     } catch (erro) {
         console.error("Erro:", erro);
-        alert("Erro ao carregar o banco de novenas.");
         return null;
     }
 }
 
-// 2. Abre a Lista de Novenas (Calendário)
+// 2. Abre a Lista Geral (Calendário)
 window.abrirListaNovenas = async () => {
     const db = await carregarNovenas();
     if (!db) return;
@@ -1221,129 +1221,246 @@ window.abrirListaNovenas = async () => {
     const titulo = document.getElementById("modal-titulo");
     const corpo = document.getElementById("modal-corpo");
 
-    titulo.innerText = "Calendário de Novenas";
+    // Título principal (Sem botão de voltar aqui, pois é a raiz)
+    titulo.innerText = "Novenas e Devoções";
+
+    // HTML das 3 Abas
+    const htmlAbas = `
+        <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 5px; background: var(--bg); padding: 5px; border-radius: 12px; margin-bottom: 20px; border: 1px solid var(--border);">
+            <button id="tab-agora" onclick="alternarAbaNovenas('agora')" style="padding: 8px; border-radius: 8px; border: none; font-weight: bold; font-size: 0.8rem; cursor: pointer; transition: 0.3s; display: flex; align-items: center; justify-content: center; gap: 5px;">
+                <span class="material-symbols-rounded" style="font-size: 18px;">whatshot</span> Agora
+            </button>
+            <button id="tab-breve" onclick="alternarAbaNovenas('breve')" style="padding: 8px; border-radius: 8px; border: none; font-weight: bold; font-size: 0.8rem; cursor: pointer; transition: 0.3s; display: flex; align-items: center; justify-content: center; gap: 5px;">
+                <span class="material-symbols-rounded" style="font-size: 18px;">event_upcoming</span> Em Breve
+            </button>
+            <button id="tab-fim" onclick="alternarAbaNovenas('fim')" style="padding: 8px; border-radius: 8px; border: none; font-weight: bold; font-size: 0.8rem; cursor: pointer; transition: 0.3s; display: flex; align-items: center; justify-content: center; gap: 5px;">
+                <span class="material-symbols-rounded" style="font-size: 18px;">history</span> Fim
+            </button>
+        </div>
+        <div id="lista-novenas-conteudo" style="max-height: 60vh; overflow-y: auto; padding-bottom: 20px;">
+        </div>
+    `;
+
+    corpo.innerHTML = htmlAbas;
     
-    // Meses para exibição
-    const meses = ["Janeiro", "Fevereiro", "Março", "Abril", "Maio", "Junho", "Julho", "Agosto", "Setembro", "Outubro", "Novembro", "Dezembro"];
-    const mesAtual = new Date().getMonth();
-
-    // Gera o HTML da lista
-    const listaHtml = db.calendario
-        .sort((a, b) => a.mes - b.mes)
-        .map(n => {
-            const destaque = n.mes === mesAtual ? "border: 2px solid var(--primary);" : "";
-            // Verifica se existe texto cadastrado para essa novena
-            const disponivel = db.detalhes[n.id] ? true : false;
-            const statusIcon = disponivel ? '<span class="material-symbols-rounded" style="color:var(--primary)">chevron_right</span>' : '<span style="font-size:0.8rem; opacity:0.6">Em breve</span>';
-            const clickAction = disponivel ? `onclick="abrirDetalhesNovena('${n.id}')"` : `onclick="alert('O conteúdo desta novena será liberado próximo à data.')"`;
-
-            return `
-            <div ${clickAction} style="background: var(--card-bg); padding: 15px; border-radius: 12px; margin-bottom: 10px; cursor: pointer; ${destaque} display: flex; justify-content: space-between; align-items: center;">
-                <div>
-                    <strong style="display:block; font-size: 1rem;">${n.nome}</strong>
-                    <span style="font-size: 0.8rem; color: var(--muted);">${meses[n.mes]} • Início: ${n.inicio.split('-').reverse().join('/')}</span>
-                </div>
-                ${statusIcon}
-            </div>`;
-        }).join("");
-
-    corpo.innerHTML = `<div style="max-height: 60vh; overflow-y: auto;">${listaHtml}</div>`;
-    
-    // Abre o modal
     if (typeof abrirModal === 'function') abrirModal("modalGeral");
     else modal.style.display = 'flex';
+
+    alternarAbaNovenas('agora');
 };
 
-// 3. Abre os Detalhes (Grade de 9 Dias)
+// 3. Filtra e Renderiza a Lista
+window.alternarAbaNovenas = async (tipo) => {
+    filtroAtual = tipo;
+    const db = await carregarNovenas();
+    const container = document.getElementById("lista-novenas-conteudo");
+    
+    const botoes = {
+        'agora': document.getElementById("tab-agora"),
+        'breve': document.getElementById("tab-breve"),
+        'fim': document.getElementById("tab-fim")
+    };
+
+    Object.values(botoes).forEach(btn => {
+        if(btn) {
+            btn.style.background = "transparent";
+            btn.style.color = "var(--muted)";
+            btn.style.boxShadow = "none";
+        }
+    });
+
+    if(botoes[tipo]) {
+        botoes[tipo].style.background = "var(--primary)";
+        botoes[tipo].style.color = "#fff";
+        botoes[tipo].style.boxShadow = "0 2px 8px rgba(0,0,0,0.2)";
+    }
+
+    const hoje = new Date();
+    hoje.setHours(0, 0, 0, 0);
+    const anoAtual = hoje.getFullYear();
+    const mesAtual = hoje.getMonth() + 1;
+
+    const listaFiltrada = db.calendario.filter(n => {
+        const [mIni, dIni] = n.inicio.split('-').map(Number);
+        const [mFim, dFim] = n.fim.split('-').map(Number);
+        let anoInicio = anoAtual;
+        let anoFim = anoAtual;
+
+        if (mIni > mFim) {
+            if (mesAtual <= mFim) { anoInicio = anoAtual - 1; anoFim = anoAtual; }
+            else { anoInicio = anoAtual; anoFim = anoAtual + 1; }
+        }
+
+        const dataInicio = new Date(anoInicio, mIni - 1, dIni);
+        const dataFim = new Date(anoFim, mFim - 1, dFim);
+        
+        if (tipo === 'agora') return hoje >= dataInicio && hoje <= dataFim;
+        if (tipo === 'breve') return hoje < dataInicio;
+        if (tipo === 'fim') return hoje > dataFim;
+    });
+
+    if (listaFiltrada.length === 0) {
+        let msg = "Nada encontrado.";
+        if(tipo === 'agora') msg = "Nenhuma novena ativa hoje.";
+        container.innerHTML = `<div style="text-align:center; padding: 40px; color: var(--muted); opacity: 0.7;"><span class="material-symbols-rounded" style="font-size: 40px; display:block; margin-bottom:10px;">event_busy</span><p>${msg}</p></div>`;
+        return;
+    }
+
+    container.innerHTML = listaFiltrada.sort((a, b) => a.mes - b.mes).map(n => {
+        const disponivel = db.detalhes[n.id] ? true : false;
+        let statusIcon = "";
+        let clickAction = "";
+
+        if (disponivel) {
+            statusIcon = `<span class="material-symbols-rounded" style="color:var(--primary)">chevron_right</span>`;
+            clickAction = `onclick="abrirDetalhesNovena('${n.id}')"`;
+        } else {
+            statusIcon = `<span style="font-size:0.7rem; color:var(--muted); border:1px solid var(--border); padding:2px 6px; border-radius:4px;">EM BREVE</span>`;
+            clickAction = `onclick="alert('Conteúdo indisponível no momento.')"`;
+        }
+
+        return `
+        <div ${clickAction} style="background: var(--card-bg); padding: 15px; border-radius: 12px; margin-bottom: 10px; cursor: pointer; border: 1px solid var(--border); display: flex; justify-content: space-between; align-items: center;">
+            <div>
+                <strong style="display:block; font-size: 1rem; color:var(--text); margin-bottom:4px;">${n.nome}</strong>
+                <span style="font-size: 0.8rem; color: var(--muted); display:flex; align-items:center; gap:5px;">
+                    <span class="material-symbols-rounded" style="font-size:14px;">calendar_month</span>
+                    ${n.inicio.split('-').reverse().join('/')} a ${n.fim.split('-').reverse().join('/')}
+                </span>
+            </div>
+            ${statusIcon}
+        </div>`;
+    }).join("");
+};
+
+// 4. Abre os Detalhes (VISUAL LIMPO - REMOVIDO CARD INTERNO)
 window.abrirDetalhesNovena = async (id) => {
     const db = await carregarNovenas();
     const novena = db.detalhes[id];
-
     if (!novena) return;
 
     const titulo = document.getElementById("modal-titulo");
     const corpo = document.getElementById("modal-corpo");
     
-    titulo.innerText = novena.titulo;
+    // NAVEGAÇÃO: Seta volta para a Lista Geral
+    const btnVoltar = `<button onclick="window.abrirListaNovenas()" style="background:none; border:none; cursor:pointer; color:var(--text); margin-right:10px; display:flex; align-items:center;"><span class="material-symbols-rounded" style="font-size:28px;">arrow_back</span></button>`;
     
-    // Recupera progresso do usuário
+    // Layout flex para o título ficar alinhado com a seta
+    titulo.innerHTML = `<div style="display:flex; align-items:center;">${btnVoltar} <span>${novena.titulo}</span></div>`;
+
     const progresso = JSON.parse(localStorage.getItem(`novena_${id}`)) || [];
 
-    let html = `<p style="color:var(--muted); margin-bottom:20px; font-style:italic;">${novena.intro}</p>`;
+    // REMOVI O ESTILO DE CARD (Borda e Fundo) do texto de introdução
+    let html = `
+        <div style="padding: 0 5px; margin-bottom: 25px; font-size: 0.95rem; line-height: 1.6; color: var(--text);">
+            ${novena.intro}
+        </div>
+    `;
     
     // Grid de botões
     html += `<div style="display:grid; grid-template-columns: repeat(3, 1fr); gap:10px;">`;
 
     novena.dias.forEach((diaObj, index) => {
         const feito = progresso.includes(index);
-        // Estilo condicional: Verde se feito, Normal se não
+        
         const estilo = feito 
             ? 'background: var(--primary); color: #fff; border:none;' 
-            : 'background: var(--bg); border: 1px solid var(--border); color: var(--text);';
+            : 'background: var(--card-bg); border: 1px solid var(--border); color: var(--text);';
         
         const conteudoBotao = feito 
-            ? '<span class="material-symbols-rounded">check</span>' 
+            ? '<span class="material-symbols-rounded" style="font-size:24px;">check</span>' 
             : `${index + 1}º Dia`;
 
         html += `
             <button onclick="lerDiaNovena('${id}', ${index})" 
-                    style="padding: 15px; border-radius: 10px; cursor: pointer; font-weight:bold; ${estilo}">
+                    style="padding: 15px; border-radius: 10px; cursor: pointer; font-weight:bold; height: 60px; display:flex; align-items:center; justify-content:center; ${estilo}">
                 ${conteudoBotao}
             </button>
         `;
     });
     html += `</div>`;
-    
-    // Botão Voltar
-    html += `
-        <br>
-        <button onclick="abrirListaNovenas()" class="btn-livro" style="width:100%; justify-content:center; margin-top:10px;">
-            ⬅ Voltar para Calendário
-        </button>
-    `;
 
     corpo.innerHTML = html;
 };
 
-// 4. Lê o Dia Específico (Oração Inicial + Texto + Final)
+// 5. Lê o Dia Específico (VISUAL LIMPO + NAVEGAÇÃO CORRETA)
 window.lerDiaNovena = async (id, index) => {
     const db = await carregarNovenas();
     const novena = db.detalhes[id];
     const diaObj = novena.dias[index];
     
-    // Salva o progresso automaticamente ao abrir
-    let progresso = JSON.parse(localStorage.getItem(`novena_${id}`)) || [];
-    if (!progresso.includes(index)) {
-        progresso.push(index);
-        localStorage.setItem(`novena_${id}`, JSON.stringify(progresso));
-    }
+    const progresso = JSON.parse(localStorage.getItem(`novena_${id}`)) || [];
+    const isFeito = progresso.includes(index);
 
+    const titulo = document.getElementById("modal-titulo");
     const corpo = document.getElementById("modal-corpo");
     
+    // NAVEGAÇÃO: Seta volta para os Detalhes da Novena (Tela Anterior)
+    const btnVoltar = `<button onclick="abrirDetalhesNovena('${id}')" style="background:none; border:none; cursor:pointer; color:var(--text); margin-right:10px; display:flex; align-items:center;"><span class="material-symbols-rounded" style="font-size:28px;">arrow_back</span></button>`;
+    
+    titulo.innerHTML = `<div style="display:flex; align-items:center;">${btnVoltar} <span>${diaObj.dia}º Dia</span></div>`;
+
+    // Botões de Ação
+    let botaoAcao = "";
+    if (isFeito) {
+        botaoAcao = `
+            <button class="btn-primary" onclick="alternarStatusDia('${id}', ${index})" style="width:100%; background:var(--bg); color:var(--text); border:1px solid var(--border); display:flex; justify-content:center; align-items:center; gap:8px;">
+                <span class="material-symbols-rounded">undo</span> Desmarcar
+            </button>
+        `;
+    } else {
+        botaoAcao = `
+            <button class="btn-primary" onclick="alternarStatusDia('${id}', ${index})" style="width:100%; display:flex; justify-content:center; align-items:center; gap:8px;">
+                <span class="material-symbols-rounded">check</span> Concluir Dia
+            </button>
+        `;
+    }
+
+    // REMOVI OS "CARDS" INTERNOS. O texto fica direto no corpo.
     corpo.innerHTML = `
-        <h4 style="color:var(--primary); text-align:center; margin-bottom: 20px;">${index + 1}º Dia</h4>
-        
-        <div style="margin-bottom: 20px; padding-bottom: 10px; border-bottom: 1px solid var(--border);">
-            <p style="font-weight:bold; color:var(--muted); font-size: 0.8rem; text-transform: uppercase; margin-bottom:5px;">Oração Inicial</p>
-            <p style="font-style: italic;">${novena.oracaoInicial}</p>
-        </div>
+        <div style="padding: 0 5px;">
+            <h4 style="color:var(--primary); margin-bottom: 15px; display:flex; align-items:center; gap:5px;">
+                <span class="material-symbols-rounded">import_contacts</span> Oração Inicial
+            </h4>
+            <div style="font-style: italic; color:var(--text); line-height:1.6; margin-bottom: 25px; padding-left: 10px; border-left: 3px solid var(--border);">
+                ${novena.oracaoInicial}
+            </div>
 
-        <div style="background: var(--bg); padding: 20px; border-radius: 12px; margin: 20px 0; text-align: justify; line-height: 1.7; border-left: 4px solid var(--primary);">
-            ${diaObj.texto}
-        </div>
+            <hr style="border: 0; border-top: 1px solid var(--border); margin: 20px 0;">
 
-        <div style="margin-top: 20px; padding-top: 10px; border-top: 1px solid var(--border);">
-            <p style="font-weight:bold; color:var(--muted); font-size: 0.8rem; text-transform: uppercase; margin-bottom:5px;">Oração Final</p>
-            <p style="font-style: italic;">${novena.oracaoFinal}</p>
+            <div style="text-align: justify; line-height: 1.8; font-size: 1rem;">
+                ${diaObj.texto}
+            </div>
+
+            <hr style="border: 0; border-top: 1px solid var(--border); margin: 20px 0;">
+
+            <h4 style="color:var(--primary); margin-bottom: 15px; display:flex; align-items:center; gap:5px;">
+                <span class="material-symbols-rounded">volunteer_activism</span> Oração Final
+            </h4>
+            <div style="font-style: italic; color:var(--text); line-height:1.6; margin-bottom: 30px; padding-left: 10px; border-left: 3px solid var(--border);">
+                ${novena.oracaoFinal}
+            </div>
+            
+            ${botaoAcao}
         </div>
-        
-        <br>
-        <button class="btn-primary" onclick="abrirDetalhesNovena('${id}')">Concluir Dia</button>
     `;
 
-    // Rola para o topo do modal
     const modalContent = document.querySelector('.modal-content');
     if(modalContent) modalContent.scrollTop = 0;
+};
+
+// 6. Função Alternar Status
+window.alternarStatusDia = (id, index) => {
+    let progresso = JSON.parse(localStorage.getItem(`novena_${id}`)) || [];
+    
+    if (progresso.includes(index)) {
+        progresso = progresso.filter(i => i !== index);
+    } else {
+        progresso.push(index);
+    }
+    
+    localStorage.setItem(`novena_${id}`, JSON.stringify(progresso));
+    abrirDetalhesNovena(id);
 };
 
 setTimeout(() => {
