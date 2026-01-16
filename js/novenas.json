@@ -3,7 +3,7 @@
     { "id": "epifania", "nome": "Novena da Epifania", "mes": 0, "inicio": "12-28", "fim": "01-05" },
     { "id": "santo-antao", "nome": "Santo Antão", "mes": 0, "inicio": "01-08", "fim": "01-16" },
     { "id": "sao-francisco-sales", "nome": "São Francisco de Sales", "mes": 0, "inicio": "01-15", "fim": "01-23" },
-    { "id": "sao-tomas-aquino", "nome": "Santo Tomás de Aquino", "mes": 0, "inicio": "01-19", "fim": "01-27" },
+    { "id": "santo-tomas-aquino", "nome": "Santo Tomás de Aquino", "mes": 0, "inicio": "01-19", "fim": "01-27" },
     { "id": "dom-bosco", "nome": "São João Bosco", "mes": 0, "inicio": "01-22", "fim": "01-30" },
     { "id": "candeias", "nome": "Nossa Senhora das Candeias", "mes": 1, "inicio": "01-24", "fim": "02-01" },
     { "id": "sao-bras", "nome": "São Brás", "mes": 1, "inicio": "01-25", "fim": "02-02" },
