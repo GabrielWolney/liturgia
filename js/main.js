@@ -996,9 +996,8 @@ function abrirModalLiturgia() {
     let html = `<div class="leitura-bloco"><h4>1ª Leitura</h4><p style="color: #64748b; font-weight: bold; margin-bottom: 10px;">${getRef(
       dadosLiturgia.primeiraLeitura
     )}</p><p>${getText(dadosLiturgia.primeiraLeitura)}</p></div><hr>`;
-    html += `<div class="leitura-bloco"><h4>Salmo Responsorial</h4><p style="color: #64748b; font-weight: bold; margin-bottom: 10px;">${getRef(
-      dadosLiturgia.salmo
-    )}</p><p>${getText(dadosLiturgia.salmo)}</p></div><hr>`;
+// Substitua a linha do Salmo por esta (passando o objeto direto, SEM getText):
+html += `<div class="leitura-bloco"><h4>Salmo Responsorial</h4><p style="color: #64748b; font-weight: bold; margin-bottom: 10px;">${getRef(dadosLiturgia.salmo)}</p></div> ${formatarSalmo(dadosLiturgia.salmo)} <hr>`;
     if (
       dadosLiturgia.segundaLeitura &&
       !JSON.stringify(dadosLiturgia.segundaLeitura).includes("Não há")
@@ -1461,7 +1460,51 @@ window.alternarStatusDia = (id, index) => {
     
     localStorage.setItem(`novena_${id}`, JSON.stringify(progresso));
     abrirDetalhesNovena(id);
+
 };
+function formatarSalmo(dado) {
+    if (!dado) return "";
+
+    // Recupera texto e refrão de forma segura
+    let textoBase = typeof dado === "string" ? dado : (dado.texto || "");
+    let refraoBase = typeof dado === "object" && dado.refrao ? dado.refrao : "";
+
+    // Limpeza de caracteres indesejados (+)
+    textoBase = textoBase.replace(/\+/g, "").trim();
+
+    // Lógica para garantir que temos um refrão
+    if (!refraoBase) {
+        // Se a API não mandou o refrão separado, pegamos a primeira linha do texto
+        let linhas = textoBase.split('\n');
+        if (linhas.length > 0) {
+            refraoBase = linhas[0];
+            // Remove a primeira linha do texto para não repetir
+            textoBase = linhas.slice(1).join("\n"); 
+        }
+    }
+
+    // Limpa prefixos do refrão (R., —) para padronizar
+    refraoBase = refraoBase.replace(/^(R\.|R:|—|Refrão:)\s*/i, "");
+
+    // Formata o corpo: Quebras de linha e números pequenos
+    let corpoFormatado = textoBase.replace(/\n/g, "<br>");
+    corpoFormatado = corpoFormatado.replace(
+        /(\d+)\.?/g, 
+        '<sup style="color:var(--primary); font-weight:800; font-size:0.6em; vertical-align:super; margin-right:2px;">$1</sup>'
+    );
+
+    // Retorna HTML com a MESMA classe de fonte das leituras (.leitura-bloco p)
+    return `
+        <div class="leitura-bloco">
+            <p style="margin-bottom: 15px; background: rgba(0,0,0,0.03); padding: 10px; border-left: 3px solid var(--primary); border-radius: 4px;">
+                <span style="color: var(--primary); font-weight: 800;">R.</span> 
+                <strong>${refraoBase}</strong>
+            </p>
+
+            <p>${corpoFormatado}</p>
+        </div>
+    `;
+}
 
 setTimeout(() => {
   const splash = document.getElementById("splash-screen");
