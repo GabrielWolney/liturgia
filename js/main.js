@@ -522,24 +522,41 @@ const carregarAvisos = () => {
     where("dataExpiracao", ">=", hojeLocal),
     orderBy("dataExpiracao", "asc")
   );
+
   onSnapshot(q, (snapshot) => {
     avisosGlobais = [];
     if (container) container.innerHTML = "";
+    
     if (snapshot.empty && container) {
-      container.innerHTML =
-        "<li style='text-align:center; color:gray;'>Nenhum aviso ativo.</li>";
+      container.innerHTML = `
+        <div style="text-align:center; padding: 20px; opacity: 0.6;">
+            <span class="material-symbols-rounded" style="font-size:32px; color:var(--muted);">event_busy</span>
+            <p style="font-size:0.85rem; color:var(--muted); margin-top:5px;">Sem avisos por enquanto.</p>
+        </div>`;
       return;
     }
+
     snapshot.forEach((doc) => {
       const dados = doc.data();
       avisosGlobais.push(dados);
+      
       if (container) {
+        // Separa dia, mês e ano
+        const [ano, mes, dia] = dados.dataExpiracao.split("-");
+        const meses = ["JAN", "FEV", "MAR", "ABR", "MAI", "JUN", "JUL", "AGO", "SET", "OUT", "NOV", "DEZ"];
+        const nomeMes = meses[parseInt(mes) - 1];
+
         const li = document.createElement("li");
-        const dataFormatada = dados.dataExpiracao
-          .split("-")
-          .reverse()
-          .join("/");
-        li.innerHTML = `<strong>${dataFormatada}:</strong> ${dados.texto}`;
+        li.className = "aviso-item"; // Classe nova para o CSS
+        li.innerHTML = `
+            <div class="aviso-data-box">
+                <span class="aviso-dia">${dia}</span>
+                <span class="aviso-mes">${nomeMes}</span>
+            </div>
+            <div class="aviso-conteudo">
+                <p>${dados.texto}</p>
+            </div>
+        `;
         container.appendChild(li);
       }
     });
