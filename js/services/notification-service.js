@@ -1,4 +1,4 @@
-import { messaging, db } from "./firebase-config.js";
+import { messaging, db } from "../config/firebase-config.js";
 import { getToken } from "https://www.gstatic.com/firebasejs/12.7.0/firebase-messaging.js";
 import { doc, setDoc } from "https://www.gstatic.com/firebasejs/12.7.0/firebase-firestore.js";
 
@@ -19,13 +19,6 @@ export const configurarNotificacoes = async () => {
       }
     }
   } catch (err) {
-    console.warn("Aviso: Notificações não configuradas. Verifique se está em HTTPS ou localhost.");
+    console.warn("Aviso: Notificações não configuradas (Requer HTTPS ou localhost).");
   }
-};
-
-export const buscarDadosApi = async () => {
-  const url = "https://liturgia.up.railway.app/";
-  const response = await fetch(url);
-  if (!response.ok) throw new Error("Erro na rede");
-  return await response.json();
 };
