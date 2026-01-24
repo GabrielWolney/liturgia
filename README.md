@@ -4,7 +4,7 @@
 **Gabriel Wolney Drumond**  
 Estudante de Engenharia de Software – Universidade Católica de Brasília (UCB)
 
-🔗 **Acesse:** https://liturgia-agape.vercel.app
+🔗 **Acesse no celular:** https://liturgia-agape.vercel.app
 
 ---
 
