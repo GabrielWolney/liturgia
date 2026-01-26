@@ -1,0 +1,30 @@
+:root {
+  /* TEMA CLARO (Padrão) */
+  --bg: #f1f5f9;
+  --card-bg: #ffffff;
+  --text: #1e293b;
+  --muted: #64748b;
+  --primary: #2563eb;
+  --primary-light: #dbeafe;
+  --border: #e2e8f0;
+  --shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+
+  /* Layout & Dimensões */
+  --nav-height: 70px;
+  --header-max-width: 600px;
+  --cor-roxo: #9333ea;
+  --cor-roxo-bg: rgba(147, 51, 234, 0.1);
+}
+
+/* TEMA ESCURO (Dark Mode) */
+[data-theme="dark"] {
+  --bg: #0f172a;
+  --card-bg: #1e293b;
+  --text: #f8fafc;
+  --muted: #cbd5e1;
+  --border: #334155;
+  --shadow: none;
+  --primary-light: rgba(37, 99, 235, 0.35);
+  --cor-roxo: #c084fc;
+  --cor-roxo-bg: rgba(192, 132, 252, 0.15);
+}

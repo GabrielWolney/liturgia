@@ -1,0 +1,60 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  -webkit-tap-highlight-color: transparent;
+}
+
+/* Força fonte Montserrat globalmente */
+body,
+h1,
+h2,
+h3,
+h4,
+p,
+span,
+div,
+a,
+button,
+input,
+textarea,
+li {
+  font-family: "Montserrat", sans-serif !important;
+}
+
+.material-symbols-rounded {
+  font-family: "Material Symbols Rounded" !important;
+  /* Estado padrão VAZIO para transição suave */
+  font-variation-settings:
+    "FILL" 0,
+    "wght" 400,
+    "GRAD" 0,
+    "opsz" 24 !important;
+  transition: font-variation-settings 0.6s ease-in-out !important;
+}
+
+html,
+body {
+  height: 100%;
+  overflow: hidden; /* Scroll gerenciado pelo Main */
+  background: var(--bg);
+  transition:
+    background-color 0.3s ease,
+    color 0.3s ease;
+}
+
+body {
+  display: flex;
+  flex-direction: column;
+  color: var(--text);
+}
+
+/* Scrollbar invisível */
+::-webkit-scrollbar {
+  display: none !important;
+  width: 0px !important;
+  background: transparent !important;
+}
+* {
+  scrollbar-width: none !important;
+}

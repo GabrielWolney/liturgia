@@ -1,0 +1,1235 @@
+@charset "UTF-8";
+:root {
+  /* TEMA CLARO (Padrão) */
+  --bg: #f1f5f9;
+  --card-bg: #ffffff;
+  --text: #1e293b;
+  --muted: #64748b;
+  --primary: #2563eb;
+  --primary-light: #dbeafe;
+  --border: #e2e8f0;
+  --shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+  /* Layout & Dimensões */
+  --nav-height: 70px;
+  --header-max-width: 600px;
+  --cor-roxo: #9333ea;
+  --cor-roxo-bg: rgba(147, 51, 234, 0.1);
+}
+
+/* TEMA ESCURO (Dark Mode) */
+[data-theme=dark] {
+  --bg: #0f172a;
+  --card-bg: #1e293b;
+  --text: #f8fafc;
+  --muted: #cbd5e1;
+  --border: #334155;
+  --shadow: none;
+  --primary-light: rgba(37, 99, 235, 0.35);
+  --cor-roxo: #c084fc;
+  --cor-roxo-bg: rgba(192, 132, 252, 0.15);
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  -webkit-tap-highlight-color: transparent;
+}
+
+/* Força fonte Montserrat globalmente */
+body,
+h1,
+h2,
+h3,
+h4,
+p,
+span,
+div,
+a,
+button,
+input,
+textarea,
+li {
+  font-family: "Montserrat", sans-serif !important;
+}
+
+.material-symbols-rounded {
+  font-family: "Material Symbols Rounded" !important;
+  /* Estado padrão VAZIO para transição suave */
+  font-variation-settings: "FILL" 0, "wght" 400, "GRAD" 0, "opsz" 24 !important;
+  transition: font-variation-settings 0.6s ease-in-out !important;
+}
+
+html,
+body {
+  height: 100%;
+  overflow: hidden; /* Scroll gerenciado pelo Main */
+  background: var(--bg);
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+body {
+  display: flex;
+  flex-direction: column;
+  color: var(--text);
+}
+
+/* Scrollbar invisível */
+::-webkit-scrollbar {
+  display: none !important;
+  width: 0px !important;
+  background: transparent !important;
+}
+
+* {
+  scrollbar-width: none !important;
+}
+
+/* --- HEADER (TOPO) --- */
+.topo {
+  position: fixed;
+  top: 15px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 92%;
+  max-width: 450px;
+  height: 60px;
+  border-radius: 50px;
+  background: var(--card-bg);
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+  border: 1px solid var(--border);
+  z-index: 1100;
+  display: flex;
+  align-items: center;
+  transition: background-color 0.3s ease;
+}
+
+.header-container {
+  width: 100%;
+  height: 100%;
+  padding: 0 15px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  position: relative;
+}
+
+.logo-header {
+  width: 32px;
+  height: 32px;
+  border-radius: 8px;
+  -o-object-fit: contain;
+     object-fit: contain;
+}
+
+.header-container h1 {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  font-family: "Poppins", sans-serif;
+  font-size: 0.9rem;
+  font-weight: 800;
+  color: var(--primary);
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  margin: 0;
+  white-space: nowrap;
+}
+
+#btn-tema {
+  background: transparent !important;
+  border: none !important;
+  padding: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--text);
+  cursor: pointer;
+  border-radius: 50%;
+}
+
+/* --- MAIN (CONTEÚDO) --- */
+main {
+  flex: 1;
+  overflow-y: auto;
+  padding: 1rem;
+  padding-top: 100px !important;
+  padding-bottom: 120px !important;
+  -webkit-overflow-scrolling: touch;
+  scroll-behavior: smooth;
+}
+
+.conteudo-aba {
+  animation: fadeIn 0.3s ease-out;
+}
+
+.data-atual {
+  text-align: center;
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: var(--muted);
+  margin-bottom: 1rem;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+/* --- BOTTOM NAV --- */
+.bottom-nav {
+  position: fixed;
+  bottom: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 92%;
+  max-width: 450px;
+  height: 65px;
+  border-radius: 50px;
+  background: var(--card-bg);
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
+  border: 1px solid var(--border);
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  padding: 0 5px;
+  z-index: 1000;
+  transition: all 0.3s ease;
+  margin-bottom: env(safe-area-inset-bottom);
+}
+
+.nav-item {
+  display: flex !important;
+  flex-direction: column !important;
+  align-items: center !important;
+  justify-content: center !important;
+  flex: 1;
+  text-decoration: none;
+  color: var(--muted);
+  border-radius: 50%;
+  height: 55px !important;
+  gap: 6px !important;
+  padding-bottom: 2px;
+  transition: all 0.2s;
+}
+
+.nav-item:active {
+  transform: scale(0.95);
+  background-color: transparent !important;
+}
+
+.nav-item .material-symbols-rounded {
+  font-size: 24px !important;
+  width: 24px;
+  height: 24px;
+  margin: 0 !important;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.nav-item span:not(.material-symbols-rounded) {
+  font-size: 9px;
+  font-weight: 600;
+  margin: 0 !important;
+  line-height: 1 !important;
+  position: relative;
+  top: -1px;
+}
+
+/* Estados Ativos */
+.nav-item.active {
+  color: var(--primary);
+}
+
+.nav-item.active .material-symbols-rounded {
+  color: var(--primary);
+  font-variation-settings: "FILL" 1, "wght" 400, "GRAD" 0, "opsz" 24 !important;
+  transform: translateY(-2px);
+}
+
+.nav-item.active span {
+  color: currentColor;
+  font-weight: 600;
+}
+
+/* Override Específico: Confissão (Roxo) */
+.nav-item[data-target=tab-confissao].active,
+.nav-item[data-target=tab-confissao].active span,
+.nav-item[data-target=tab-confissao].active .icone-estola-linear {
+  color: #9333ea !important;
+}
+
+.nav-item[data-target=tab-confissao].active .icone-estola-linear .traco-estola {
+  stroke: #9333ea !important;
+}
+
+/* Override Específico: Oração (Azul Forçado) */
+.nav-item[data-target=tab-oracao].active {
+  color: var(--primary) !important;
+}
+
+.nav-item[data-target=tab-oracao].active .icone-oracao-custom {
+  color: var(--primary) !important;
+  transform: translateY(-2px);
+}
+
+.nav-item[data-target=tab-oracao].active .icone-oracao-custom path {
+  stroke: var(--primary) !important;
+  opacity: 1 !important;
+}
+
+.nav-item[data-target=tab-oracao].active .icone-oracao-custom path.classe-fill {
+  fill: var(--primary) !important;
+  stroke: none !important;
+}
+
+.btn-primary {
+  width: 100%;
+  background: var(--primary);
+  color: white;
+  border: none;
+  padding: 14px;
+  border-radius: 14px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: 0.2s;
+  margin-top: 10px;
+}
+
+.btn-secondary {
+  width: 100%;
+  background: transparent;
+  color: var(--primary);
+  border: 1px solid var(--primary);
+  padding: 10px;
+  border-radius: 12px;
+  font-weight: 600;
+  font-size: 0.8rem;
+  margin-top: 12px;
+  cursor: pointer;
+}
+
+.btn-conhecer {
+  text-decoration: none;
+  background: transparent;
+  color: var(--primary);
+  padding: 6px 12px;
+  border-radius: 8px;
+  font-size: 0.75rem;
+  font-weight: 700;
+  border: 1px solid var(--border);
+  display: inline-block;
+  margin-top: 15px;
+}
+
+.btn-outline {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  background: transparent !important;
+  border: 1px solid var(--primary);
+  color: var(--primary);
+  border-radius: 50px;
+  padding: 4px 20px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  margin-top: 5px;
+  cursor: pointer;
+  width: auto !important;
+}
+
+.btn-outline .material-symbols-rounded {
+  font-size: 16px !important;
+  line-height: 1;
+}
+
+.btn-outline.lido {
+  color: #22c55e !important;
+  border-color: #22c55e !important;
+}
+
+/* Inputs Admin */
+.input-admin {
+  width: 100%;
+  padding: 12px;
+  margin-bottom: 10px;
+  border-radius: 10px;
+  border: 1px solid var(--border);
+  background: var(--card-bg);
+  color: var(--text);
+}
+
+textarea.input-admin {
+  height: 80px;
+  resize: none;
+}
+
+/* Ícones SVG Customizados */
+.icone-estola-linear,
+.icone-oracao-custom {
+  width: 24px;
+  height: 24px;
+  color: var(--muted);
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.icone-estola-linear .traco-estola,
+.icone-oracao-custom path {
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 35;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+[data-theme=dark] .nav-item:not(.active) .icone-estola-linear,
+[data-theme=dark] .nav-item:not(.active) .icone-oracao-custom {
+  color: var(--muted);
+}
+
+.modal {
+  display: none;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(15, 23, 42, 0.6);
+  z-index: 2000;
+  justify-content: center;
+  align-items: center;
+  padding: 10px;
+}
+
+.modal-content {
+  background: var(--card-bg);
+  width: 100%;
+  max-height: 92vh;
+  border-radius: 25px;
+  display: flex;
+  flex-direction: column;
+  border: 1px solid var(--border);
+}
+
+.modal-content-centered {
+  max-height: 50vh;
+  width: 90%;
+  margin: 0 auto;
+  align-self: center;
+}
+
+.modal-header {
+  padding: 1.5rem;
+  border-bottom: 1px solid var(--border);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.modal-body {
+  padding: 1.5rem;
+  overflow-y: auto;
+  flex: 1;
+}
+
+.modal-body strong {
+  color: var(--primary) !important;
+}
+
+.close-modal {
+  flex-shrink: 0;
+  width: 32px;
+  height: 32px;
+  min-width: 32px;
+  min-height: 32px;
+  background: #f1f5f9;
+  border: none;
+  border-radius: 50%;
+  cursor: pointer;
+  font-weight: bold;
+  color: #1e293b;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Modal Leitura Bíblia Fullscreen */
+#leitura-biblia-container {
+  background-color: var(--bg) !important;
+  color: var(--text) !important;
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+#leitura-header {
+  background-color: var(--card-bg) !important;
+  border-bottom: 1px solid var(--border) !important;
+}
+
+#leitura-texto p {
+  color: var(--text) !important;
+}
+
+.card {
+  background: var(--card-bg);
+  border-radius: 20px;
+  padding: 20px;
+  margin-bottom: 1rem;
+  border: 1px solid var(--border);
+  box-shadow: var(--shadow);
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  transition: background-color 0.3s ease;
+}
+
+.card h2 {
+  font-size: 0.95rem;
+  font-weight: 700;
+  margin-bottom: 1rem;
+  color: var(--text);
+}
+
+hr,
+.card-divider {
+  width: 60% !important;
+  margin: 10px auto 5px auto !important;
+  border: 0 !important;
+  border-top: 1px solid var(--border) !important;
+  opacity: 1 !important;
+}
+
+/* Menu Grid */
+.menu-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 15px;
+}
+
+.menu-item {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  padding: 20px;
+  cursor: pointer;
+  gap: 10px;
+}
+
+.menu-item:active {
+  transform: scale(0.98);
+}
+
+.menu-item span {
+  font-weight: 600;
+  font-size: 0.9rem;
+}
+
+/* Cards de Pedido (Mural) */
+.card-pedido {
+  background-color: var(--card-bg);
+  border: 1px solid #e2e8f0;
+  border-left: 4px solid #db2777;
+  padding: 12px;
+  border-radius: 8px;
+  margin-bottom: 10px;
+  position: relative !important;
+  animation: slideIn 0.3s ease;
+}
+
+.pedido-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 6px;
+}
+
+.pedido-nome {
+  font-weight: 700;
+  color: #db2777;
+  font-size: 0.85rem;
+}
+
+.pedido-data {
+  font-size: 0.7rem;
+  color: var(--muted);
+}
+
+.pedido-texto {
+  font-size: 0.9rem;
+  color: var(--text);
+  line-height: 1.4;
+  white-space: pre-wrap;
+}
+
+/* Botão Excluir Pedido */
+.btn-excluir-pedido {
+  background: transparent;
+  border: none;
+  color: #ef4444;
+  cursor: pointer;
+  padding: 4px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0.7;
+}
+
+.btn-excluir-pedido:hover {
+  opacity: 1;
+}
+
+/* Avisos (Novo Design) */
+#lista-avisos {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.aviso-item {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  background-color: var(--bg);
+  padding: 12px;
+  border-radius: 12px;
+  margin-bottom: 10px;
+  border: 1px solid var(--border);
+  transition: transform 0.2s ease;
+}
+
+.aviso-item:active {
+  transform: scale(0.98);
+}
+
+.aviso-data-box {
+  background-color: var(--card-bg);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  min-width: 55px;
+  height: 55px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
+}
+
+[data-theme=dark] .aviso-data-box {
+  background-color: rgba(255, 255, 255, 0.05);
+  border-color: rgba(255, 255, 255, 0.1);
+}
+
+.aviso-dia {
+  font-size: 1.2rem;
+  font-weight: 800;
+  color: var(--primary);
+  line-height: 1;
+}
+
+.aviso-mes {
+  font-size: 0.65rem;
+  font-weight: 700;
+  color: var(--muted);
+  text-transform: uppercase;
+  margin-top: 2px;
+}
+
+.aviso-conteudo p {
+  margin: 0;
+  font-size: 0.9rem;
+  color: var(--text);
+  line-height: 1.4;
+  font-weight: 500;
+  text-align: left;
+}
+
+/* Admin Aviso Item */
+.item-admin-aviso {
+  background: var(--bg);
+  padding: 12px;
+  border-radius: 12px;
+  margin-bottom: 10px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border: 1px solid var(--border);
+  animation: fadeIn 0.3s ease;
+}
+
+.btn-delete-aviso {
+  background: rgba(239, 68, 68, 0.1) !important;
+  color: #ef4444 !important;
+  border: none !important;
+  width: 35px;
+  height: 35px;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+}
+
+/* Calendário */
+.calendar-grid {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 5px;
+  text-align: center;
+}
+
+.calendar-day {
+  padding: 8px 0;
+  font-size: 0.9rem;
+  border-radius: 8px;
+  position: relative;
+  cursor: pointer;
+}
+
+.calendar-header {
+  font-weight: bold;
+  color: var(--muted);
+  font-size: 0.75rem;
+  margin-bottom: 5px;
+}
+
+.has-event {
+  background-color: rgba(var(--primary-rgb), 0.1);
+  color: var(--primary);
+  font-weight: bold;
+}
+
+.has-event::after {
+  content: "";
+  position: absolute;
+  bottom: 4px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 4px;
+  height: 4px;
+  background-color: var(--primary);
+  border-radius: 50%;
+}
+
+.day-selected {
+  background-color: var(--primary) !important;
+  color: white !important;
+}
+
+/* Profile Header */
+.profile-header {
+  background: #2563eb !important;
+}
+
+.profile-header h2,
+.profile-header p {
+  color: #ffffff !important;
+}
+
+/* --- LITURGIA --- */
+.circulo-liturgico {
+  width: 80px;
+  height: 80px;
+  border-radius: 22px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: none;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+  margin-bottom: 10px;
+  transition: all 0.3s ease;
+}
+
+.icone-liturgico-img {
+  width: 100%;
+  height: 100%;
+  -o-object-fit: contain;
+     object-fit: contain;
+  display: block;
+  padding: 5px;
+}
+
+/* Variações de Cores */
+.circulo-liturgico.verde {
+  background: linear-gradient(135deg, #10b981, #047857);
+  box-shadow: 0 8px 20px -5px rgba(16, 185, 129, 0.5);
+}
+
+.circulo-liturgico.verde .icone-liturgico-img {
+  filter: brightness(0) invert(1);
+  opacity: 0.95;
+}
+
+.circulo-liturgico.branco {
+  background: #f8fafc;
+  color: #475569;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+}
+
+.circulo-liturgico.vermelho {
+  background: #fee2e2;
+  color: #991b1b;
+}
+
+.circulo-liturgico.roxo {
+  background: #f3e8ff;
+  color: #6b21a8;
+}
+
+.circulo-liturgico.rosa {
+  background: #fdf2f8;
+  color: #9d174d;
+}
+
+#emoji-tempo {
+  font-size: 36px;
+  display: block;
+}
+
+.label-pequeno {
+  font-size: 0.7rem;
+  text-transform: uppercase;
+  color: var(--muted);
+  font-weight: 700;
+}
+
+#nome-santo {
+  font-size: 1.1rem;
+  color: var(--text);
+  margin-bottom: 4px;
+}
+
+.badge-cor {
+  padding: 4px 12px;
+  border-radius: 20px;
+  font-size: 0.7rem;
+  font-weight: 800;
+  text-transform: uppercase;
+}
+
+.badge-cor.verde {
+  background: #dcfce7;
+  color: #166534;
+}
+
+.badge-cor.branco {
+  background: #f8fafc;
+  color: #475569;
+  border: 1px solid #e2e8f0;
+}
+
+.badge-cor.vermelho {
+  background: #fee2e2;
+  color: #991b1b;
+}
+
+.badge-cor.roxo {
+  background: #f3e8ff;
+  color: #6b21a8;
+}
+
+.badge-cor.rosa {
+  background: #fdf2f8;
+  color: #9d174d;
+}
+
+/* Leitura e Terço */
+#titulo-misterio {
+  color: var(--primary);
+  margin-bottom: 8px;
+  font-size: 1rem;
+  font-weight: 700;
+}
+
+#descricao-misterio {
+  color: var(--muted);
+  font-size: clamp(0.7rem, 3.2vw, 0.9rem);
+  line-height: 1.6;
+  margin: 0 -10px;
+  width: calc(100% + 20px);
+  text-align: center;
+}
+
+/* Botões Horas */
+.botoes-horas {
+  display: flex;
+  gap: 10px;
+  margin-top: 10px;
+  width: 100%;
+}
+
+.btn-hora {
+  flex: 1;
+  background: var(--primary-light);
+  color: var(--primary);
+  border: none;
+  padding: 12px;
+  border-radius: 12px;
+  font-weight: 700;
+  font-size: 0.8rem;
+  cursor: pointer;
+}
+
+/* --- BÍBLIA --- */
+#grid-livros {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 12px;
+  margin-top: 15px;
+}
+
+.btn-livro {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 50px;
+  padding: 8px 5px;
+  font-size: 0.85rem;
+  font-weight: 600;
+  text-align: center;
+  border-radius: 12px;
+  cursor: pointer;
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  -webkit-user-select: none;
+     -moz-user-select: none;
+          user-select: none;
+  width: 100%;
+}
+
+[data-theme=light] .btn-livro {
+  background-color: #ffffff;
+  color: #334155;
+  border: 1px solid #e2e8f0;
+  box-shadow: 0 2px 4px rgba(148, 163, 184, 0.15);
+}
+
+[data-theme=dark] .btn-livro {
+  background-color: #1e293b;
+  color: #e2e8f0;
+  border: 1px solid #334155;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+[data-theme=light] .btn-livro:active,
+[data-theme=light] .btn-livro:hover {
+  border-color: var(--primary);
+  color: var(--primary);
+  background-color: #f8fafc;
+  transform: translateY(1px);
+  box-shadow: none;
+}
+
+[data-theme=dark] .btn-livro:active {
+  background-color: #0f172a;
+  border-color: var(--primary);
+}
+
+#btn-novo-test,
+#btn-antigo-test {
+  transition: opacity 0.3s, background-color 0.3s;
+  flex: 1;
+}
+
+/* --- CONFISSÃO --- */
+.titulo-roxo {
+  color: var(--cor-roxo);
+  font-size: 1.1rem;
+  font-weight: 800;
+  margin: 0;
+  line-height: 1.2;
+}
+
+.passo-numero {
+  background-color: #9333ea !important;
+}
+
+/* Acordeão Exame */
+.exame-grupo.roxo {
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  margin-bottom: 10px;
+  background-color: var(--bg);
+  overflow: hidden;
+}
+
+.exame-grupo.roxo summary {
+  padding: 15px;
+  font-weight: 600;
+  color: var(--cor-roxo);
+  background-color: var(--cor-roxo-bg);
+  cursor: pointer;
+  list-style: none;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.exame-grupo.roxo summary::after {
+  content: "expand_more";
+  font-family: "Material Symbols Rounded";
+  transition: transform 0.2s;
+}
+
+.exame-grupo.roxo[open] summary::after {
+  transform: rotate(180deg);
+}
+
+.passo-card {
+  display: flex !important;
+  align-items: left !important;
+  text-align: left;
+  gap: 15px !important;
+  padding: 10px;
+  border-radius: 12px;
+  transition: background-color 0.2s ease;
+}
+
+.passo-icon-box {
+  background: var(--cor-roxo-bg);
+  color: var(--cor-roxo);
+  width: 40px;
+  height: 40px;
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.exame-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 15px;
+  margin-bottom: 15px;
+  padding-bottom: 10px;
+  border-bottom: 1px solid var(--border);
+}
+
+[data-theme=dark] .exame-header {
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1) !important;
+}
+
+.btn-limpar {
+  flex-shrink: 0;
+  background: transparent;
+  border: 1px solid var(--border);
+  padding: 6px 14px;
+  border-radius: 50px;
+  font-size: 0.7rem;
+  font-weight: 600;
+  color: var(--muted);
+  cursor: pointer;
+  white-space: nowrap;
+}
+
+/* Lista Pecados */
+.lista-exame {
+  padding: 0;
+  margin: 0;
+}
+
+.lista-exame li {
+  list-style: none;
+  border-top: 1px solid var(--border);
+  padding: 12px 10px;
+}
+
+.lista-exame label {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 8px 0;
+  cursor: pointer;
+}
+
+.check-roxo {
+  -webkit-appearance: none !important;
+  -moz-appearance: none !important;
+       appearance: none !important;
+  width: 24px !important;
+  height: 24px !important;
+  min-width: 24px;
+  border: 2px solid #9333ea !important;
+  border-radius: 50% !important;
+  background-color: transparent;
+  cursor: pointer !important;
+  display: grid !important;
+  place-content: center !important;
+  transition: all 0.2s ease-in-out;
+  margin-right: 0;
+}
+
+.check-roxo:checked {
+  background-color: #9333ea !important;
+  box-shadow: 0 0 8px rgba(147, 51, 234, 0.4);
+}
+
+.check-roxo::before {
+  content: "";
+  width: 10px;
+  height: 10px;
+  background-color: white;
+  transform: scale(0);
+  transition: 0.2s transform ease-in-out;
+  clip-path: polygon(14% 44%, 0 65%, 50% 100%, 100% 16%, 80% 0%, 43% 62%);
+}
+
+.check-roxo:checked::before {
+  transform: scale(1);
+}
+
+/* Card Ato de Contrição */
+.card-oracao {
+  border: 1px solid var(--cor-roxo);
+  background: linear-gradient(180deg, var(--card-bg) 0%, var(--cor-roxo-bg) 100%);
+  position: relative;
+  overflow: hidden;
+}
+
+.card-oracao::top {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 4px;
+  background: var(--cor-roxo);
+}
+
+.texto-oracao {
+  text-align: center;
+  font-family: "Georgia", serif !important;
+  font-size: 1rem;
+  line-height: 1.6;
+  color: var(--text);
+  padding: 0 10px;
+}
+
+.destaque-final {
+  font-family: "Montserrat", sans-serif !important;
+  font-weight: 800;
+  color: var(--cor-roxo);
+  text-transform: uppercase;
+  font-size: 0.9rem;
+  letter-spacing: 1px;
+  margin-top: 20px;
+  padding-top: 15px;
+  border-top: 1px dashed rgba(147, 51, 234, 0.3);
+}
+
+/* Ícones Card Grande */
+.svg-card-grande {
+  width: 48px !important;
+  height: 48px !important;
+  margin-bottom: 10px;
+}
+
+.svg-card-grande .parte-tecido {
+  fill: white !important;
+  opacity: 0.95;
+}
+
+.svg-card-grande .parte-cruz {
+  fill: #ffffff !important;
+}
+
+/* Contador de Leituras */
+#texto-contador-leituras {
+  font-size: 0.7rem;
+  color: var(--muted);
+  margin-top: 4px;
+  font-weight: 500;
+  text-align: center;
+  display: block;
+}
+
+/* --- SPLASH SCREEN --- */
+#splash-screen {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background-color: white;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 999999;
+  overflow: hidden;
+}
+
+.splash-logo {
+  width: 100px;
+  height: 100px;
+  -o-object-fit: contain;
+     object-fit: contain;
+  animation: girarLogo 2s linear infinite;
+}
+
+@keyframes girarLogo {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+@keyframes slideIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+/* Efeitos de Skeleton */
+.skeleton {
+  background: linear-gradient(90deg, #f1f5f9 0px, #e2e8f0 50%, #f1f5f9 100%);
+  background-size: 200% 100%;
+  animation: shimmer 1.5s infinite linear;
+  border-radius: 4px;
+  display: inline-block;
+  width: 100%;
+}
+
+@keyframes shimmer {
+  0% {
+    background-position: -200% 0;
+  }
+  100% {
+    background-position: 200% 0;
+  }
+}
+.skeleton-title {
+  height: 24px;
+  width: 70%;
+  margin: 5px auto;
+}
+
+.skeleton-text {
+  height: 14px;
+  margin-bottom: 8px;
+}
+
+.skeleton-circle {
+  width: 70px;
+  height: 70px;
+  border-radius: 50%;
+}
+
+.skeleton-badge {
+  height: 20px;
+  width: 80px;
+  border-radius: 20px;
+}/*# sourceMappingURL=main.css.map */
