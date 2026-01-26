@@ -232,3 +232,39 @@ hr,
 .profile-header p {
   color: #ffffff !important;
 }
+/* --- BOTÃO DE INSTALAÇÃO (PWA) --- */
+#container-instalar {
+  margin-top: 25px;
+  display: none; /* O JS controla isso */
+  text-align: center;
+  padding-bottom: 20px;
+  animation: fadeIn 0.5s ease;
+}
+
+.btn-install {
+  background-color: var(--card-bg) !important; /* Fundo do card */
+  color: var(--text) !important;
+  border: 1px solid var(--border) !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  gap: 10px !important;
+  box-shadow: var(--shadow);
+}
+
+.btn-install .material-symbols-rounded {
+  color: var(--primary);
+}
+
+.legenda-instalar {
+  font-size: 0.7rem;
+  color: var(--muted);
+  margin-top: 8px;
+  font-weight: 500;
+}
+
+/* Modo Escuro: Ajuste fino para destacar */
+[data-theme="dark"] .btn-install {
+  background-color: rgba(255, 255, 255, 0.05) !important;
+  border-color: rgba(255, 255, 255, 0.1) !important;
+}

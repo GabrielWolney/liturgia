@@ -1,7 +1,7 @@
 /**
- * Main Controller - Versão 6.1 (Correção Botão Leitura)
+ * Main Controller - Versão 6.2 (Com PWA e Service Worker)
  */
-
+import { initInstall } from "./modules/install.js"; // <--- Importação correta aqui
 import { analytics } from "./config/firebase-config.js";
 import { logEvent } from "https://www.gstatic.com/firebasejs/12.7.0/firebase-analytics.js";
 import { configurarNotificacoes } from "./services/notification-service.js"; 
@@ -47,6 +47,17 @@ window.limparExame = () => {
     document.querySelectorAll("details.exame-grupo").forEach((d) => d.removeAttribute("open"));
 };
 
+// --- REGISTRO DO PWA (Service Worker) ---
+if ("serviceWorker" in navigator) {
+  window.addEventListener("load", () => {
+    navigator.serviceWorker
+      .register("./sw.js")
+      .then((reg) => console.log("Service Worker registrado!", reg))
+      .catch((err) => console.error("Falha no Service Worker:", err));
+  });
+}
+// ------------------------------------------
+
 // =======================================================
 // INICIALIZAÇÃO
 // =======================================================
@@ -62,6 +73,7 @@ async function initApp() {
         configurarIconeDinamicoHoras();
         configurarTema();
         configurarNotas(); 
+        initInstall();
 
         BibleModule.alternarTestamento("novo");
         
