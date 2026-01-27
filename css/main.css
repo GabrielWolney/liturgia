@@ -387,6 +387,21 @@ textarea.input-admin {
   color: var(--muted);
 }
 
+/* CORREÇÃO DO BOTÃO TORTO */
+.btn-primary, .btn-conhecer, .btn-outline {
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  gap: 8px;
+  line-height: 1 !important;
+}
+
+.btn-primary .material-symbols-rounded {
+  margin: 0 !important;
+  font-size: 20px;
+  display: block;
+}
+
 .modal {
   display: none;
   position: fixed;
