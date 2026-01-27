@@ -387,19 +387,39 @@ textarea.input-admin {
   color: var(--muted);
 }
 
-/* CORREÇÃO DO BOTÃO TORTO */
-.btn-primary, .btn-conhecer, .btn-outline {
-  display: flex !important;
-  align-items: center !important;
-  justify-content: center !important;
-  gap: 8px;
-  line-height: 1 !important;
+/* ============================================================
+   CORREÇÃO DE BOTÕES (Versão Segura para iOS e Android)
+   ============================================================ */
+/* 1. Estrutura do Botão (Container) */
+.btn-primary,
+.btn-conhecer,
+.btn-outline {
+  /* Remove estilo nativo da Apple (iPhone) */
+  -webkit-appearance: none;
+  -moz-appearance: none;
+       appearance: none;
+  /* Alinhamento Matemático */
+  display: inline-flex !important; /* Mantém o botão junto */
+  align-items: center !important; /* Centraliza verticalmente */
+  justify-content: center !important; /* Centraliza horizontalmente */
+  gap: 8px !important; /* Espaço ícone-texto */
+  /* Reseta comportamentos estranhos de texto */
+  vertical-align: middle;
+  line-height: normal !important; /* Deixa o flexbox decidir a altura */
+  text-decoration: none; /* Caso seja um link <a> */
 }
 
-.btn-primary .material-symbols-rounded {
-  margin: 0 !important;
-  font-size: 20px;
-  display: block;
+/* 2. O Ícone dentro do Botão */
+/* Removemos as alturas fixas que quebraram os outros botões */
+.btn-primary .material-symbols-rounded,
+.btn-conhecer .material-symbols-rounded,
+.btn-outline .material-symbols-rounded {
+  display: block !important; /* Remove comportamento de texto */
+  line-height: 1 !important; /* Remove "entrelinha" fantasma */
+  margin: 0 !important; /* Remove margens extras */
+  flex-shrink: 0 !important; /* Impede que o ícone seja esmagado se o texto for longo */
+  /* IMPORTANTE: Removemos width/height: 20px */
+  /* Agora o ícone respeita o tamanho que você definiu no HTML (font-size) */
 }
 
 .modal {
@@ -1284,4 +1304,131 @@ hr,
   height: 20px;
   width: 80px;
   border-radius: 20px;
+}
+
+/* =================================================================
+   ESTILOS DO CALENDÁRIO (Modo Compacto)
+   ================================================================= */
+/* Container do Grid */
+#calendario-grid {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 2px; /* Espaço bem pequeno */
+  margin-bottom: 10px;
+}
+
+/* Ajustes do Header do Modal específico do Calendário */
+#modalCalendario .modal-header {
+  display: flex !important;
+  align-items: center;
+  gap: 5px;
+  margin-bottom: 5px;
+}
+
+/* Título do Mês */
+#mes-ano-calendario {
+  flex: 1;
+  text-align: center;
+  margin: 0;
+  font-size: 1rem;
+  font-weight: 700;
+  color: var(--text);
+}
+
+/* Botões de Navegação (< e >) */
+.nav-btn {
+  background: var(--bg); /* Usa a cor de fundo do tema */
+  border: none;
+  cursor: pointer;
+  color: var(--text);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 28px;
+  height: 28px;
+  transition: background 0.2s;
+}
+
+.nav-btn:hover {
+  background: rgba(0, 0, 0, 0.1);
+}
+
+.nav-btn span {
+  font-size: 20px;
+}
+
+/* Cabeçalho dos dias (D S T Q...) */
+.calendar-header-day {
+  font-weight: bold;
+  color: #94a3b8; /* Cor muted */
+  font-size: 0.75rem;
+  text-align: center;
+  margin-bottom: 2px;
+}
+
+/* Dias do Mês */
+.calendar-day {
+  height: 36px; /* Altura fixa compacta */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 0.85rem;
+  position: relative;
+  color: var(--text);
+}
+
+.calendar-day:hover {
+  background-color: #e0f2fe;
+  color: #0284c7;
+}
+
+/* Dia Atual */
+.calendar-day.today {
+  background-color: #0284c7;
+  color: white !important;
+  font-weight: bold;
+}
+
+/* Dia Selecionado */
+.calendar-day.selected {
+  border: 2px solid #0284c7;
+}
+
+/* Dias vazios (padding) */
+.calendar-day.empty {
+  pointer-events: none;
+  cursor: default;
+}
+
+/* Bolinha indicadora de evento */
+.calendar-day.has-event::after {
+  content: "";
+  position: absolute;
+  bottom: 3px;
+  width: 4px;
+  height: 4px;
+  background-color: #db2777; /* Rosa */
+  border-radius: 50%;
+}
+
+/* Mensagem de instrução */
+#msg-instrucao-cal {
+  text-align: center;
+  font-size: 0.7rem;
+  color: #9ca3af;
+  margin: 5px 0;
+  font-style: italic;
+}
+
+/* Card de Evento (Quando clica) */
+.evento-card {
+  background: var(--bg);
+  color: #9d174d;
+  padding: 8px;
+  border-radius: 6px;
+  border-left: 3px solid #db2777;
+  font-size: 0.9rem;
 }/*# sourceMappingURL=main.css.map */

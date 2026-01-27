@@ -100,18 +100,40 @@ textarea.input-admin {
   color: var(--muted);
 }
 
-/* CORREÇÃO DO BOTÃO TORTO */
-.btn-primary, .btn-conhecer, .btn-outline {
-  display: flex !important;          
-  align-items: center !important;     
-  justify-content: center !important; 
-  gap: 8px;                          
-  line-height: 1 !important;         
+/* ============================================================
+   CORREÇÃO DE BOTÕES (Versão Segura para iOS e Android)
+   ============================================================ */
+
+/* 1. Estrutura do Botão (Container) */
+.btn-primary, 
+.btn-conhecer, 
+.btn-outline {
+    /* Remove estilo nativo da Apple (iPhone) */
+    -webkit-appearance: none;
+    appearance: none;
+
+    /* Alinhamento Matemático */
+    display: inline-flex !important; /* Mantém o botão junto */
+    align-items: center !important;     /* Centraliza verticalmente */
+    justify-content: center !important; /* Centraliza horizontalmente */
+    gap: 8px !important;                /* Espaço ícone-texto */
+    
+    /* Reseta comportamentos estranhos de texto */
+    vertical-align: middle;
+    line-height: normal !important; /* Deixa o flexbox decidir a altura */
+    text-decoration: none; /* Caso seja um link <a> */
 }
 
-
-.btn-primary .material-symbols-rounded {
-  margin: 0 !important;
-  font-size: 20px;
-  display: block;  
+/* 2. O Ícone dentro do Botão */
+/* Removemos as alturas fixas que quebraram os outros botões */
+.btn-primary .material-symbols-rounded,
+.btn-conhecer .material-symbols-rounded,
+.btn-outline .material-symbols-rounded {
+    display: block !important; /* Remove comportamento de texto */
+    line-height: 1 !important; /* Remove "entrelinha" fantasma */
+    margin: 0 !important;      /* Remove margens extras */
+    flex-shrink: 0 !important; /* Impede que o ícone seja esmagado se o texto for longo */
+    
+    /* IMPORTANTE: Removemos width/height: 20px */
+    /* Agora o ícone respeita o tamanho que você definiu no HTML (font-size) */
 }

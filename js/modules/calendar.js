@@ -1,115 +1,200 @@
-import { ouvirAvisos } from "../services/firestore-service.js";
-import { abrirModal } from "../utils/dom-utils.js";
+/* =================================================================
+   MÓDULO: CALENDÁRIO (Lógica Pura - CSS Externo)
+   ================================================================= */
 
-let avisosCache = [];
+const calendarGrid = document.getElementById('calendario-grid');
+const currentMonthElement = document.getElementById('mes-ano-calendario');
+const eventosContainer = document.getElementById('lista-eventos-dia');
 
-export const inicializarAvisos = () => {
-    const container = document.getElementById("lista-avisos");
-    
-    ouvirAvisos((snapshot) => {
-        avisosCache = [];
-        if (container) container.innerHTML = "";
+let currentDate = new Date();
+const monthNames = ["Janeiro", "Fevereiro", "Março", "Abril", "Maio", "Junho", "Julho", "Agosto", "Setembro", "Outubro", "Novembro", "Dezembro"];
+const dayNames = ["D", "S", "T", "Q", "Q", "S", "S"];
 
-        if (snapshot.empty && container) {
-            container.innerHTML = `
-                <div style="text-align:center; padding: 20px; opacity: 0.6;">
-                    <span class="material-symbols-rounded" style="font-size:32px; color:var(--muted);">event_busy</span>
-                    <p style="font-size:0.85rem; color:var(--muted); margin-top:5px;">Sem avisos por enquanto.</p>
-                </div>`;
-            return;
-        }
-
-        snapshot.forEach((doc) => {
-            const dados = doc.data();
-            avisosCache.push(dados);
-
-            if (container) {
-                // Formatação visual estilo "Calendário"
-                const [ano, mes, dia] = dados.dataExpiracao.split("-");
-                const meses = ["JAN", "FEV", "MAR", "ABR", "MAI", "JUN", "JUL", "AGO", "SET", "OUT", "NOV", "DEZ"];
-                const nomeMes = meses[parseInt(mes) - 1];
-
-                const li = document.createElement("li");
-                li.className = "aviso-item";
-                li.innerHTML = `
-                    <div class="aviso-data-box">
-                        <span class="aviso-dia">${dia}</span>
-                        <span class="aviso-mes">${nomeMes}</span>
-                    </div>
-                    <div class="aviso-conteudo">
-                        <p>${dados.texto}</p>
-                    </div>
-                `;
-                container.appendChild(li);
-            }
-        });
-    });
+// DADOS DO PDF CALENDÁRIO ÁGAPE 2026
+const agapeEvents = {
+    '0-17': 'Retorno do Ágape',
+    '0-24': 'Workshop 1',
+    '1-1': 'Workshop 2',
+    '1-3': 'Intercessão / Pré-encontro',
+    '1-7': 'Workshop 3',
+    '1-10': 'Intercessão',
+    '1-14': 'Carnaval',
+    '1-21': 'Noite de Tortas',
+    '1-22': 'Mutirão de Mensagens',
+    '1-24': 'Intercessão / Pré-encontro',
+    '2-1': 'Passagem do Encontro',
+    '2-3': 'Missa de Envio',
+    '2-7': 'Encontro',
+    '2-8': 'Encontro',
+    '2-14': 'Filho Pródigo',
+    '2-21': '1ª Vivência de Cursistas',
+    '2-22': '1ª Formação de Servos',
+    '2-29': 'Relação com Deus (Caça ao Tesouro)',
+    '3-5': 'Páscoa',
+    '3-11': 'Ágape: Viver a Caridade',
+    '3-18': 'Deus Pai',
+    '3-25': '2ª Vivência de Cursistas',
+    '3-26': '2ª Formação de Servos',
+    '3-28': 'Intercessão',
+    '4-2': 'Deus Filho',
+    '4-10': 'Dia das Mães',
+    '4-16': 'Deus Espírito Santo / Conf.',
+    '4-23': '3ª Vivência / Pentecostes',
+    '4-24': '3ª Formação de Servos',
+    '4-26': 'Intercessão',
+    '4-29': 'Festa Junina',
+    '4-30': 'Festa Junina',
+    '4-31': 'Festa Junina',
+    '5-6': 'Maria',
+    '5-13': 'Fim do Homem',
+    '5-20': 'Novíssimos',
+    '5-27': '4ª Vivência de Cursistas',
+    '5-28': '4ª Formação de Servos',
+    '5-30': 'Intercessão',
+    '6-4': 'Ser Igreja',
+    '6-12': 'Remissão dos Pecados',
+    '6-18': 'Confra Fim de Semestre',
+    '6-19': 'Férias',
+    '6-25': 'Férias',
+    '7-2': 'Férias',
+    '7-8': 'Luau',
+    '7-9': 'Dia dos Pais',
+    '7-15': 'Relacionamento com Deus',
+    '7-22': '5ª Vivência de Cursistas',
+    '7-23': '5ª Formação de Servos',
+    '7-25': 'Intercessão',
+    '7-29': 'Relacionamento Consigo',
+    '8-5': 'Relacionamento com o Próximo',
+    '8-9': 'Círio',
+    '8-10': 'Círio',
+    '8-11': 'Círio',
+    '8-12': 'Círio',
+    '8-19': 'Relacionamento Familiar',
+    '8-26': '6ª Vivência de Cursistas',
+    '8-27': '6ª Formação de Servos',
+    '9-3': 'Castidade',
+    '9-10': 'Drogas / Vício',
+    '9-17': 'Vocação',
+    '9-24': '7ª Vivência de Cursistas',
+    '9-25': 'Redes Sociais',
+    '9-27': 'Intercessão',
+    '10-1': 'Chamado à Santidade',
+    '10-7': 'Adoração Santíssimo',
+    '10-8': 'Viver em Comunidade',
+    '10-14': 'Missa Parte a Parte',
+    '10-21': 'Querigma',
+    '10-28': 'Projeto Ágape',
+    '11-5': 'Retiro de Servos',
+    '11-12': 'Confra Fim de Ano'
 };
 
-export const abrirCalendario = () => {
-    renderizarCalendario();
-    abrirModal("modalCalendario");
-};
+export function initCalendar() {
+    if (!calendarGrid) return;
+    renderCalendar();
+    addNavigationButtons();
+    addInstructionMessage();
+}
 
-function renderizarCalendario() {
-    const grid = document.getElementById("calendario-grid");
-    const titulo = document.getElementById("mes-ano-calendario");
-    const listaEventos = document.getElementById("lista-eventos-dia");
+function addNavigationButtons() {
+    const header = document.querySelector('#modalCalendario .modal-header');
+    if (!header || header.querySelector('.nav-btn')) return;
 
-    if (!grid || !listaEventos) return;
+    const prevBtn = document.createElement('button');
+    prevBtn.innerHTML = '<span class="material-symbols-rounded">chevron_left</span>';
+    prevBtn.className = 'nav-btn';
+    prevBtn.onclick = () => changeMonth(-1);
 
-    grid.innerHTML = "";
-    listaEventos.innerHTML = `
-        <div style="display: flex; align-items: center; justify-content: center; gap: 10px; color: var(--muted); margin-top: 15px; padding: 10px; background: rgba(0,0,0,0.03); border-radius: 8px;">
-            <span class="material-symbols-rounded" style="font-size: 20px;">touch_app</span>
-            <span style="font-size: 0.85rem;">Toque nos dias marcados para ver os avisos.</span>
-        </div>`;
+    const nextBtn = document.createElement('button');
+    nextBtn.innerHTML = '<span class="material-symbols-rounded">chevron_right</span>';
+    nextBtn.className = 'nav-btn';
+    nextBtn.onclick = () => changeMonth(1);
 
-    const hoje = new Date();
-    const ano = hoje.getFullYear();
-    const mes = hoje.getMonth();
+    const closeBtn = header.querySelector('.close-modal');
 
-    titulo.innerText = hoje.toLocaleDateString("pt-BR", { month: "long", year: "numeric" });
+    // Inserção na ordem visual correta: < Título > X
+    header.insertBefore(prevBtn, currentMonthElement);
+    header.insertBefore(nextBtn, closeBtn);
+}
 
-    ["D", "S", "T", "Q", "Q", "S", "S"].forEach((d) => {
-        const el = document.createElement("div");
-        el.className = "calendar-header";
-        el.innerText = d;
-        grid.appendChild(el);
+function addInstructionMessage() {
+    if(document.getElementById('msg-instrucao-cal')) return;
+    const msg = document.createElement('p');
+    msg.id = 'msg-instrucao-cal';
+    msg.innerText = "Toque em um dia para ver os eventos.";
+    calendarGrid.parentNode.insertBefore(msg, eventosContainer);
+}
+
+function changeMonth(delta) {
+    currentDate.setMonth(currentDate.getMonth() + delta);
+    renderCalendar();
+}
+
+function renderCalendar() {
+    calendarGrid.innerHTML = "";
+    const year = currentDate.getFullYear();
+    const month = currentDate.getMonth();
+
+    currentMonthElement.innerText = `${monthNames[month]} ${year}`;
+
+    dayNames.forEach(day => {
+        const div = document.createElement('div');
+        div.className = 'calendar-header-day';
+        div.textContent = day;
+        calendarGrid.appendChild(div);
     });
 
-    const primeiroDia = new Date(ano, mes, 1).getDay();
-    const diasNoMes = new Date(ano, mes + 1, 0).getDate();
+    const firstDayIndex = new Date(year, month, 1).getDay();
+    const lastDay = new Date(year, month + 1, 0).getDate();
+    const today = new Date();
 
-    for (let i = 0; i < primeiroDia; i++) grid.appendChild(document.createElement("div"));
-
-    for (let dia = 1; dia <= diasNoMes; dia++) {
-        const el = document.createElement("div");
-        el.className = "calendar-day";
-        el.innerText = dia;
-
-        const dataStr = `${ano}-${String(mes + 1).padStart(2, "0")}-${String(dia).padStart(2, "0")}`;
-        const temAviso = avisosCache.find((a) => a.dataExpiracao === dataStr);
-
-        if (temAviso) {
-            el.classList.add("has-event");
-            el.onclick = () => {
-                listaEventos.innerHTML = `
-                    <div class="aviso-carinhoso" style="animation: fadeIn 0.3s ease;">
-                        <div style="display:flex; align-items:center; gap:10px; margin-bottom:5px;">
-                            <span class="material-symbols-rounded" style="color:var(--primary);">event_available</span>
-                            <strong style="color:var(--primary);">Aviso para dia ${dia}:</strong>
-                        </div>
-                        <p style="font-size: 1rem; color: var(--text); line-height: 1.5;">${temAviso.texto}</p>
-                    </div>`;
-            };
-        } else {
-            el.onclick = () => {
-                listaEventos.innerHTML = `<p style="font-size: 0.9rem; color: var(--muted); text-align: center; margin-top:15px; font-style: italic;">Nada agendado para o dia ${dia}.<br>Que tal um momento de oração? 🙏</p>`;
-            };
-        }
-
-        if (dia === hoje.getDate()) el.style.border = "2px solid var(--primary)";
-        grid.appendChild(el);
+    for (let i = 0; i < firstDayIndex; i++) {
+        const div = document.createElement('div');
+        div.className = 'calendar-day empty';
+        calendarGrid.appendChild(div);
     }
+
+    for (let i = 1; i <= lastDay; i++) {
+        const div = document.createElement('div');
+        div.className = 'calendar-day';
+        div.textContent = i;
+
+        if (i === today.getDate() && month === today.getMonth() && year === today.getFullYear()) {
+            div.classList.add('today');
+        }
+
+        const eventKey = `${month}-${i}`;
+        if (agapeEvents[eventKey]) {
+            div.classList.add('has-event');
+        }
+
+        div.onclick = () => {
+            document.querySelectorAll('.calendar-day').forEach(d => d.classList.remove('selected'));
+            div.classList.add('selected');
+            showEventsForDay(i, month, year);
+        };
+        calendarGrid.appendChild(div);
+    }
+}
+
+function showEventsForDay(day, month, year) {
+    const dateStr = `${day}/${month + 1}/${year}`;
+    const eventKey = `${month}-${day}`;
+    
+    let html = `<h4 style="margin: 5px 0; color:var(--primary); font-size: 0.9rem;">${dateStr}</h4>`;
+    
+    if (agapeEvents[eventKey]) {
+        // Usa a classe CSS .evento-card que definimos no CSS agora
+        html += `
+            <div class="evento-card">
+                <strong>${agapeEvents[eventKey]}</strong>
+            </div>
+        `;
+    } else {
+        html += `<p style="color: var(--muted); font-size: 0.8rem;">Nenhum evento especial.</p>`;
+    }
+
+    const msg = document.getElementById('msg-instrucao-cal');
+    if(msg) msg.style.display = 'none';
+
+    eventosContainer.innerHTML = html;
 }
