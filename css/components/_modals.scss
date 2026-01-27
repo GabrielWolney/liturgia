@@ -78,3 +78,94 @@
 #leitura-texto p {
   color: var(--text) !important;
 }
+
+/* =========================================
+   NOVO DESIGN DOS AVISOS
+   ========================================= */
+
+/* Remove bolinhas da lista */
+#lista-avisos {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+/* O Card de cada aviso */
+.aviso-item {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    background-color: var(--bg); /* Fundo sutil */
+    padding: 12px;
+    border-radius: 12px;
+    margin-bottom: 10px;
+    border: 1px solid var(--border);
+    transition: transform 0.2s ease;
+}
+
+.aviso-item:active {
+    transform: scale(0.98);
+}
+
+/* O Bloquinho da Data (Esquerda) */
+.aviso-data-box {
+    background-color: var(--card-bg);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    min-width: 55px;
+    height: 55px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.05);
+}
+
+/* O número do dia */
+.aviso-dia {
+    font-size: 1.2rem;
+    font-weight: 800;
+    color: var(--primary);
+    line-height: 1;
+}
+
+/* O nome do mês */
+.aviso-mes {
+    font-size: 0.65rem;
+    font-weight: 700;
+    color: var(--muted);
+    text-transform: uppercase;
+    margin-top: 2px;
+}
+
+/* O Texto do aviso */
+.aviso-conteudo p {
+    margin: 0;
+    font-size: 0.9rem;
+    color: var(--text);
+    line-height: 1.4;
+    font-weight: 500;
+    text-align: left; /* Garante alinhamento à esquerda */
+}
+
+/* Ajuste Dark Mode específico se necessário */
+[data-theme="dark"] .aviso-data-box {
+    background-color: rgba(255,255,255,0.05);
+    border-color: rgba(255,255,255,0.1);
+}
+/* Correção do botão X (Fechar Modal) */
+.close-modal {
+    flex-shrink: 0;        /* O PULO DO GATO: Impede o botão de ser "esmagado" */
+    min-width: 32px;       /* Garante a largura mínima */
+    min-height: 32px;      /* Garante a altura mínima */
+    width: 32px;           /* Tamanho fixo */
+    height: 32px;          /* Tamanho fixo */
+    
+    /* Mantém o resto do estilo que você já tem */
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: none;
+    cursor: pointer;
+}

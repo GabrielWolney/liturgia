@@ -1,5 +1,5 @@
 /* =================================================================
-   MÓDULO: AVISOS PÚBLICOS (Leitura do Firebase)
+   MÓDULO: AVISOS (Visual de Data + Firebase)
    ================================================================= */
 import { db } from "../config/firebase-config.js";
 import { collection, query, where, orderBy, onSnapshot } from "https://www.gstatic.com/firebasejs/12.7.0/firebase-firestore.js";
@@ -12,49 +12,58 @@ export function initAvisos() {
 }
 
 function escutarAvisosEmTempoReal() {
-    // Pega data de hoje no formato YYYY-MM-DD (padrão do input date e do Firebase)
-    const hoje = new Date().toLocaleDateString('en-CA'); 
+    // Pega a data de hoje para filtrar (não mostrar avisos vencidos)
+    const hojeLocal = new Date().toLocaleDateString('en-CA'); 
 
-    // Cria a busca: Coleção "avisos", onde a data de validade for maior ou igual a hoje
     const q = query(
         collection(db, "avisos"),
-        where("dataExpiracao", ">=", hoje),
+        where("dataExpiracao", ">=", hojeLocal),
         orderBy("dataExpiracao", "asc")
     );
 
-    // "onSnapshot" fica vigiando o banco. Se você adicionar um aviso no Admin,
-    // ele aparece na Home instantaneamente sem precisar atualizar a página.
     onSnapshot(q, (snapshot) => {
         listaAvisos.innerHTML = "";
 
         // SE NÃO TIVER AVISOS
         if (snapshot.empty) {
             listaAvisos.innerHTML = `
-                <li style="text-align: center; color: #9ca3af; padding: 20px 0; font-style: italic; list-style: none;">
-                    Nenhum aviso paroquial no momento.
-                </li>`;
+                <div style="text-align:center; padding: 30px 20px; opacity: 0.6;">
+                    <span class="material-symbols-rounded" style="font-size:32px; color:var(--muted);">event_busy</span>
+                    <p style="font-size:0.9rem; color:var(--muted); margin-top:5px;">Sem avisos por enquanto.</p>
+                </div>`;
             return;
         }
 
         // SE TIVER AVISOS
         snapshot.forEach((doc) => {
-            const aviso = doc.data();
-            criarItemAviso(aviso.texto);
+            const dados = doc.data();
+            criarItemAviso(dados);
         });
     }, (error) => {
         console.error("Erro ao buscar avisos:", error);
-        listaAvisos.innerHTML = `<li style="color:red; font-size:0.8rem;">Erro ao carregar avisos.</li>`;
     });
 }
 
-function criarItemAviso(texto) {
-    const li = document.createElement('li');
-    // Estilo inline para garantir visual mesmo sem CSS atualizado
-    li.style.cssText = "padding: 12px 0; border-bottom: 1px solid #eee; display: flex; gap: 12px; align-items: flex-start;";
+function criarItemAviso(dados) {
+    // Separa a data (YYYY-MM-DD) para criar a caixinha visual
+    const [ano, mes, dia] = dados.dataExpiracao.split("-");
+    const meses = ["JAN", "FEV", "MAR", "ABR", "MAI", "JUN", "JUL", "AGO", "SET", "OUT", "NOV", "DEZ"];
     
+    // Converte o número do mês para nome (ex: 01 -> JAN)
+    const nomeMes = meses[parseInt(mes) - 1]; 
+
+    const li = document.createElement('li');
+    li.className = 'aviso-item';
+    
+    // HTML com a estrutura da caixinha de data
     li.innerHTML = `
-        <span class="material-symbols-rounded" style="color: #db2777; flex-shrink: 0; margin-top: 2px;">campaign</span>
-        <span style="font-size: 0.95rem; line-height: 1.5; color: var(--text);">${texto}</span>
+        <div class="aviso-data-box">
+            <span class="aviso-dia">${dia}</span>
+            <span class="aviso-mes">${nomeMes}</span>
+        </div>
+        <div class="aviso-conteudo">
+            <p>${dados.texto}</p>
+        </div>
     `;
     
     listaAvisos.appendChild(li);
