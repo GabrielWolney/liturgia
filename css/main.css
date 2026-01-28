@@ -888,6 +888,31 @@ hr,
   border-color: rgba(255, 255, 255, 0.1) !important;
 }
 
+/* Estilos específicos do Card do Terço */
+.terco-lista {
+  margin-bottom: 15px;
+  line-height: 1.5;
+  text-align: center; /* Centralizado */
+  font-size: 0.95rem;
+  color: var(--text);
+  /* Garante que os números não fiquem colados demais */
+}
+.terco-lista br {
+  content: "";
+  margin: 2px 0;
+  display: block;
+}
+
+.terco-meditacao {
+  border-top: 1px solid var(--border);
+  margin-top: 10px;
+  padding-top: 10px;
+  font-style: italic;
+  font-size: 0.85rem;
+  color: var(--muted);
+  text-align: center;
+}
+
 /* --- LITURGIA --- */
 .circulo-liturgico {
   width: 80px;

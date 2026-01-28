@@ -1,200 +1,163 @@
-/* =================================================================
-   MÓDULO: CALENDÁRIO (Lógica Pura - CSS Externo)
-   ================================================================= */
+import { eventos2026 } from "../data/eventos-2026.js";
+import { abrirModal } from "../utils/dom-utils.js";
 
-const calendarGrid = document.getElementById('calendario-grid');
-const currentMonthElement = document.getElementById('mes-ano-calendario');
-const eventosContainer = document.getElementById('lista-eventos-dia');
+let dataCalendario = new Date(); 
 
-let currentDate = new Date();
-const monthNames = ["Janeiro", "Fevereiro", "Março", "Abril", "Maio", "Junho", "Julho", "Agosto", "Setembro", "Outubro", "Novembro", "Dezembro"];
-const dayNames = ["D", "S", "T", "Q", "Q", "S", "S"];
-
-// DADOS DO PDF CALENDÁRIO ÁGAPE 2026
-const agapeEvents = {
-    '0-17': 'Retorno do Ágape',
-    '0-24': 'Workshop 1',
-    '1-1': 'Workshop 2',
-    '1-3': 'Intercessão / Pré-encontro',
-    '1-7': 'Workshop 3',
-    '1-10': 'Intercessão',
-    '1-14': 'Carnaval',
-    '1-21': 'Noite de Tortas',
-    '1-22': 'Mutirão de Mensagens',
-    '1-24': 'Intercessão / Pré-encontro',
-    '2-1': 'Passagem do Encontro',
-    '2-3': 'Missa de Envio',
-    '2-7': 'Encontro',
-    '2-8': 'Encontro',
-    '2-14': 'Filho Pródigo',
-    '2-21': '1ª Vivência de Cursistas',
-    '2-22': '1ª Formação de Servos',
-    '2-29': 'Relação com Deus (Caça ao Tesouro)',
-    '3-5': 'Páscoa',
-    '3-11': 'Ágape: Viver a Caridade',
-    '3-18': 'Deus Pai',
-    '3-25': '2ª Vivência de Cursistas',
-    '3-26': '2ª Formação de Servos',
-    '3-28': 'Intercessão',
-    '4-2': 'Deus Filho',
-    '4-10': 'Dia das Mães',
-    '4-16': 'Deus Espírito Santo / Conf.',
-    '4-23': '3ª Vivência / Pentecostes',
-    '4-24': '3ª Formação de Servos',
-    '4-26': 'Intercessão',
-    '4-29': 'Festa Junina',
-    '4-30': 'Festa Junina',
-    '4-31': 'Festa Junina',
-    '5-6': 'Maria',
-    '5-13': 'Fim do Homem',
-    '5-20': 'Novíssimos',
-    '5-27': '4ª Vivência de Cursistas',
-    '5-28': '4ª Formação de Servos',
-    '5-30': 'Intercessão',
-    '6-4': 'Ser Igreja',
-    '6-12': 'Remissão dos Pecados',
-    '6-18': 'Confra Fim de Semestre',
-    '6-19': 'Férias',
-    '6-25': 'Férias',
-    '7-2': 'Férias',
-    '7-8': 'Luau',
-    '7-9': 'Dia dos Pais',
-    '7-15': 'Relacionamento com Deus',
-    '7-22': '5ª Vivência de Cursistas',
-    '7-23': '5ª Formação de Servos',
-    '7-25': 'Intercessão',
-    '7-29': 'Relacionamento Consigo',
-    '8-5': 'Relacionamento com o Próximo',
-    '8-9': 'Círio',
-    '8-10': 'Círio',
-    '8-11': 'Círio',
-    '8-12': 'Círio',
-    '8-19': 'Relacionamento Familiar',
-    '8-26': '6ª Vivência de Cursistas',
-    '8-27': '6ª Formação de Servos',
-    '9-3': 'Castidade',
-    '9-10': 'Drogas / Vício',
-    '9-17': 'Vocação',
-    '9-24': '7ª Vivência de Cursistas',
-    '9-25': 'Redes Sociais',
-    '9-27': 'Intercessão',
-    '10-1': 'Chamado à Santidade',
-    '10-7': 'Adoração Santíssimo',
-    '10-8': 'Viver em Comunidade',
-    '10-14': 'Missa Parte a Parte',
-    '10-21': 'Querigma',
-    '10-28': 'Projeto Ágape',
-    '11-5': 'Retiro de Servos',
-    '11-12': 'Confra Fim de Ano'
+// --- AQUI ESTÁ A EXPORTAÇÃO QUE O MAIN.JS PROCURA ---
+export const abrirCalendario = () => {
+    abrirModal("modalCalendario");
+    // Pequeno delay para garantir que o modal abriu antes de renderizar
+    setTimeout(() => {
+        renderizarCalendario(dataCalendario);
+    }, 50);
 };
 
-export function initCalendar() {
-    if (!calendarGrid) return;
-    renderCalendar();
-    addNavigationButtons();
-    addInstructionMessage();
-}
+// Funções de navegação (Globais para funcionar no onclick do HTML gerado)
+window.mudarMesCalendario = (delta) => {
+    dataCalendario.setMonth(dataCalendario.getMonth() + delta);
+    renderizarCalendario(dataCalendario);
+};
 
-function addNavigationButtons() {
-    const header = document.querySelector('#modalCalendario .modal-header');
-    if (!header || header.querySelector('.nav-btn')) return;
+function renderizarCalendario(data) {
+    const grid = document.getElementById("calendario-grid");
+    const titulo = document.getElementById("mes-ano-calendario");
+    const areaDetalhes = document.getElementById("lista-eventos-dia"); 
 
-    const prevBtn = document.createElement('button');
-    prevBtn.innerHTML = '<span class="material-symbols-rounded">chevron_left</span>';
-    prevBtn.className = 'nav-btn';
-    prevBtn.onclick = () => changeMonth(-1);
-
-    const nextBtn = document.createElement('button');
-    nextBtn.innerHTML = '<span class="material-symbols-rounded">chevron_right</span>';
-    nextBtn.className = 'nav-btn';
-    nextBtn.onclick = () => changeMonth(1);
-
-    const closeBtn = header.querySelector('.close-modal');
-
-    // Inserção na ordem visual correta: < Título > X
-    header.insertBefore(prevBtn, currentMonthElement);
-    header.insertBefore(nextBtn, closeBtn);
-}
-
-function addInstructionMessage() {
-    if(document.getElementById('msg-instrucao-cal')) return;
-    const msg = document.createElement('p');
-    msg.id = 'msg-instrucao-cal';
-    msg.innerText = "Toque em um dia para ver os eventos.";
-    calendarGrid.parentNode.insertBefore(msg, eventosContainer);
-}
-
-function changeMonth(delta) {
-    currentDate.setMonth(currentDate.getMonth() + delta);
-    renderCalendar();
-}
-
-function renderCalendar() {
-    calendarGrid.innerHTML = "";
-    const year = currentDate.getFullYear();
-    const month = currentDate.getMonth();
-
-    currentMonthElement.innerText = `${monthNames[month]} ${year}`;
-
-    dayNames.forEach(day => {
-        const div = document.createElement('div');
-        div.className = 'calendar-header-day';
-        div.textContent = day;
-        calendarGrid.appendChild(div);
-    });
-
-    const firstDayIndex = new Date(year, month, 1).getDay();
-    const lastDay = new Date(year, month + 1, 0).getDate();
-    const today = new Date();
-
-    for (let i = 0; i < firstDayIndex; i++) {
-        const div = document.createElement('div');
-        div.className = 'calendar-day empty';
-        calendarGrid.appendChild(div);
+    // Garante estrutura compacta se não existir
+    if(areaDetalhes) {
+        areaDetalhes.style.marginTop = "15px";
+        areaDetalhes.style.paddingTop = "10px";
+        areaDetalhes.style.borderTop = "1px solid var(--border)";
+        areaDetalhes.style.minHeight = "60px";
+        areaDetalhes.style.display = "flex";
+        areaDetalhes.style.alignItems = "center";
+        areaDetalhes.style.justifyContent = "center";
+        areaDetalhes.style.textAlign = "center";
     }
 
-    for (let i = 1; i <= lastDay; i++) {
-        const div = document.createElement('div');
-        div.className = 'calendar-day';
-        div.textContent = i;
+    if (!grid || !titulo) return;
 
-        if (i === today.getDate() && month === today.getMonth() && year === today.getFullYear()) {
-            div.classList.add('today');
-        }
-
-        const eventKey = `${month}-${i}`;
-        if (agapeEvents[eventKey]) {
-            div.classList.add('has-event');
-        }
-
-        div.onclick = () => {
-            document.querySelectorAll('.calendar-day').forEach(d => d.classList.remove('selected'));
-            div.classList.add('selected');
-            showEventsForDay(i, month, year);
-        };
-        calendarGrid.appendChild(div);
-    }
-}
-
-function showEventsForDay(day, month, year) {
-    const dateStr = `${day}/${month + 1}/${year}`;
-    const eventKey = `${month}-${day}`;
+    const ano = data.getFullYear();
+    const mes = data.getMonth();
+    const nomesMeses = ["Janeiro", "Fevereiro", "Março", "Abril", "Maio", "Junho", "Julho", "Agosto", "Setembro", "Outubro", "Novembro", "Dezembro"];
     
-    let html = `<h4 style="margin: 5px 0; color:var(--primary); font-size: 0.9rem;">${dateStr}</h4>`;
-    
-    if (agapeEvents[eventKey]) {
-        // Usa a classe CSS .evento-card que definimos no CSS agora
-        html += `
-            <div class="evento-card">
-                <strong>${agapeEvents[eventKey]}</strong>
+    // Header
+    titulo.innerHTML = `
+        <div style="display:flex; justify-content:space-between; align-items:center; width:100%; padding: 0 10px;">
+            <button onclick="window.mudarMesCalendario(-1)" style="background:none; border:none; color:var(--text); cursor:pointer; padding: 5px;"><span class="material-symbols-rounded">chevron_left</span></button>
+            <span style="font-size: 1rem; font-weight: 700; text-transform: uppercase; letter-spacing: 1px;">${nomesMeses[mes]} ${ano}</span>
+            <button onclick="window.mudarMesCalendario(1)" style="background:none; border:none; color:var(--text); cursor:pointer; padding: 5px;"><span class="material-symbols-rounded">chevron_right</span></button>
+        </div>
+    `;
+
+    // Instrução Inicial
+    if(areaDetalhes) {
+        areaDetalhes.innerHTML = `
+            <div style="color: var(--muted); font-size: 0.85rem; display: flex; align-items: center; gap: 6px; animation: fadeIn 0.5s;">
+                <span class="material-symbols-rounded" style="font-size: 18px;">touch_app</span>
+                Toque em um dia marcado para ver detalhes
             </div>
         `;
-    } else {
-        html += `<p style="color: var(--muted); font-size: 0.8rem;">Nenhum evento especial.</p>`;
     }
 
-    const msg = document.getElementById('msg-instrucao-cal');
-    if(msg) msg.style.display = 'none';
+    grid.innerHTML = "";
+    
+    // Dias da semana
+    const diasSemana = ["D", "S", "T", "Q", "Q", "S", "S"];
+    diasSemana.forEach(d => {
+        const el = document.createElement("div");
+        el.innerText = d;
+        el.style.fontWeight = "bold";
+        el.style.color = "var(--primary)";
+        el.style.fontSize = "0.8rem";
+        el.style.textAlign = "center";
+        el.style.marginBottom = "5px";
+        grid.appendChild(el);
+    });
 
-    eventosContainer.innerHTML = html;
+    const primeiroDia = new Date(ano, mes, 1);
+    const ultimoDia = new Date(ano, mes + 1, 0);
+    const diasNoMes = ultimoDia.getDate();
+    const diaSemanaInicio = primeiroDia.getDay(); 
+
+    // Espaços
+    for (let i = 0; i < diaSemanaInicio; i++) {
+        grid.appendChild(document.createElement("div"));
+    }
+
+    // Dias
+    for (let dia = 1; dia <= diasNoMes; dia++) {
+        const el = document.createElement("div");
+        el.innerText = dia;
+        
+        el.style.display = "flex";
+        el.style.flexDirection = "column";
+        el.style.alignItems = "center";
+        el.style.justifyContent = "center";
+        el.style.height = "32px";
+        el.style.width = "32px";
+        el.style.margin = "0 auto";
+        el.style.borderRadius = "50%";
+        el.style.cursor = "pointer";
+        el.style.fontSize = "0.9rem";
+        el.style.position = "relative";
+
+        const chave = `${dia}-${mes + 1}`;
+        const evento = eventos2026[chave];
+        const hoje = new Date();
+
+        if (dia === hoje.getDate() && mes === hoje.getMonth() && ano === hoje.getFullYear()) {
+            el.style.background = "var(--primary)";
+            el.style.color = "#fff";
+            el.style.fontWeight = "bold";
+        }
+
+        if (evento) {
+            const dot = document.createElement("span");
+            dot.style.cssText = "display:block; width:5px; height:5px; background:#db2777; border-radius:50%; position: absolute; bottom: 2px;";
+            if (dia === hoje.getDate() && mes === hoje.getMonth()) dot.style.background = "#fff";
+            
+            el.appendChild(dot);
+            el.style.fontWeight = "600";
+            
+            el.onclick = () => {
+                document.querySelectorAll(".dia-selecionado").forEach(d => {
+                    d.style.border = "none";
+                    d.style.background = "transparent";
+                });
+                
+                if (!(dia === hoje.getDate() && mes === hoje.getMonth())) {
+                    el.style.background = "rgba(219, 39, 119, 0.1)"; 
+                    el.style.color = "#db2777";
+                }
+                el.classList.add("dia-selecionado");
+                
+                if(areaDetalhes) {
+                    areaDetalhes.innerHTML = `
+                        <div style="width: 100%; animation: slideUp 0.3s;">
+                            <div style="font-size: 0.95rem; font-weight: 700; color: #db2777;">${evento.titulo}</div>
+                            <div style="font-size: 0.75rem; color: var(--muted); text-transform: uppercase; margin-top: 2px;">
+                                ${dia}/${mes+1} • ${evento.tipo}
+                            </div>
+                        </div>
+                    `;
+                }
+            };
+        } else {
+             el.onclick = () => {
+                document.querySelectorAll(".dia-selecionado").forEach(d => {
+                    d.style.background = "transparent";
+                    d.style.color = "var(--text)";
+                });
+                if(areaDetalhes) {
+                    areaDetalhes.innerHTML = `
+                        <div style="color: var(--muted); font-size: 0.8rem; font-style: italic;">
+                            Nada agendado para dia ${dia}.
+                        </div>
+                    `;
+                }
+             }
+        }
+        grid.appendChild(el);
+    }
 }

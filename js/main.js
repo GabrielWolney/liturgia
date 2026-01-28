@@ -1,12 +1,12 @@
 /**
- * Main Controller - Versão Restaurada (Modo Clássico - onclick)
+ * Main Controller - Versão Corrigida (Modais Funcionando)
  */
 import { initInstall } from "./modules/install.js";
 import { analytics } from "./config/firebase-config.js";
 import { logEvent } from "https://www.gstatic.com/firebasejs/12.7.0/firebase-analytics.js";
 import { configurarNotificacoes } from "./services/notification-service.js"; 
 import { configurarData, obterMisterioDoDia } from "./utils/date-utils.js";
-import { abrirModal } from "./utils/dom-utils.js";
+import { fecharModais, abrirModal, setupClick as setupDomClick } from "./utils/dom-utils.js";
 
 // Módulos
 import * as LiturgiaModule from "./modules/liturgia.js";
@@ -14,57 +14,62 @@ import * as MuralModule from "./modules/mural.js";
 import * as BibleModule from "./modules/bible.js";
 import * as NovenasModule from "./modules/novenas.js";
 import * as PrayersModule from "./modules/prayers.js";
+import * as AdminModule from "./modules/admin.js";
 
-// Importações dos novos módulos
+// --- NOVOS MÓDULOS ---
 import { initAvisos } from './modules/avisos.js';
-import { initCalendar } from './modules/calendar.js';
-import { inicializarAdmin } from './modules/admin.js';
+import { abrirCalendario } from './modules/calendar.js';
 
 // =======================================================
-// EXPOSIÇÃO GLOBAL (Obrigatório para o onclick do HTML funcionar)
+// EXPOSIÇÃO GLOBAL (Essencial para onclick="..." no HTML)
 // =======================================================
-
-// Calendário
-window.abrirCalendario = function() {
-    abrirModal("modalCalendario");
-    // Pequeno delay para garantir que o CSS carregou e o modal abriu
-    setTimeout(() => {
-        initCalendar();
-    }, 50);
-};
-
-// Mural de Pedidos
-window.abrirMuralPedidos = function() {
-    abrirModal("modalMuralPedidos");
-    MuralModule.inicializarMural();
-};
+window.abrirMuralPedidos = MuralModule.inicializarMural;
 window.postarPedido = MuralModule.enviarPedido;
 window.excluirMeuPedido = MuralModule.excluirPedido;
 
-// Liturgia e Orações
-window.abrirLiturgia = LiturgiaModule.abrirModalLiturgiaCompleta;
+window.abrirCalendario = abrirCalendario;
+
+// --- AQUI ESTAVAM OS PROBLEMAS ---
+// Garantindo que as funções da liturgia estejam disponíveis globalmente
+window.abrirLiturgia = () => {
+    console.log("Abrindo liturgia..."); // Debug
+    LiturgiaModule.abrirModalLiturgiaCompleta();
+};
+
+// Se o botão de explicação usa onclick="abrirModalExplicacao()", precisamos expor:
+window.abrirModalExplicacao = () => {
+    abrirModal("modalExplicacaoHoras");
+};
+
 window.compartilharEvangelho = LiturgiaModule.compartilharEvangelho;
 window.abrirHora = LiturgiaModule.abrirHora;
-window.abrirOracao = PrayersModule.abrirOracao;
 
-// Novenas
 window.abrirListaNovenas = NovenasModule.abrirListaNovenas;
+window.alternarAbaNovenas = NovenasModule.alternarAbaNovenas;
+window.abrirDetalhesNovena = NovenasModule.abrirDetalhesNovena;
 window.lerDiaNovena = NovenasModule.lerDiaNovena;
 window.alternarStatusDia = NovenasModule.alternarStatusDia;
 
-// Bíblia
 window.alternarTestamento = BibleModule.alternarTestamento;
 window.fecharLeitura = BibleModule.fecharLeitura;
 
-// Utils e Admin
+window.abrirOracao = PrayersModule.abrirOracao;
+
 window.abrirNotas = () => abrirModal("modalNotas");
 window.limparExame = () => {
     document.querySelectorAll(".check-roxo").forEach((c) => (c.checked = false));
     document.querySelectorAll("details.exame-grupo").forEach((d) => d.removeAttribute("open"));
 };
-// Função simples para fechar modais
-window.fecharModal = (id) => document.getElementById(id).style.display = 'none';
 
+// --- REGISTRO DO PWA ---
+if ("serviceWorker" in navigator) {
+  window.addEventListener("load", () => {
+    navigator.serviceWorker
+      .register("./sw.js")
+      .then((reg) => console.log("Service Worker registrado!", reg))
+      .catch((err) => console.error("Falha no Service Worker:", err));
+  });
+}
 
 // =======================================================
 // INICIALIZAÇÃO
@@ -75,66 +80,57 @@ document.addEventListener("DOMContentLoaded", () => {
 
 async function initApp() {
     try {
-        console.log("Iniciando App...");
+        console.log("Iniciando App Ágape...");
 
-        // Configurações Visuais
         configurarNavegação();
         configurarData();
         configurarTercoUI();
         configurarIconeDinamicoHoras();
         configurarTema();
         configurarNotas(); 
-        
-        // Iniciar Módulos
         initInstall();
-        
-        try { initAvisos(); } catch(e) { console.log("Erro Avisos", e); }
-        try { inicializarAdmin(); } catch(e) { console.log("Erro Admin", e); }
 
-        // Carregar Dados
         BibleModule.alternarTestamento("novo");
+        
         await LiturgiaModule.carregarLiturgia();
         LiturgiaModule.inicializarContador();
 
-        // Analytics
-        try { configurarNotificacoes(); } catch (e) {}
+        try { await initAvisos(); } catch (e) { console.warn("Erro avisos:", e); }
+        try { AdminModule.inicializarAdmin(); } catch(e) {}
+        try { configurarNotificacoes(); } catch (e) { }
         
-        // Listeners Genéricos (Fechar modal, etc)
+        logEvent(analytics, "page_view", { page_title: "Home Liturgia Ágape" });
+        
+        // Configura os cliques DEPOIS de carregar tudo
         configurarListenersModais();
+        
         setInterval(configurarIconeDinamicoHoras, 300000);
 
-        // Remover Splash Screen
-        setTimeout(() => {
-            const splash = document.getElementById("splash-screen");
-            if (splash) splash.remove();
-        }, 800);
-
     } catch (erro) {
-        console.error("Erro fatal:", erro);
-        document.getElementById("splash-screen")?.remove();
+        console.error("Erro fatal na inicialização:", erro);
+        const splash = document.getElementById("splash-screen");
+        if (splash) splash.remove();
     }
 }
 
 // =======================================================
-// FUNÇÕES AUXILIARES (UI)
+// UI UTILS
 // =======================================================
 
 function configurarNavegação() {
-    const navItems = document.querySelectorAll(".nav-item, .sidebar-menu button");
+    const navItems = document.querySelectorAll(".nav-item");
     const abas = document.querySelectorAll(".conteudo-aba");
     navItems.forEach((item) => {
         item.onclick = (e) => {
-            if (item.tagName === 'A') e.preventDefault();
-            let targetId = item.getAttribute("data-target");
-            if (targetId) {
-                navItems.forEach((i) => i.classList.remove("active"));
-                document.querySelectorAll(`[data-target="${targetId}"]`).forEach(el => el.classList.add('active'));
-                abas.forEach((aba) => (aba.style.display = "none"));
-                const targetAba = document.getElementById(targetId);
-                if (targetAba) {
-                    targetAba.style.display = "block"; 
-                    window.scrollTo(0, 0);
-                }
+            e.preventDefault();
+            const targetId = item.getAttribute("data-target");
+            const targetAba = document.getElementById(targetId);
+            navItems.forEach((i) => i.classList.remove("active"));
+            item.classList.add("active");
+            abas.forEach((aba) => (aba.style.display = "none"));
+            if (targetAba) {
+                targetAba.style.display = "block";
+                window.scrollTo(0, 0);
             }
         };
     });
@@ -143,49 +139,106 @@ function configurarNavegação() {
 function configurarTema() {
     const btnTema = document.getElementById("btn-tema");
     const html = document.documentElement;
-    const aplicar = (t) => {
-        html.setAttribute("data-theme", t);
-        if(btnTema) btnTema.innerHTML = t === "dark" ? '<span class="material-symbols-rounded">light_mode</span>' : '<span class="material-symbols-rounded">dark_mode</span>';
-    };
-    aplicar(localStorage.getItem("tema") || "light");
-    if (btnTema) btnTema.onclick = () => {
-        const novo = html.getAttribute("data-theme") === "dark" ? "light" : "dark";
-        aplicar(novo);
-        localStorage.setItem("tema", novo);
-    };
+    function aplicarTema(tema) {
+        if (tema === "dark") {
+            html.setAttribute("data-theme", "dark");
+            if (btnTema) btnTema.innerHTML = '<span class="material-symbols-rounded">light_mode</span>';
+        } else {
+            html.setAttribute("data-theme", "light");
+            if (btnTema) btnTema.innerHTML = '<span class="material-symbols-rounded">dark_mode</span>';
+        }
+    }
+    const temaSalvo = localStorage.getItem("tema");
+    if (temaSalvo) aplicarTema(temaSalvo);
+    if (btnTema) {
+        btnTema.onclick = () => {
+            const temaAtual = html.getAttribute("data-theme");
+            const novoTema = temaAtual === "dark" ? "light" : "dark";
+            aplicarTema(novoTema);
+            localStorage.setItem("tema", novoTema);
+        };
+    }
 }
 
 function configurarIconeDinamicoHoras() {
-    const icon = document.getElementById("icon-horas");
-    if (icon) {
-        const h = new Date().getHours();
-        icon.innerText = (h >= 5 && h < 9) ? "wb_twilight" : (h >= 9 && h < 18) ? "light_mode" : (h >= 18 && h < 22) ? "clear_night" : "bedtime";
-    }
+    const iconElement = document.getElementById("icon-horas");
+    if (!iconElement) return;
+    const hora = new Date().getHours();
+    let novoIcone = "bedtime";
+    if (hora >= 5 && hora < 9) novoIcone = "wb_twilight";
+    else if (hora >= 9 && hora < 18) novoIcone = "light_mode";
+    else if (hora >= 18 && hora < 22) novoIcone = "clear_night";
+    if (iconElement.innerText !== novoIcone) iconElement.innerText = novoIcone;
 }
 
 const configurarTercoUI = () => {
-    const tit = document.getElementById("titulo-misterio");
-    const desc = document.getElementById("descricao-misterio");
-    if (tit && desc) {
-        const hoje = obterMisterioDoDia();
-        tit.innerText = hoje.titulo;
-        desc.innerHTML = `<div style="text-align:center; margin-bottom:10px;">${hoje.desc}</div><div style="font-size:0.8rem; text-align:center; font-style:italic;">${hoje.meditacao}</div>`;
-    }
+    const tituloEl = document.getElementById("titulo-misterio");
+    const descEl = document.getElementById("descricao-misterio");
+    if (!tituloEl || !descEl) return;
+    
+    const hoje = obterMisterioDoDia();
+    tituloEl.innerText = hoje.titulo;
+
+    let descFormatada = hoje.desc;
+    descFormatada = descFormatada.replace(/(\d\.\s)/g, '<br>$1');
+    if(descFormatada.startsWith('<br>')) descFormatada = descFormatada.substring(4);
+
+    descEl.innerHTML = `
+        <div class="terco-lista">
+            ${descFormatada}
+        </div>
+        <div class="terco-meditacao">
+            ${hoje.meditacao}
+        </div>
+    `;
 };
 
 function configurarNotas() {
     const area = document.getElementById("area-notas");
-    if (area) {
-        area.value = localStorage.getItem("minhas_notas_agape") || "";
-        area.addEventListener("input", () => localStorage.setItem("minhas_notas_agape", area.value));
-    }
+    if (!area) return;
+    const sugestoes = ["O que Deus falou ao seu coração hoje?", "Pontos da pregação...", "Orações..."];
+    if (!area.value) area.placeholder = sugestoes[Math.floor(Math.random() * sugestoes.length)];
+    const salvo = localStorage.getItem("minhas_notas_agape");
+    if (salvo) area.value = salvo;
+    area.addEventListener("input", () => {
+        localStorage.setItem("minhas_notas_agape", area.value);
+    });
 }
 
+// --- FUNÇÃO DE LISTENERS CORRIGIDA ---
 function configurarListenersModais() {
-    document.querySelectorAll(".close-modal").forEach(b => b.onclick = () => document.querySelectorAll(".modal").forEach(m => m.style.display = "none"));
-    window.onclick = (e) => { if (e.target.classList.contains("modal")) document.querySelectorAll(".modal").forEach(m => m.style.display = "none"); };
+    // Listener explícito para o botão da Liturgia Completa (caso o onclick falhe)
+    const btnLiturgia = document.getElementById("btn-abrir-liturgia");
+    if (btnLiturgia) {
+        btnLiturgia.onclick = () => {
+            LiturgiaModule.abrirModalLiturgiaCompleta();
+        };
+    }
+
+    // Listener explícito para o botão de explicação das Horas
+    const btnExplicacao = document.getElementById("btn-explicar-horas");
+    if (btnExplicacao) {
+        btnExplicacao.onclick = () => {
+            abrirModal("modalExplicacaoHoras");
+        };
+    }
+    
+    // Login Admin
+    setupDomClick("btn-login-secreto", () => abrirModal("modalLogin"));
+
+    // Fechar modais
+    const fechar = () => document.querySelectorAll(".modal").forEach((m) => (m.style.display = "none"));
+    document.querySelectorAll(".close-modal, .close-modal-sobre, #btn-entendido-horas, #btn-fechar-explicacao").forEach((b) => (b.onclick = fechar));
+    
+    window.onclick = (e) => {
+        if (e.target.classList.contains("modal")) fechar();
+    };
 }
 
-if ("serviceWorker" in navigator) {
-    window.addEventListener("load", () => navigator.serviceWorker.register("./sw.js").catch(() => {}));
-}
+setTimeout(() => {
+    const splash = document.getElementById("splash-screen");
+    if (splash) {
+        splash.style.opacity = "0";
+        setTimeout(() => splash.remove(), 500);
+    }
+}, 1000);
