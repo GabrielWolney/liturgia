@@ -15,10 +15,9 @@ import * as BibleModule from "./modules/bible.js";
 import * as NovenasModule from "./modules/novenas.js";
 import * as PrayersModule from "./modules/prayers.js";
 import * as AdminModule from "./modules/admin.js";
-
-// --- NOVOS MÓDULOS ---
 import { initAvisos } from './modules/avisos.js';
 import { abrirCalendario } from './modules/calendar.js';
+import * as PropositoModule from './modules/proposito.js';
 
 // =======================================================
 // EXPOSIÇÃO GLOBAL (Essencial para onclick="..." no HTML)
@@ -94,6 +93,11 @@ async function initApp() {
         
         await LiturgiaModule.carregarLiturgia();
         LiturgiaModule.inicializarContador();
+        try {
+            await PropositoModule.carregarCardProposito();
+        } catch (e) {
+            console.warn("Erro ao carregar propósito:", e);
+        }
 
         try { await initAvisos(); } catch (e) { console.warn("Erro avisos:", e); }
         try { AdminModule.inicializarAdmin(); } catch(e) {}
