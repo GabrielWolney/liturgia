@@ -11,10 +11,17 @@
     <meta name="dexion" content="Liturgia diária e vida de oração para jovens católicos." />
     <meta name="theme-color" content="#ffffff" />
 
+<<<<<<< Updated upstream
     <link rel="icon" type="image/png" sizes="32x32" href="favicon-logos/favicon-32x32.png" />
     <link rel="icon" type="image/png" sizes="16x16" href="favicon-logos/favicon-16x16.png" /> 
     <link rel="apple-touch-icon" sizes="180x180" href="favicon-logos/apple-touch-icon.png" />
     <link rel="manifest" href="./site.webmanifest" />
+=======
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon/favicon-32x32.png" />
+    <link rel="icon" type="image/png" sizes="16x16" href="/favicon/favicon-16x16.png" /> 
+    <link rel="apple-touch-icon" sizes="180x180" href="/favicon/apple-touch-icon.png" />
+    <link rel="manifest" href="/site.webmanifest" />
+>>>>>>> Stashed changes
     
     <title>Liturgia | Ágape de Jovens.</title>
 
@@ -464,7 +471,9 @@
           <div style="padding: 15px; background: var(--bg); border-bottom: 1px solid var(--border);">
             <input type="text" id="nome-orante" class="input-admin" placeholder="Seu nome (Opcional)" style="margin-bottom: 8px;">
             <textarea id="texto-pedido-publico" class="input-admin" placeholder="Escreva seu pedido..." style="height: 60px; margin-bottom: 8px;"></textarea>
-            <button onclick="postarPedido()" class="btn-primary" style="background-color: #db2777; margin: 0;"><span class="material-symbols-rounded">send</span> Publicar</button>
+            <button onclick="postarPedido()" class="btn-primary" style="background-color: #db2777; width: 100%; display: flex; align-items: center; justify-content: center; gap: 8px; margin-top: 5px;">
+    <span class="material-symbols-rounded">send</span> Publicar
+</button>
           </div>
           <div id="feed-pedidos" style="flex: 1; overflow-y: auto; padding: 15px; background: var(--card-bg);">
             <p style="text-align: center; color: var(--muted); margin-top: 20px;">Carregando...</p>
