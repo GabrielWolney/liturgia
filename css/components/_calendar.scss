@@ -6,11 +6,10 @@
 #calendario-grid {
     display: grid;
     grid-template-columns: repeat(7, 1fr);
-    gap: 2px; /* Espaço bem pequeno */
+    gap: 2px;
     margin-bottom: 10px;
 }
 
-/* Ajustes do Header do Modal específico do Calendário */
 #modalCalendario .modal-header {
     display: flex !important;
     align-items: center;
@@ -30,7 +29,7 @@
 
 /* Botões de Navegação (< e >) */
 .nav-btn {
-    background: var(--bg); /* Usa a cor de fundo do tema */
+    background: var(--bg);
     border: none;
     cursor: pointer;
     color: var(--text);
@@ -62,7 +61,7 @@
 
 /* Dias do Mês */
 .calendar-day {
-    height: 36px; /* Altura fixa compacta */
+    height: 36px;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -103,7 +102,7 @@
     bottom: 3px;
     width: 4px;
     height: 4px;
-    background-color: #db2777; /* Rosa */
+    background-color: #db2777;
     border-radius: 50%;
 }
 

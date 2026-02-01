@@ -2,12 +2,56 @@
    LAYOUT DESKTOP (V15 - FINAL CORRIGIDO)
    ================================================================= */
 
-/* --- 1. REGRAS BASE --- */
-.desktop-only, .oracao-desktop-view { display: none !important; }
-.oracao-mobile-view { display: block !important; }
+/* --- ESTILO DE CORTE (MOBILE FIRST) --- */
 
-/* --- 2. DESKTOP (>1024px) 
+/* Esconde coisas de desktop no celular */
+.desktop-only, .oracao-desktop-view {
+    display: none !important;
+}
+
+/* Mostra coisas de mobile no celular */
+.mobile-only, .oracao-mobile-view, .topo, .bottom-nav {
+    display: flex;
+}
+
+/* --- REGRAS PARA TELAS GRANDES (>1024px) --- */
 @media (min-width: 1024px) {
+    
+    /* INVERTE A VISIBILIDADE */
+    .mobile-only, .oracao-mobile-view, .topo, .bottom-nav {
+        display: none !important;
+    }
+
+    .desktop-only, .oracao-desktop-view {
+        display: flex !important;
+    }
+
+    /* Layout Geral */
+    body { flex-direction: row; overflow: hidden; }
+    main { flex: 1; padding: 30px 50px !important; height: 100vh; overflow-y: auto; }
+
+    /* Home Grid */
+    #tab-inicio:not([style*="display: none"]) {
+        display: grid !important;
+        grid-template-columns: 2.5fr 1.2fr;
+        gap: 30px;
+        grid-template-areas: 
+            "liturgia santo" 
+            "liturgia container-proposito"
+            "liturgia avisos";
+    }
+    #liturgia { grid-area: liturgia; }
+    #santo { grid-area: santo; }
+    #avisos { grid-area: avisos; margin-top: auto; max-height: 400px; }
+
+    /* Aba Oração Grid 3 colunas */
+    .oracao-desktop-view {
+        display: grid !important;
+        grid-template-columns: 280px 1fr 320px;
+        gap: 25px;
+        height: calc(100vh - 150px);
+    }
+}
 
     /* Visibilidade */
     .oracao-mobile-view, .topo, .bottom-nav { display: none !important; }

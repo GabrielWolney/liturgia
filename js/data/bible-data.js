@@ -1,4 +1,4 @@
-// ATENÇÃO: Adicione 'export' no início
+
 export const bibliaCatolica = {
   novo: [
     { nome: "Mateus", slug: "sao-mateus" },

@@ -5,7 +5,6 @@
   -webkit-tap-highlight-color: transparent;
 }
 
-/* Força fonte Montserrat globalmente */
 body,
 h1,
 h2,
@@ -24,7 +23,6 @@ li {
 
 .material-symbols-rounded {
   font-family: "Material Symbols Rounded" !important;
-  /* Estado padrão VAZIO para transição suave */
   font-variation-settings:
     "FILL" 0,
     "wght" 400,
@@ -36,7 +34,7 @@ li {
 html,
 body {
   height: 100%;
-  overflow: hidden; /* Scroll gerenciado pelo Main */
+  overflow: hidden; 
   background: var(--bg);
   transition:
     background-color 0.3s ease,
@@ -49,7 +47,7 @@ body {
   color: var(--text);
 }
 
-/* Scrollbar invisível */
+
 ::-webkit-scrollbar {
   display: none !important;
   width: 0px !important;

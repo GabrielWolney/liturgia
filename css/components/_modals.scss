@@ -20,6 +20,7 @@
   display: flex;
   flex-direction: column;
   border: 1px solid var(--border);
+  overflow: hidden !important;
 }
 
 .modal-content-centered {
@@ -95,7 +96,7 @@
     display: flex;
     align-items: center;
     gap: 15px;
-    background-color: var(--bg); /* Fundo sutil */
+    background-color: var(--bg);
     padding: 12px;
     border-radius: 12px;
     margin-bottom: 10px;
@@ -145,7 +146,7 @@
     color: var(--text);
     line-height: 1.4;
     font-weight: 500;
-    text-align: left; /* Garante alinhamento à esquerda */
+    text-align: left; 
 }
 
 /* Ajuste Dark Mode específico se necessário */
@@ -155,17 +156,140 @@
 }
 /* Correção do botão X (Fechar Modal) */
 .close-modal {
-    flex-shrink: 0;        /* O PULO DO GATO: Impede o botão de ser "esmagado" */
-    min-width: 32px;       /* Garante a largura mínima */
-    min-height: 32px;      /* Garante a altura mínima */
-    width: 32px;           /* Tamanho fixo */
-    height: 32px;          /* Tamanho fixo */
-    
-    /* Mantém o resto do estilo que você já tem */
+    flex-shrink: 0;    
+    min-width: 32px;      
+    min-height: 32px;     
+    width: 32px;          
+    height: 32px;       
     border-radius: 50%;
     display: flex;
     align-items: center;
     justify-content: center;
     border: none;
     cursor: pointer;
+}
+
+/* =============================================================
+   ESTILO DO NOVO MURAL (Inputs, Abas e Feed)
+   ============================================================= */
+
+/* 1. Modal Container Restraints */
+#modalMuralPedidos .modal-content {
+    border-radius: 25px !important;
+    overflow: hidden !important;
+    display: flex;
+    flex-direction: column;
+    max-height: 85vh;
+    transform: translateZ(0);
+}
+
+/* 2. Modal Body Reset */
+#modalMuralPedidos .modal-body {
+    padding: 0 !important;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    background: var(--bg);
+    flex: 1;
+    border-bottom-left-radius: 25px !important;
+    border-bottom-right-radius: 25px !important;
+}
+
+
+.mural-header-fixo {
+    background: var(--card-bg);
+    padding: 20px 20px 0 20px;
+    border-bottom: 1px solid var(--border);
+    display: flex;
+    flex-direction: column;
+    gap: 10px; 
+    flex-shrink: 0;
+    z-index: 10;
+}
+
+/* 4. Input Styling */
+.mural-header-fixo input,
+.mural-header-fixo textarea {
+    width: 100%;
+    border: 1px solid var(--border);
+    background: var(--bg);
+    color: var(--text);
+    padding: 12px;
+    border-radius: 12px;
+    font-family: "Montserrat", sans-serif;
+    font-size: 0.9rem;
+    box-sizing: border-box; 
+    display: block;
+    margin-bottom: 5px;
+}
+
+.mural-header-fixo textarea {
+    resize: none; 
+}
+/* 6. Tabs (24h / All) */
+.mural-abas {
+    display: grid;
+    grid-template-columns: 1fr 1fr; 
+    gap: 10px;
+    padding: 15px 0; 
+}
+
+.mural-abas button {
+    padding: 10px;
+    border-radius: 10px;
+    font-weight: 700;
+    font-size: 0.85rem;
+    cursor: pointer;
+    text-align: center;
+    transition: 0.2s;
+}
+
+/* 7. Scrolling Feed Area */
+#feed-pedidos {
+    flex: 1;
+    overflow-y: auto; 
+    padding: 15px;
+    background-color: var(--bg);
+    border-bottom-left-radius: 25px !important;
+    border-bottom-right-radius: 25px !important;
+    margin-bottom: -1px; 
+}
+
+/* 8. Empty State Styling */
+.mural-vazio {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 100%;
+    text-align: center;
+    padding: 40px 20px;
+    color: var(--muted);
+}
+.mural-vazio span {
+    font-size: 48px;
+    color: #db2777;
+    margin-bottom: 10px;
+    opacity: 0.5;
+}
+
+.pedido-footer {
+  border-top: 1px solid var(--border);
+  padding-top: 10px;
+  margin-top: 10px;
+  
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 15px; 
+}
+
+/* O contador de intercessores */
+.contador-oracoes {
+  font-size: 0.75rem;
+  color: var(--muted);
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  white-space: nowrap;
 }

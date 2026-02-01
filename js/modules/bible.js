@@ -85,17 +85,34 @@ async function executarLeituraLocal(livroObj, capitulo) {
 
     let todosLivros = [].concat(dados.antigoTestamento || [], dados.novoTestamento || []);
     
+    // --- MAPA DE CORREÇÃO MANUAL (AQUI ESTÁ A SOLUÇÃO) ---
+    // Liga o 'slug' do botão ao 'nome' exato no JSON
+    const mapaCorrecao = {
+        "i-pedro": "I São Pedro",
+        "ii-pedro": "II São Pedro",
+        "i-joao": "I São João",
+        "ii-joao": "II São João",
+        "iii-joao": "III São João",
+        "sao-judas": "São Judas",
+        "sao-tiago": "São Tiago"
+    };
+
+    const nomeCorrigido = mapaCorrecao[livroObj.slug];
     const slugLimpo = livroObj.slug.replace(/-/g, " ").toLowerCase();
     const nomeLimpo = removerAcentos(livroObj.nome).toLowerCase();
 
     const livroEncontrado = todosLivros.find((l) => {
+      // 1. Tenta bater pelo mapa manual (Prioridade para João e Pedro)
+      if (nomeCorrigido && l.nome === nomeCorrigido) return true;
+
+      // 2. Fallback: lógica padrão
       const nomeJson = removerAcentos(l.nome).toLowerCase();
       return nomeJson === slugLimpo || nomeJson === nomeLimpo || nomeJson.includes(slugLimpo);
     });
 
-    if (!livroEncontrado) throw new Error("Livro não encontrado");
+    if (!livroEncontrado) throw new Error("Livro não encontrado: " + livroObj.nome);
 
-    // Tenta pegar o capítulo (indexado ou busca)
+    // Tenta pegar o capítulo
     let capituloObj = livroEncontrado.capitulos[parseInt(capitulo) - 1];
     if (!capituloObj || capituloObj.capitulo != capitulo) {
         capituloObj = livroEncontrado.capitulos.find(c => c.capitulo == capitulo);
@@ -105,7 +122,6 @@ async function executarLeituraLocal(livroObj, capitulo) {
 
     tituloDiv.innerText = `${livroEncontrado.nome} ${capitulo}`;
     
-    // Renderiza versículos
     textoDiv.innerHTML = capituloObj.versiculos.map(v => 
         `<p style="margin-bottom:10px; font-size: 1.1rem; text-align: justify;">
             <b style="color:var(--primary); font-size:0.8rem; margin-right:8px; vertical-align: super;">${v.versiculo}</b>
