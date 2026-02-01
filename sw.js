@@ -1,6 +1,6 @@
 // MUDE AQUI: Toda vez que você lançar uma atualização no site, suba esse número.
 // Ex: v1 -> v2. Isso força o navegador a apagar o cache velho e baixar tudo novo.
-const CACHE_NAME = "agape-v10"; // Coloquei v7 pra garantir que limpe tudo
+const CACHE_NAME = "agape-v71"; // Coloquei v7 pra garantir que limpe tudo
 
 const ASSETS = [
   "./",              // Importante: use ./ para garantir caminho relativo
