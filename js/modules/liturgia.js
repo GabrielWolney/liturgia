@@ -1,18 +1,19 @@
+
+import { abrirModal } from "../utils/dom-utils.js";
+import { buscarDadosLiturgia } from "../services/api-service.js"; // Se usar serviço separado
+import { atualizarContadorLeitura, ouvirContador } from "../services/firestore-service.js"; // Se usar firestore
+import { formatarSalmo, formatarLeitura, getText, getRef } from "../utils/formatters.js";
 import { analytics } from "../config/firebase-config.js";
 import { logEvent } from "https://www.gstatic.com/firebasejs/12.7.0/firebase-analytics.js";
-import { buscarDadosLiturgia } from "../services/api-service.js"; 
-import { atualizarContadorLeitura, ouvirContador } from "../services/firestore-service.js";
-import { formatarSalmo, formatarLeitura, getText, getRef } from "../utils/formatters.js";
-import { abrirModal } from "../utils/dom-utils.js";
 
 let dadosLiturgiaCache = null;
 
-// --- LITURGIA DIÁRIA ---
-
+// --- CARREGAMENTO INICIAL ---
 export const carregarLiturgia = async () => {
     renderizarSkeletons();
     try {
-        dadosLiturgiaCache = await buscarDadosLiturgia();
+        dadosLiturgiaCache = await buscarDadosLiturgia(); 
+        
         if (!dadosLiturgiaCache || !dadosLiturgiaCache.primeiraLeitura) {
             throw new Error("Dados incompletos");
         }
@@ -23,59 +24,7 @@ export const carregarLiturgia = async () => {
     }
 };
 
-// --- CONTADOR (Botão Eu Li) ---
-export const inicializarContador = () => {
-    const btnLi = document.getElementById("btn-li-a-leitura");
-    const elContador = document.getElementById("texto-contador-leituras");
-    if (!btnLi || !elContador) return;
-
-    const hoje = new Date().toLocaleDateString("en-CA");
-    
-    ouvirContador((docSnap) => {
-        const total = docSnap.exists() ? docSnap.data().contador || 0 : 0;
-        if (total === 0) elContador.innerText = "Seja o primeiro a ler hoje!";
-        else if (total === 1) elContador.innerText = "1 pessoa leu hoje!!";
-        else elContador.innerText = `${total} pessoas leram hoje!!`;
-    });
-
-    const jaLeu = localStorage.getItem(`leitura_concluida_${hoje}`);
-    atualizarVisualBotao(btnLi, !!jaLeu);
-
-    btnLi.onclick = async () => {
-        const estaLido = localStorage.getItem(`leitura_concluida_${hoje}`);
-        atualizarVisualBotao(btnLi, !estaLido);
-        try {
-            if (!estaLido) {
-                localStorage.setItem(`leitura_concluida_${hoje}`, "true");
-                await atualizarContadorLeitura(true);
-                logEvent(analytics, "marcou_leitura_concluida");
-            } else {
-                localStorage.removeItem(`leitura_concluida_${hoje}`);
-                await atualizarContadorLeitura(false);
-                logEvent(analytics, "desmarcou_leitura_concluida");
-            }
-        } catch (error) {
-            atualizarVisualBotao(btnLi, !!estaLido);
-        }
-    };
-};
-
-function atualizarVisualBotao(btn, lido) {
-    if (lido) {
-        btn.innerHTML = `<span class="material-symbols-rounded" style="font-variation-settings: 'FILL' 1;">check_circle</span> <span>Leitura Concluída</span>`;
-        btn.classList.add("lido");
-        btn.style.color = "#22c55e"; 
-        btn.style.borderColor = "#22c55e";
-    } else {
-        btn.innerHTML = `<span class="material-symbols-rounded" style="font-variation-settings: 'FILL' 0;">check_circle</span> <span>Eu li as leituras</span>`;
-        btn.classList.remove("lido");
-        btn.style.color = ""; 
-        btn.style.borderColor = "";
-    }
-}
-
 // --- INTERFACE (UI) ---
-
 const renderizarSkeletons = () => {
     const elSanto = document.getElementById("nome-santo");
     const resumo = document.getElementById("resumo-leituras");
@@ -89,10 +38,12 @@ const atualizarInterfaceLiturgia = (dados) => {
     const elCirculo = document.getElementById("indicador-cor");
     const elEmoji = document.getElementById("emoji-tempo");
     const resumo = document.getElementById("resumo-leituras");
+    const liturgiaDesktop = document.getElementById("liturgia-desktop-texto");
 
     let corAPI = (dados.cor || "Branco").toLowerCase();
     const tituloLiturgia = (dados.liturgia || "").toLowerCase();
 
+    // Lógica de cores litúrgicas
     if (tituloLiturgia.includes("tempo comum")) corAPI = "verde";
     else if (tituloLiturgia.includes("quaresma") || tituloLiturgia.includes("advento")) corAPI = "roxo";
     else if (tituloLiturgia.includes("mártir") || tituloLiturgia.includes("paixão")) corAPI = "vermelho";
@@ -115,6 +66,7 @@ const atualizarInterfaceLiturgia = (dados) => {
     if (elCirculo) elCirculo.className = `circulo-liturgico ${config.classe}`;
     if (elEmoji) elEmoji.innerHTML = `<img src="${config.img}" alt="${corAPI}" class="icone-liturgico-img">`;
 
+    // Resumo Mobile
     if (resumo) {
         const l1 = getRef(dados.primeiraLeitura);
         const sal = getRef(dados.salmo);
@@ -124,7 +76,6 @@ const atualizarInterfaceLiturgia = (dados) => {
             <p><strong>1ª Leitura:</strong> ${l1}</p>
             <p><strong>Salmo:</strong> ${sal}</p>`;
             
-        // Verifica se a segunda leitura existe MESMO para exibir no resumo
         const s2Texto = getText(dados.segundaLeitura);
         if (s2Texto && s2Texto.length > 20 && !s2Texto.toLowerCase().includes("não há")) {
             html += `<p><strong>2ª Leitura:</strong> ${getRef(dados.segundaLeitura)}</p>`;
@@ -132,6 +83,11 @@ const atualizarInterfaceLiturgia = (dados) => {
         
         html += `<p><strong>Evangelho:</strong> ${ev}</p></div>`;
         resumo.innerHTML = html;
+    }
+
+    // Texto Completo Desktop (Sem Modal)
+    if(liturgiaDesktop) {
+        liturgiaDesktop.innerHTML = gerarHTMLCompleto(dados);
     }
 };
 
@@ -145,6 +101,60 @@ const usarBackup = () => {
     if (elSanto) elSanto.innerText = "Modo Offline";
 };
 
+// --- MODAL COMPLETO (MOBILE) ---
+export const abrirModalLiturgiaCompleta = () => {
+    if (!dadosLiturgiaCache) return usarBackup();
+    logEvent(analytics, "visualizou_liturgia_completa", { liturgia_titulo: dadosLiturgiaCache.liturgia });
+    
+    const corpo = document.getElementById("modal-corpo");
+    const titulo = document.getElementById("modal-titulo");
+    
+    if(titulo) titulo.innerText = "Liturgia da Palavra";
+    if(corpo) corpo.innerHTML = gerarHTMLCompleto(dadosLiturgiaCache);
+
+    abrirModal("modalGeral");
+};
+
+function gerarHTMLCompleto(data) {
+    const estiloTexto = 'text-align: justify; line-height: 1.8; font-family: "Montserrat", sans-serif;';
+    let html = "";
+
+    // 1ª Leitura
+    html += `<div class="leitura-bloco">
+        <h4>1ª Leitura</h4>
+        <p style="color: #64748b; font-weight: bold; margin-bottom: 10px;">${getRef(data.primeiraLeitura)}</p>
+        <div style="${estiloTexto}">${formatarLeitura(getText(data.primeiraLeitura))}</div>
+    </div><hr>`;
+    
+    // Salmo
+    html += `<div class="leitura-bloco">
+        <h4>Salmo Responsorial</h4>
+        <p style="color: #64748b; font-weight: bold; margin-bottom: 10px;">${getRef(data.salmo)}</p>
+        ${formatarSalmo(data.salmo)}
+    </div><hr>`;
+    
+    // 2ª Leitura
+    const s2Texto = getText(data.segundaLeitura);
+    if (s2Texto && s2Texto.length > 20 && !s2Texto.toLowerCase().includes("não há")) {
+        html += `<div class="leitura-bloco">
+            <h4>2ª Leitura</h4>
+            <p style="color: #64748b; font-weight: bold;">${getRef(data.segundaLeitura)}</p>
+            <div style="${estiloTexto}">${formatarLeitura(s2Texto)}</div>
+        </div><hr>`;
+    }
+      
+
+    html += `<div class="leitura-bloco destaque-evangelho">
+        <h4>Evangelho</h4>
+        <p style="color: #64748b; font-weight: bold; margin-bottom: 10px;">${getRef(data.evangelho)}</p>
+        <div style="${estiloTexto}">${formatarLeitura(getText(data.evangelho))}</div>
+    </div>`;
+    
+    html += `<div style="padding: 15px; border-top: 1px solid var(--border);"><button id="btn-compartilhar" class="btn-primary" onclick="window.compartilharEvangelho()"><span class="material-symbols-rounded" style="vertical-align: middle; margin-right: 5px;">share</span> Compartilhar Evangelho</button></div>`;
+    
+    return html;
+}
+
 export const compartilharEvangelho = async () => {
     if (!dadosLiturgiaCache) return;
     const texto = `📖 *Evangelho do Dia*\n\nConfira a liturgia completa no App Ágape!\n${window.location.href}`;
@@ -155,86 +165,73 @@ export const compartilharEvangelho = async () => {
     }
 };
 
-export const abrirModalLiturgiaCompleta = () => {
-    if (!dadosLiturgiaCache) usarBackup();
-    logEvent(analytics, "visualizou_liturgia_completa", { liturgia_titulo: dadosLiturgiaCache.liturgia });
-    
-    const corpo = document.getElementById("modal-corpo");
-    const titulo = document.getElementById("modal-titulo");
-    
-    titulo.innerText = "Liturgia da Palavra";
-    
-    // Estilo unificado para todas as leituras
-    const estiloTexto = 'text-align: justify; line-height: 1.8; font-family: "Montserrat", sans-serif;';
+export const inicializarContador = () => {
+    const btnLi = document.getElementById("btn-li-a-leitura");
+    const elContador = document.getElementById("texto-contador-leituras");
+    if (!btnLi || !elContador) return;
 
-    // 1. Primeira Leitura
-    let html = `
-        <div class="leitura-bloco">
-            <h4>1ª Leitura</h4>
-            <p style="color: #64748b; font-weight: bold; margin-bottom: 10px;">${getRef(dadosLiturgiaCache.primeiraLeitura)}</p>
-            <div style="${estiloTexto}">
-                ${formatarLeitura(getText(dadosLiturgiaCache.primeiraLeitura))}
-            </div>
-        </div>
-        <hr>
-    `;
-    
-    // 2. Salmo (Já formatado com div interna)
-    html += `
-        <div class="leitura-bloco">
-            <h4>Salmo Responsorial</h4>
-            <p style="color: #64748b; font-weight: bold; margin-bottom: 10px;">${getRef(dadosLiturgiaCache.salmo)}</p>
-            ${formatarSalmo(dadosLiturgiaCache.salmo)}
-        </div>
-        <hr>
-    `;
-    
-    // 3. Segunda Leitura (Lógica rigorosa: só exibe se tiver texto válido > 20 chars e não for "não há")
-    const s2Texto = getText(dadosLiturgiaCache.segundaLeitura);
-    if (s2Texto && s2Texto.length > 20 && !s2Texto.toLowerCase().includes("não há")) {
-        html += `
-            <div class="leitura-bloco">
-                <h4>2ª Leitura</h4>
-                <p style="color: #64748b; font-weight: bold;">${getRef(dadosLiturgiaCache.segundaLeitura)}</p>
-                <div style="${estiloTexto}">
-                    ${formatarLeitura(s2Texto)}
-                </div>
-            </div>
-            <hr>
-        `;
-    }
-      
-    // 4. Evangelho
-    html += `
-        <div class="leitura-bloco">
-            <h4>Evangelho</h4>
-            <p style="color: #64748b; font-weight: bold; margin-bottom: 10px;">${getRef(dadosLiturgiaCache.evangelho)}</p>
-            <div style="${estiloTexto}">
-                ${formatarLeitura(getText(dadosLiturgiaCache.evangelho))}
-            </div>
-        </div>
-    `;
-    
-    html += `<div style="padding: 15px; border-top: 1px solid var(--border);"><button id="btn-compartilhar" class="btn-primary" onclick="window.compartilharEvangelho()"><span class="material-symbols-rounded" style="vertical-align: middle; margin-right: 5px;">share</span> Compartilhar Evangelho</button></div>`;
-    
-    corpo.innerHTML = html;
-    abrirModal("modalGeral");
+    const hoje = new Date().toLocaleDateString("en-CA");
+
+    try {
+        ouvirContador((docSnap) => {
+            const total = docSnap.exists() ? docSnap.data().contador || 0 : 0;
+            if (total === 0) elContador.innerText = "Seja o primeiro a ler hoje!";
+            else if (total === 1) elContador.innerText = "1 pessoa leu hoje!!";
+            else elContador.innerText = `${total} pessoas leram hoje!!`;
+        });
+    } catch(e) { console.log("Contador offline"); }
+
+    const atualizarVisualBotao = (lido) => {
+        if (lido) {
+            btnLi.innerHTML = `<span class="material-symbols-rounded" style="font-variation-settings: 'FILL' 1;">check_circle</span> <span>Leitura Concluída</span>`;
+            btnLi.classList.add("lido");
+            btnLi.style.color = "#22c55e"; 
+            btnLi.style.borderColor = "#22c55e";
+        } else {
+            btnLi.innerHTML = `<span class="material-symbols-rounded" style="font-variation-settings: 'FILL' 0;">check_circle</span> <span>Eu li as leituras</span>`;
+            btnLi.classList.remove("lido");
+            btnLi.style.color = ""; 
+            btnLi.style.borderColor = "";
+        }
+    };
+
+    const jaLeu = localStorage.getItem(`leitura_concluida_${hoje}`);
+    atualizarVisualBotao(!!jaLeu);
+
+    btnLi.onclick = async () => {
+        const estaLido = localStorage.getItem(`leitura_concluida_${hoje}`);
+        atualizarVisualBotao(!estaLido);
+        try {
+            if (!estaLido) {
+                localStorage.setItem(`leitura_concluida_${hoje}`, "true");
+                await atualizarContadorLeitura(true);
+                logEvent(analytics, "marcou_leitura_concluida");
+            } else {
+                localStorage.removeItem(`leitura_concluida_${hoje}`);
+                await atualizarContadorLeitura(false);
+                logEvent(analytics, "desmarcou_leitura_concluida");
+            }
+        } catch (error) {
+            atualizarVisualBotao(!!estaLido);
+        }
+    };
 };
 
 export const abrirHora = (tipo) => {
     logEvent(analytics, "rezou_liturgia_horas", { tipo_hora: tipo });
-    const corpo = document.getElementById("modal-corpo");
-    const titulo = document.getElementById("modal-titulo");
+    const infoHoras = {
+        laudes: { titulo: "Laudes: Oração da Manhã", desc: "Consagramos o início do dia a Deus, celebrando a Ressurreição." },
+        vesperas: { titulo: "Vésperas: Oração da Tarde", desc: "Agradecemos pelo dia que passou e entregamos a noite." },
+        completas: { titulo: "Completas: Oração da Noite", desc: "Exame de consciência e preparação para o repouso em Deus." },
+    };
     
-    if (corpo && titulo) {
-        const infoHoras = {
-            laudes: { titulo: "Laudes: Oração da Manhã", desc: "Consagramos o início do dia a Deus, celebrando a Ressurreição." },
-            vesperas: { titulo: "Vésperas: Oração da Tarde", desc: "Agradecemos pelo dia que passou e entregamos a noite." },
-            completas: { titulo: "Completas: Oração da Noite", desc: "Exame de consciência e preparação para o repouso em Deus." },
-        };
+    const modalTitulo = document.getElementById("modal-titulo");
+    const modalCorpo = document.getElementById("modal-corpo");
+    
+    if (modalTitulo && modalCorpo && infoHoras[tipo]) {
         const selecao = infoHoras[tipo];
-        titulo.innerText = selecao.titulo;
-        corpo.innerHTML = `
+        modalTitulo.innerText = selecao.titulo;
+        modalCorpo.innerHTML = `
             <div style="text-align:center; padding: 10px;">
                 <p style="margin-bottom: 25px; text-align: justify; line-height: 1.6; color: var(--text); font-style: italic;">"${selecao.desc}"</p>
                 <div class="box-destaque-youtube">
@@ -243,5 +240,8 @@ export const abrirHora = (tipo) => {
                 </div>
             </div>`;
         abrirModal("modalGeral");
+    } else {
+        // Fallback direto
+        window.open('https://www.youtube.com/LiturgiadasHorasOnline', '_blank');
     }
 };

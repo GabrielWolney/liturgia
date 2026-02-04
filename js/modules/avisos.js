@@ -1,6 +1,4 @@
-/* =================================================================
-   MÓDULO: AVISOS (Visual de Data + Firebase)
-   ================================================================= */
+
 import { db } from "../config/firebase-config.js";
 import { collection, query, where, orderBy, onSnapshot } from "https://www.gstatic.com/firebasejs/12.7.0/firebase-firestore.js";
 
@@ -12,7 +10,7 @@ export function initAvisos() {
 }
 
 function escutarAvisosEmTempoReal() {
-    // Pega a data de hoje para filtrar (não mostrar avisos vencidos)
+
     const hojeLocal = new Date().toLocaleDateString('en-CA'); 
 
     const q = query(
@@ -24,7 +22,7 @@ function escutarAvisosEmTempoReal() {
     onSnapshot(q, (snapshot) => {
         listaAvisos.innerHTML = "";
 
-        // SE NÃO TIVER AVISOS
+
         if (snapshot.empty) {
             listaAvisos.innerHTML = `
                 <div style="text-align:center; padding: 30px 20px; opacity: 0.6;">
@@ -34,7 +32,7 @@ function escutarAvisosEmTempoReal() {
             return;
         }
 
-        // SE TIVER AVISOS
+
         snapshot.forEach((doc) => {
             const dados = doc.data();
             criarItemAviso(dados);
@@ -45,17 +43,17 @@ function escutarAvisosEmTempoReal() {
 }
 
 function criarItemAviso(dados) {
-    // Separa a data (YYYY-MM-DD) para criar a caixinha visual
+
     const [ano, mes, dia] = dados.dataExpiracao.split("-");
     const meses = ["JAN", "FEV", "MAR", "ABR", "MAI", "JUN", "JUL", "AGO", "SET", "OUT", "NOV", "DEZ"];
     
-    // Converte o número do mês para nome (ex: 01 -> JAN)
+
     const nomeMes = meses[parseInt(mes) - 1]; 
 
     const li = document.createElement('li');
     li.className = 'aviso-item';
     
-    // HTML com a estrutura da caixinha de data
+
     li.innerHTML = `
         <div class="aviso-data-box">
             <span class="aviso-dia">${dia}</span>

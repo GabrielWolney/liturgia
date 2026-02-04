@@ -1,29 +1,27 @@
-// --- FUNÇÃO AUXILIAR DE LIMPEZA (NOVA) ---
+
 const limparComentario = (texto) => {
-    // Frases que indicam o COMEÇO REAL da leitura bíblica
+
     const iniciosLiturgicos = [
-        "Leitura d",       // Pega "Leitura do", "Leitura da", "Leitura dos"
-        "Início d",        // Pega "Início do", "Início da"
-        "Proclamação d",   // Para Evangelhos
-        "Naqueles dias",   // Caso venha sem título
-        "Naquele tempo"    // Caso venha sem título
+        "Leitura d",     
+        "Início d",      
+        "Proclamação d",  
+        "Naqueles dias",  
+        "Naquele tempo"   
     ];
 
     let menorIndice = texto.length;
     let encontrou = false;
 
-    // Procura qual dessas frases aparece primeiro no texto
     iniciosLiturgicos.forEach(termo => {
         const idx = texto.indexOf(termo);
-        // Se achou o termo e ele não está logo no início (tem lixo antes)
-        // Ignoramos se estiver nos primeiros 5 caracteres, pois aí já é o texto certo
+
         if (idx !== -1 && idx < menorIndice) {
             menorIndice = idx;
             encontrou = true;
         }
     });
 
-    // Se achou um ponto de corte válido (e não é o começo do texto), corta o que vem antes
+
     if (encontrou && menorIndice > 5) {
         return texto.substring(menorIndice);
     }
@@ -31,7 +29,6 @@ const limparComentario = (texto) => {
     return texto;
 };
 
-// --- EXPORTS ---
 
 export const formatarSalmo = (dado) => {
     if (!dado) return "";
@@ -73,20 +70,19 @@ export const formatarSalmo = (dado) => {
 export const formatarLeitura = (textoLeitura) => {
     if (!textoLeitura) return "";
     
-    // 1. LIMPEZA: Remove comentários teológicos antes da leitura
+
     textoLeitura = limparComentario(textoLeitura);
 
-    // 2. Verifica duplicidade de título na primeira linha
+
     let linhas = textoLeitura.split('\n');
     if (linhas.length > 1) {
-        // Se a 1ª linha for curta (< 60 chars) e a 2ª linha começar com "Naqueles dias" ou "Naquele tempo"
-        // removemos a 1ª linha porque o cabeçalho do App já tem o título.
+
         if (linhas[0].trim().length < 60) {
             textoLeitura = linhas.slice(1).join('\n');
         }
     }
 
-    // 3. Aplica formatação dos números (versículos)
+
     let html = textoLeitura.replace(
         /(^|[.!?\n>]\s*)(\d+)\s+(?=[A-ZÀ-Ú"'])/gm, 
         '$1<sup style="font-size: 0.6em; font-weight: 800; color: var(--primary); vertical-align: super; margin-right: 2px;">$2</sup> '
@@ -117,15 +113,15 @@ export const getRef = (d) => {
 
     conteudo = conteudo.replace(/[\n\r]/g, " ").trim();
 
-    // Se curto, é a referência certa (Ex: "2Sm 1,1-4")
+
     if (conteudo.length < 60) {
         return conteudo;
     }
 
-    // Se longo, tenta pegar a primeira frase (Ex: "Início do livro de...")
+
     let primeiraParte = conteudo.split(/[\n\.]/)[0];
     
-    // Se a primeira parte também for um textão (> 60), desiste e põe título genérico
+
     if (primeiraParte.length > 60) return "Liturgia da Palavra";
 
     return primeiraParte;

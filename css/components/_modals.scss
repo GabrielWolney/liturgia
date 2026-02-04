@@ -64,7 +64,6 @@
   justify-content: center;
 }
 
-/* Modal Leitura Bíblia Fullscreen */
 #leitura-biblia-container {
   background-color: var(--bg) !important;
   color: var(--text) !important;
@@ -80,18 +79,14 @@
   color: var(--text) !important;
 }
 
-/* =========================================
-   NOVO DESIGN DOS AVISOS
-   ========================================= */
 
-/* Remove bolinhas da lista */
 #lista-avisos {
     list-style: none;
     padding: 0;
     margin: 0;
 }
 
-/* O Card de cada aviso */
+
 .aviso-item {
     display: flex;
     align-items: center;
@@ -108,7 +103,6 @@
     transform: scale(0.98);
 }
 
-/* O Bloquinho da Data (Esquerda) */
 .aviso-data-box {
     background-color: var(--card-bg);
     border: 1px solid var(--border);
@@ -122,7 +116,6 @@
     box-shadow: 0 2px 6px rgba(0,0,0,0.05);
 }
 
-/* O número do dia */
 .aviso-dia {
     font-size: 1.2rem;
     font-weight: 800;
@@ -130,7 +123,6 @@
     line-height: 1;
 }
 
-/* O nome do mês */
 .aviso-mes {
     font-size: 0.65rem;
     font-weight: 700;
@@ -139,7 +131,6 @@
     margin-top: 2px;
 }
 
-/* O Texto do aviso */
 .aviso-conteudo p {
     margin: 0;
     font-size: 0.9rem;
@@ -149,12 +140,11 @@
     text-align: left; 
 }
 
-/* Ajuste Dark Mode específico se necessário */
 [data-theme="dark"] .aviso-data-box {
     background-color: rgba(255,255,255,0.05);
     border-color: rgba(255,255,255,0.1);
 }
-/* Correção do botão X (Fechar Modal) */
+
 .close-modal {
     flex-shrink: 0;    
     min-width: 32px;      
@@ -169,11 +159,7 @@
     cursor: pointer;
 }
 
-/* =============================================================
-   ESTILO DO NOVO MURAL (Inputs, Abas e Feed)
-   ============================================================= */
 
-/* 1. Modal Container Restraints */
 #modalMuralPedidos .modal-content {
     border-radius: 25px !important;
     overflow: hidden !important;
@@ -183,7 +169,7 @@
     transform: translateZ(0);
 }
 
-/* 2. Modal Body Reset */
+
 #modalMuralPedidos .modal-body {
     padding: 0 !important;
     display: flex;
@@ -207,7 +193,7 @@
     z-index: 10;
 }
 
-/* 4. Input Styling */
+
 .mural-header-fixo input,
 .mural-header-fixo textarea {
     width: 100%;
@@ -226,7 +212,7 @@
 .mural-header-fixo textarea {
     resize: none; 
 }
-/* 6. Tabs (24h / All) */
+
 .mural-abas {
     display: grid;
     grid-template-columns: 1fr 1fr; 
@@ -244,7 +230,7 @@
     transition: 0.2s;
 }
 
-/* 7. Scrolling Feed Area */
+
 #feed-pedidos {
     flex: 1;
     overflow-y: auto; 
@@ -255,7 +241,7 @@
     margin-bottom: -1px; 
 }
 
-/* 8. Empty State Styling */
+
 .mural-vazio {
     display: flex;
     flex-direction: column;
@@ -284,7 +270,7 @@
   gap: 15px; 
 }
 
-/* O contador de intercessores */
+
 .contador-oracoes {
   font-size: 0.75rem;
   color: var(--muted);

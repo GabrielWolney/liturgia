@@ -4,7 +4,7 @@ import { collection, addDoc, query, where, orderBy, onSnapshot, deleteDoc, doc }
 import { abrirModal } from "../utils/dom-utils.js";
 
 export const inicializarAdmin = () => {
-    // Configura o botão de login
+
     const btnLogin = document.getElementById("btn-fazer-login");
     if (btnLogin) {
         btnLogin.onclick = async () => {
@@ -28,7 +28,7 @@ export const inicializarAdmin = () => {
         };
     }
 
-    // Configura o botão de salvar aviso
+
     const btnSalvar = document.getElementById("btn-salvar-aviso");
     if (btnSalvar) {
         btnSalvar.onclick = async () => {

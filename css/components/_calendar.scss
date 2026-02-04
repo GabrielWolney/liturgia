@@ -1,126 +1,109 @@
 /* =================================================================
-   ESTILOS DO CALENDÁRIO (Modo Compacto)
+   RESGATE DO VISUAL PERFEITO - CALENDÁRIO MOBILE (MODAL)
    ================================================================= */
 
-/* Container do Grid */
+/* 1. O Grid Principal */
 #calendario-grid {
-    display: grid;
-    grid-template-columns: repeat(7, 1fr);
-    gap: 2px;
-    margin-bottom: 10px;
+    display: grid !important;
+    grid-template-columns: repeat(7, 1fr) !important;
+    gap: 2px !important;
+    margin-bottom: 10px !important;
+    width: 100% !important;
+    max-width: none !important; /* Remove travas anteriores */
 }
 
-#modalCalendario .modal-header {
+/* 2. Cabeçalho do Modal (Mês e Botões) */
+/* O JS injeta os botões direto na div #mes-ano-calendario, então estilizamos ela */
+#mes-ano-calendario > div {
     display: flex !important;
-    align-items: center;
-    gap: 5px;
-    margin-bottom: 5px;
+    align-items: center !important;
+    justify-content: space-between !important;
+    width: 100%;
 }
 
-/* Título do Mês */
-#mes-ano-calendario {
-    flex: 1;
-    text-align: center;
-    margin: 0;
-    font-size: 1rem;
-    font-weight: 700;
-    color: var(--text);
+/* Título (Janeiro 2026) */
+#mes-ano-calendario span {
+    font-size: 1rem !important;
+    font-weight: 700 !important;
+    color: var(--text) !important;
+    text-transform: capitalize !important;
 }
 
 /* Botões de Navegação (< e >) */
-.nav-btn {
-    background: var(--bg);
-    border: none;
-    cursor: pointer;
-    color: var(--text);
-    border-radius: 50%;
-    display: flex;
+#mes-ano-calendario button {
+    background: var(--bg) !important;
+    border: none !important;
+    cursor: pointer !important;
+    color: var(--text) !important;
+    border-radius: 50% !important;
+    display: flex !important;
     align-items: center;
     justify-content: center;
-    width: 28px;
-    height: 28px;
+    width: 28px !important;
+    height: 28px !important;
+    padding: 0 !important;
     transition: background 0.2s;
 }
-
-.nav-btn:hover {
-    background: rgba(0, 0, 0, 0.1);
+#mes-ano-calendario button:hover {
+    background: rgba(0, 0, 0, 0.1) !important;
 }
 
-.nav-btn span {
-    font-size: 20px;
+/* 3. Dias da Semana (D S T Q...) - São os primeiros 7 filhos */
+#calendario-grid > div:nth-child(-n+7) {
+    font-weight: bold !important;
+    color: #94a3b8 !important; 
+    font-size: 0.75rem !important;
+    text-align: center !important;
+    margin-bottom: 2px !important;
+    height: auto !important;
+    background: transparent !important;
+    border-radius: 0 !important;
 }
 
-/* Cabeçalho dos dias (D S T Q...) */
-.calendar-header-day {
-    font-weight: bold;
-    color: #94a3b8; /* Cor muted */
-    font-size: 0.75rem;
-    text-align: center;
-    margin-bottom: 2px;
-}
-
-/* Dias do Mês */
-.calendar-day {
-    height: 36px;
+/* 4. Dias do Mês (Onde você queria border-radius: 8px) */
+/* Usamos !important para vencer o estilo inline do JS */
+#calendario-grid > div {
+    height: 36px !important;
+    width: 100% !important; /* Ocupa a célula do grid */
+    aspect-ratio: auto !important; /* Remove formato forçado de bolinha */
+    
     display: flex;
     align-items: center;
     justify-content: center;
-    border-radius: 8px;
+    
+    border-radius: 8px !important; /* O SEU ESTILO ORIGINAL */
     cursor: pointer;
-    font-size: 0.85rem;
+    font-size: 0.85rem !important;
     position: relative;
     color: var(--text);
+    
+    /* Removemos o background padrão para controlar no hover */
+    /* Nota: O JS coloca background inline no dia atual. O CSS abaixo vence apenas se não for 'hoje' */
 }
 
-.calendar-day:hover {
-    background-color: #e0f2fe;
-    color: #0284c7;
+/* Hover nos dias */
+#calendario-grid > div:not(:nth-child(-n+7)):hover {
+    background-color: #e0f2fe !important;
+    color: #0284c7 !important;
 }
 
-/* Dia Atual */
-.calendar-day.today {
-    background-color: #0284c7;
-    color: white !important;
-    font-weight: bold;
-}
-
-/* Dia Selecionado */
-.calendar-day.selected {
-    border: 2px solid #0284c7;
-}
-
-/* Dias vazios (padding) */
-.calendar-day.empty {
-    pointer-events: none;
-    cursor: default;
-}
-
-/* Bolinha indicadora de evento */
-.calendar-day.has-event::after {
-    content: '';
+/* 5. Bolinha de Evento */
+/* O JS atual cria um <span> dentro da div quando tem evento. Vamos estilizá-lo. */
+#calendario-grid > div span {
     position: absolute;
     bottom: 3px;
     width: 4px;
     height: 4px;
     background-color: #db2777;
     border-radius: 50%;
+    display: block !important;
 }
 
-/* Mensagem de instrução */
+/* Instrução */
 #msg-instrucao-cal {
     text-align: center;
     font-size: 0.7rem;
     color: #9ca3af;
     margin: 5px 0;
     font-style: italic;
-}
-
-/* Card de Evento (Quando clica) */
-.evento-card {
-    background: var(--bg);
-    color: #9d174d;
-    padding: 8px;
-    border-radius: 6px;
-    border-left: 3px solid #db2777;
-    font-size: 0.9rem;
 }

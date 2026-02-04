@@ -1,25 +1,23 @@
 import { getPropositoMensal, updatePropositoMensal } from "../services/firestore-service.js";
 import { abrirModal } from "../utils/dom-utils.js";
 
-// Renderiza o card na Home se estiver ativo
+
 export const carregarCardProposito = async () => {
     const container = document.getElementById("container-proposito");
     if (!container) return;
 
-    // Limpa antes de carregar
+
     container.innerHTML = "";
 
     const dados = await getPropositoMensal();
 
-    // Se não tiver dados ou estiver marcado como inativo, não mostra nada (some)
     if (!dados || dados.ativo === "false" || dados.ativo === false) {
         container.style.display = "none";
         return;
     }
 
     container.style.display = "block";
-    
-    // Desenha o Card (Estilo Rosa da Intercessão)
+
     container.innerHTML = `
         <section class="card" style="border-left: 4px solid #db2777;">
             <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 10px;">
@@ -38,7 +36,7 @@ export const carregarCardProposito = async () => {
 
 window.abrirAdminIntercessao = () => {
     abrirModal("modalIntercessaoAdmin");
-    // Verifica se já está logado na sessão atual
+
     if (sessionStorage.getItem("intercessao_logada") === "true") {
         mostrarFormularioIntercessao();
     }
@@ -46,7 +44,7 @@ window.abrirAdminIntercessao = () => {
 
 window.loginIntercessao = () => {
     const senha = document.getElementById("senha-intercessao").value;
-    // Senha fixa simples (pode mudar se quiser)
+
     if (senha === "agape2026" || senha === "intercessao") {
         sessionStorage.setItem("intercessao_logada", "true");
         mostrarFormularioIntercessao();
@@ -59,7 +57,6 @@ async function mostrarFormularioIntercessao() {
     document.getElementById("login-intercessao").style.display = "none";
     document.getElementById("form-intercessao").style.display = "block";
 
-    // Carrega dados atuais para editar
     const dados = await getPropositoMensal();
     if (dados) {
         document.getElementById("prop-ativo").value = dados.ativo ? "true" : "false";
@@ -69,7 +66,7 @@ async function mostrarFormularioIntercessao() {
 }
 
 window.salvarProposito = async () => {
-    const ativo = document.getElementById("prop-ativo").value === "true"; // Converte string para boolean
+    const ativo = document.getElementById("prop-ativo").value === "true"; 
     const tema = document.getElementById("prop-tema").value;
     const texto = document.getElementById("prop-texto").value;
 
@@ -91,7 +88,7 @@ window.salvarProposito = async () => {
         });
         
         alert("Propósito atualizado com sucesso!");
-        carregarCardProposito(); // Atualiza a home na hora
+        carregarCardProposito(); 
         document.getElementById("modalIntercessaoAdmin").style.display = "none";
         
     } catch (error) {

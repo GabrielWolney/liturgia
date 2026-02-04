@@ -3,7 +3,7 @@ import { removerAcentos } from "../utils/formatters.js";
 
 let cacheBiblia = null;
 
-// Carrega o JSON gigante da Bíblia apenas quando necessário
+
 async function carregarBibliaLocal() {
   if (cacheBiblia) return cacheBiblia;
   try {
@@ -58,7 +58,7 @@ const abrirModalCapitulo = (livroObj) => {
   if (input) input.value = "";
   if (modal) modal.style.display = "flex";
 
-  // Clona o botão para limpar listeners antigos
+
   const novoBtn = btnLer.cloneNode(true);
   btnLer.parentNode.replaceChild(novoBtn, btnLer);
 
@@ -85,8 +85,7 @@ async function executarLeituraLocal(livroObj, capitulo) {
 
     let todosLivros = [].concat(dados.antigoTestamento || [], dados.novoTestamento || []);
     
-    // --- MAPA DE CORREÇÃO MANUAL (AQUI ESTÁ A SOLUÇÃO) ---
-    // Liga o 'slug' do botão ao 'nome' exato no JSON
+
     const mapaCorrecao = {
         "i-pedro": "I São Pedro",
         "ii-pedro": "II São Pedro",
@@ -102,17 +101,17 @@ async function executarLeituraLocal(livroObj, capitulo) {
     const nomeLimpo = removerAcentos(livroObj.nome).toLowerCase();
 
     const livroEncontrado = todosLivros.find((l) => {
-      // 1. Tenta bater pelo mapa manual (Prioridade para João e Pedro)
+
       if (nomeCorrigido && l.nome === nomeCorrigido) return true;
 
-      // 2. Fallback: lógica padrão
+
       const nomeJson = removerAcentos(l.nome).toLowerCase();
       return nomeJson === slugLimpo || nomeJson === nomeLimpo || nomeJson.includes(slugLimpo);
     });
 
     if (!livroEncontrado) throw new Error("Livro não encontrado: " + livroObj.nome);
 
-    // Tenta pegar o capítulo
+
     let capituloObj = livroEncontrado.capitulos[parseInt(capitulo) - 1];
     if (!capituloObj || capituloObj.capitulo != capitulo) {
         capituloObj = livroEncontrado.capitulos.find(c => c.capitulo == capitulo);

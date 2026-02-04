@@ -1,193 +1,350 @@
 /**
- * Main Controller - Versão Corrigida (Modais Funcionando)
+ * Main Controller - Versão Final (Dashboard Desktop Integrado)
  */
 import { initInstall } from "./modules/install.js";
 import { analytics } from "./config/firebase-config.js";
 import { logEvent } from "https://www.gstatic.com/firebasejs/12.7.0/firebase-analytics.js";
-import { configurarNotificacoes } from "./services/notification-service.js"; 
+import { configurarNotificacoes } from "./services/notification-service.js";
 import { configurarData, obterMisterioDoDia } from "./utils/date-utils.js";
-import { fecharModais, abrirModal, setupClick as setupDomClick } from "./utils/dom-utils.js";
+import {
+  fecharModais,
+  abrirModal,
+  setupClick as setupDomClick,
+} from "./utils/dom-utils.js";
+import { dbOracoes } from "./data/prayers-data.js";
 
-// Módulos
 import * as LiturgiaModule from "./modules/liturgia.js";
 import * as MuralModule from "./modules/mural.js";
 import * as BibleModule from "./modules/bible.js";
 import * as NovenasModule from "./modules/novenas.js";
 import * as PrayersModule from "./modules/prayers.js";
 import * as AdminModule from "./modules/admin.js";
-import { initAvisos } from './modules/avisos.js';
-import { abrirCalendario } from './modules/calendar.js';
-import * as PropositoModule from './modules/proposito.js';
+import * as CalendarModule from "./modules/calendar.js"; 
+import { initAvisos } from "./modules/avisos.js";
+import * as PropositoModule from "./modules/proposito.js";
 
-// =======================================================
-// EXPOSIÇÃO GLOBAL (Essencial para onclick="..." no HTML)
-// =======================================================
+
+
+
+window.abrirCalendario = CalendarModule.abrirCalendario; 
 window.abrirMuralPedidos = MuralModule.inicializarMural;
-window.postarPedido = MuralModule.enviarPedido;
+window.enviarPedidoMural = MuralModule.enviarPedido;
+window.enviarPedidoMuralDesktop = () => MuralModule.enviarPedido('desk-'); 
+window.alternarAbaMural = MuralModule.alternarAbaMural;
 window.excluirMeuPedido = MuralModule.excluirPedido;
+window.marcarOracao = MuralModule.marcarOracao;
 
-window.abrirCalendario = abrirCalendario;
-
-// --- AQUI ESTAVAM OS PROBLEMAS ---
-// Garantindo que as funções da liturgia estejam disponíveis globalmente
-window.abrirLiturgia = () => {
-    console.log("Abrindo liturgia..."); // Debug
-    LiturgiaModule.abrirModalLiturgiaCompleta();
-};
-
-// Se o botão de explicação usa onclick="abrirModalExplicacao()", precisamos expor:
-window.abrirModalExplicacao = () => {
-    abrirModal("modalExplicacaoHoras");
-};
-
+window.abrirModal = abrirModal;
+window.abrirLiturgia = () => LiturgiaModule.abrirModalLiturgiaCompleta();
+window.abrirModalExplicacao = () => abrirModal("modalExplicacaoHoras");
 window.compartilharEvangelho = LiturgiaModule.compartilharEvangelho;
 window.abrirHora = LiturgiaModule.abrirHora;
-
 window.abrirListaNovenas = NovenasModule.abrirListaNovenas;
 window.alternarAbaNovenas = NovenasModule.alternarAbaNovenas;
 window.abrirDetalhesNovena = NovenasModule.abrirDetalhesNovena;
 window.lerDiaNovena = NovenasModule.lerDiaNovena;
 window.alternarStatusDia = NovenasModule.alternarStatusDia;
-
 window.alternarTestamento = BibleModule.alternarTestamento;
 window.fecharLeitura = BibleModule.fecharLeitura;
-
 window.abrirOracao = PrayersModule.abrirOracao;
+window.abrirNotas = () => abrirModal("modalNotas"); 
 
-window.abrirNotas = () => abrirModal("modalNotas");
 window.limparExame = () => {
-    document.querySelectorAll(".check-roxo").forEach((c) => (c.checked = false));
-    document.querySelectorAll("details.exame-grupo").forEach((d) => d.removeAttribute("open"));
+  if (confirm("Limpar tudo?"))
+    document
+      .querySelectorAll(".check-roxo")
+      .forEach((c) => (c.checked = false));
 };
 
-// --- REGISTRO DO PWA ---
-if ("serviceWorker" in navigator) {
-  window.addEventListener("load", () => {
-    navigator.serviceWorker
-      .register("./sw.js")
-      .then((reg) => console.log("Service Worker registrado!", reg))
-      .catch((err) => console.error("Falha no Service Worker:", err));
-  });
-}
 
-// =======================================================
-// INICIALIZAÇÃO
-// =======================================================
+
+
+
+
+
+
+window.carregarLeitor = (tipo) => {
+    
+    
+    document.querySelectorAll('.desk-menu-oracao button').forEach(b => b.classList.remove('active'));
+    const btnClicado = document.querySelector(`.desk-menu-oracao button[onclick*="'${tipo}'"]`);
+    if (btnClicado) btnClicado.classList.add('active');
+
+    const container = document.getElementById('leitor-conteudo-desktop');
+    if (!container) return;
+
+    
+    container.classList.remove('alinhado-topo');
+
+    
+    if (tipo === 'novenas') {
+        container.classList.add('alinhado-topo');
+        if(window.abrirListaNovenas) window.abrirListaNovenas();
+        return;
+    }
+
+    
+    if (tipo === 'terco') {
+        const hoje = typeof obterMisterioDoDia === 'function' ? obterMisterioDoDia() : { titulo: "Santo Terço", desc: "..." };
+        
+        let descFormatada = hoje.desc.replace(/\n/g, ' ').replace(/(\d\.\s)/g, '<br><b>$1</b>');
+        if(descFormatada.startsWith('<br>')) descFormatada = descFormatada.substring(4);
+
+        container.innerHTML = `
+            <div class="card-leitor-simulacao">
+                <h2>
+                    <svg class="icone-oracao-custom" viewBox="0 0 682.67 682.67" xmlns="http:
+                    <g transform="matrix(1.33,0,0,-1.33,0,682.67)">
+                        <g>
+                            <path d="m 0,0 v 120 h -40 v 40 H 0 v 60 H 40 V 160 H 80 V 120 H 40 V 0 Z" transform="translate(58,282)" />
+                            <path d="m 0,0 -90.48,60.31 -56.19,-75.87 90,-60 86.65,115.54 c 2.19,2.92 3.54,6.38 3.9,10.01 l 16.17,161.63 c 0.21,2.05 0.2,4.07 0,6.03 -1.31,12.85 -10.87,23.48 -23.5,26.15 -2,0.42 -4.08,0.64 -6.21,0.64 -15.33,0 -28.17,-11.62 -29.7,-26.88 l -9.31,-93.12" transform="translate(247.67,85.56)" />
+                            <path d="M 0,0 -24.93,16.62" transform="translate(155.68,93.55)" />
+                            <path d="m 0,0 22.27,105.65 c 4.3,23.68 9.62,48.22 15.91,72.91" transform="translate(157.19,145.87)" />
+                            <path d="m 0,0 c 10.66,31.02 22.89,61.05 36.67,88.61 3.77,7.53 11.47,12.29 19.9,12.29 12.48,0 22.24,-10.17 22.24,-22.2 0,-1.21 -0.1,-2.45 -0.31,-3.7 L 56.01,-71.93" transform="translate(218.18,401.1)" />
+                            <path d="m 0,0 90.47,60.31 56.19,-75.87 -90,-60 -86.65,115.54 c -2.19,2.92 -3.54,6.38 -3.9,10.01 l -16.16,161.63 c -0.21,2.05 -0.2,4.07 0,6.03 1.31,12.85 10.86,23.48 23.49,26.15 2,0.42 4.08,0.64 6.21,0.64 15.34,0 28.18,-11.62 29.7,-26.88 L 18.66,124.44" transform="translate(347.77,85.56)" />
+                            <path d="m 0,0 24.55,16.37 h 0.01" transform="translate(440.13,93.8)" />
+                            <path d="m 0,0 -22.26,105.65 c -14.29,78.59 -39.68,166.74 -75.4,238.19 -3.77,7.53 -11.47,12.29 -19.89,12.29 -12.48,0 -22.25,-10.17 -22.25,-22.2 0,-1.22 0.1,-2.45 0.31,-3.7 L -117,183.3" transform="translate(438.24,145.87)" />
+                            <path  d="m 0,0 c 5.52,0 10,-4.48 10,-10 0,-5.52 -4.48,-10 -10,-10 -5.52,0 -10,4.48 -10,10 0,5.52 4.48,10 10,10" transform="translate(206,373)" />
+                        </g>
+                    </g>
+                </svg> 
+                    Santo Terço
+                </h2>
+                <h3>${hoje.titulo}</h3>
+                <div class="conteudo-texto" style="text-align: center;">${descFormatada}</div>
+                <div class="rodape-texto">${hoje.meditacao || ""}</div>
+            </div>`;
+        return;
+    }
+
+    
+    if (['laudes', 'vesperas', 'completas'].includes(tipo)) {
+        const info = {
+            'laudes': { titulo: "Laudes", sub: "Oração da Manhã", desc: "Consagramos o início do dia a Deus, celebrando a Ressurreição." },
+            'vesperas': { titulo: "Vésperas", sub: "Oração da Tarde", desc: "Agradecemos pelo dia que passou e entregamos a noite." },
+            'completas': { titulo: "Completas", sub: "Oração da Noite", desc: "Exame de consciência e preparação para o repouso em Deus." }
+        };
+        const dados = info[tipo];
+        
+        container.innerHTML = `
+            <div class="card-leitor-simulacao">
+                <h2>
+                    <span class="material-symbols-rounded" style="color:#fbbf24; font-size: 40px;">auto_stories</span>
+                </h2>
+                <h2 style="margin-top:0; font-size:1.8rem; text-align:center;">${dados.titulo}</h2>
+                <h3 style="color:var(--muted); font-size:1.1rem; margin-top:-10px; font-weight:normal; text-align:center;">${dados.sub}</h3>
+                
+                <p class="conteudo-texto" style="font-style:italic; margin: 20px 0 30px 0; text-align: center; width: 100%;">
+                    "${dados.desc}"
+                </p>
+
+                <div class="box-destaque-youtube" style="margin-top:20px; border:none; background:transparent; display:flex; flex-direction:column; align-items:center;">
+                     <p style="font-size: 0.8rem; font-weight: 800; margin-bottom: 10px; color: #CC0000; text-transform: uppercase;">
+                        ▶️ ACOMPANHAR EM ÁUDIO
+                    </p>
+                    <a href="https:
+                        Abrir Canal no YouTube
+                    </a>
+                </div>
+            </div>`;
+        return;
+    }
+
+    
+    if(tipo === 'explicacao-horas') {
+        container.innerHTML = `
+            <div class="card-leitor-simulacao">
+                <h2 style="color:var(--primary);">Liturgia das Horas</h2>
+                <div class="conteudo-texto" style="margin-top:20px; text-align: center;">
+                    A Liturgia das Horas é a oração pública e oficial da Igreja Católica que tem como objetivo santificar o tempo ao longo do dia.
+                </div>
+            </div>`;
+        return;
+    }
+
+    
+    const oracao = dbOracoes[tipo];
+    if (oracao) {
+        container.innerHTML = `
+            <div class="card-leitor-simulacao">
+                <h2 style="color:#3b82f6;">${oracao.titulo}</h2>
+                <div class="conteudo-texto">${oracao.texto}</div>
+                <div class="rodape-texto" style="color:#3b82f6; border:none;">Amém.</div>
+            </div>`;
+    } else {
+        
+        PrayersModule.abrirOracao(tipo);
+    }
+};
+
 document.addEventListener("DOMContentLoaded", () => {
-    initApp();
+  initApp();
 });
 
 async function initApp() {
+  try {
+    console.log("Iniciando App Ágape...");
+    configurarNavegação();
+    configurarData();
+    configurarTercoUI(); 
+    configurarIconeDinamicoHoras();
+    configurarTema();
+    
+    
+    configurarNotasSync(); 
+    
+    initInstall();
+    
+    if (typeof BibleModule.alternarTestamento === "function")
+      BibleModule.alternarTestamento("novo");
+    
+    await LiturgiaModule.carregarLiturgia();
+    LiturgiaModule.inicializarContador();
+    
     try {
-        console.log("Iniciando App Ágape...");
+      await PropositoModule.carregarCardProposito();
+    } catch (e) {}
+    try {
+      await initAvisos();
+    } catch (e) {}
+    try {
+      AdminModule.inicializarAdmin();
+    } catch (e) {}
+    try {
+      configurarNotificacoes();
+    } catch (e) {}
+    
+    logEvent(analytics, "page_view", { page_title: "Home Liturgia Ágape" });
+    configurarListenersModais();
+    setInterval(configurarIconeDinamicoHoras, 300000);
 
-        configurarNavegação();
-        configurarData();
-        configurarTercoUI();
-        configurarIconeDinamicoHoras();
-        configurarTema();
-        configurarNotas(); 
-        initInstall();
+    
+    if (window.innerWidth >= 1024) {
+      
+      window.carregarLeitor("terco");
+      
+      
+      MuralModule.inicializarMuralDesktop();
+      
+      
+      CalendarModule.iniciarCalendarioDesktop();
+    }
+  } catch (erro) {
+    console.error(erro);
+    document.getElementById("splash-screen")?.remove();
+  }
+}
 
-        BibleModule.alternarTestamento("novo");
-        
-        await LiturgiaModule.carregarLiturgia();
-        LiturgiaModule.inicializarContador();
-        try {
-            await PropositoModule.carregarCardProposito();
-        } catch (e) {
-            console.warn("Erro ao carregar propósito:", e);
-        }
 
-        try { await initAvisos(); } catch (e) { console.warn("Erro avisos:", e); }
-        try { AdminModule.inicializarAdmin(); } catch(e) {}
-        try { configurarNotificacoes(); } catch (e) { }
-        
-        logEvent(analytics, "page_view", { page_title: "Home Liturgia Ágape" });
-        
-        // Configura os cliques DEPOIS de carregar tudo
-        configurarListenersModais();
-        
-        setInterval(configurarIconeDinamicoHoras, 300000);
 
-    } catch (erro) {
-        console.error("Erro fatal na inicialização:", erro);
-        const splash = document.getElementById("splash-screen");
-        if (splash) splash.remove();
+
+
+
+function configurarNotasSync() {
+    const areaMob = document.getElementById("area-notas"); 
+    const areaDesk = document.getElementById("desk-area-notas"); 
+    const key = "minhas_notas_agape";
+    
+    
+    const salvar = (val) => {
+        localStorage.setItem(key, val);
+        
+        if(areaMob && areaMob.value !== val) areaMob.value = val;
+        if(areaDesk && areaDesk.value !== val) areaDesk.value = val;
+    };
+
+    const textoSalvo = localStorage.getItem(key) || "";
+    
+    if (areaMob) {
+        areaMob.value = textoSalvo;
+        areaMob.addEventListener("input", () => salvar(areaMob.value));
+    }
+    if (areaDesk) {
+        areaDesk.value = textoSalvo;
+        areaDesk.addEventListener("input", () => salvar(areaDesk.value));
     }
 }
 
-// =======================================================
-// UI UTILS
-// =======================================================
-
 function configurarNavegação() {
-    const navItems = document.querySelectorAll(".nav-item");
-    const abas = document.querySelectorAll(".conteudo-aba");
-    navItems.forEach((item) => {
-        item.onclick = (e) => {
-            e.preventDefault();
-            const targetId = item.getAttribute("data-target");
-            const targetAba = document.getElementById(targetId);
-            navItems.forEach((i) => i.classList.remove("active"));
-            item.classList.add("active");
-            abas.forEach((aba) => (aba.style.display = "none"));
-            if (targetAba) {
-                targetAba.style.display = "block";
-                window.scrollTo(0, 0);
-            }
-        };
-    });
+  const navItems = document.querySelectorAll(".nav-item");
+  const abas = document.querySelectorAll(".conteudo-aba");
+  navItems.forEach((item) => {
+    item.onclick = (e) => {
+      e.preventDefault();
+      const targetId = item.getAttribute("data-target");
+      const targetAba = document.getElementById(targetId);
+      navItems.forEach((i) => i.classList.remove("active"));
+      item.classList.add("active");
+      abas.forEach((aba) => (aba.style.display = "none"));
+      if (targetAba) {
+        targetAba.style.display = "block";
+        window.scrollTo(0, 0);
+      }
+      window.navegarDesktop(targetId);
+    };
+  });
 }
 
 function configurarTema() {
-    const btnTema = document.getElementById("btn-tema");
-    const html = document.documentElement;
-    function aplicarTema(tema) {
-        if (tema === "dark") {
-            html.setAttribute("data-theme", "dark");
-            if (btnTema) btnTema.innerHTML = '<span class="material-symbols-rounded">light_mode</span>';
-        } else {
-            html.setAttribute("data-theme", "light");
-            if (btnTema) btnTema.innerHTML = '<span class="material-symbols-rounded">dark_mode</span>';
-        }
+  const btnTema = document.getElementById("btn-tema");
+  const btnTemaDesk = document.getElementById("btn-tema-desk");
+  const html = document.documentElement;
+  
+  function aplicarTema(tema) {
+    if (tema === "dark") {
+      html.setAttribute("data-theme", "dark");
+      document.body.classList.add("dark-mode");
+      if (btnTema)
+        btnTema.innerHTML =
+          '<span class="material-symbols-rounded">light_mode</span>';
+      if (btnTemaDesk)
+        btnTemaDesk.innerHTML =
+          '<span class="material-symbols-rounded">light_mode</span>';
+    } else {
+      html.setAttribute("data-theme", "light");
+      document.body.classList.remove("dark-mode");
+      if (btnTema)
+        btnTema.innerHTML =
+          '<span class="material-symbols-rounded">dark_mode</span>';
+      if (btnTemaDesk)
+        btnTemaDesk.innerHTML =
+          '<span class="material-symbols-rounded">dark_mode</span>';
     }
-    const temaSalvo = localStorage.getItem("tema");
-    if (temaSalvo) aplicarTema(temaSalvo);
-    if (btnTema) {
-        btnTema.onclick = () => {
-            const temaAtual = html.getAttribute("data-theme");
-            const novoTema = temaAtual === "dark" ? "light" : "dark";
-            aplicarTema(novoTema);
-            localStorage.setItem("tema", novoTema);
-        };
-    }
+  }
+  
+  const temaSalvo = localStorage.getItem("tema");
+  if (temaSalvo) aplicarTema(temaSalvo);
+  
+  const toggle = () => {
+    const temaAtual = html.getAttribute("data-theme");
+    const novoTema = temaAtual === "dark" ? "light" : "dark";
+    aplicarTema(novoTema);
+    localStorage.setItem("tema", novoTema);
+  };
+  
+  if (btnTema) btnTema.onclick = toggle;
+  if (btnTemaDesk) btnTemaDesk.onclick = toggle;
 }
 
 function configurarIconeDinamicoHoras() {
-    const iconElement = document.getElementById("icon-horas");
-    if (!iconElement) return;
-    const hora = new Date().getHours();
-    let novoIcone = "bedtime";
-    if (hora >= 5 && hora < 9) novoIcone = "wb_twilight";
-    else if (hora >= 9 && hora < 18) novoIcone = "light_mode";
-    else if (hora >= 18 && hora < 22) novoIcone = "clear_night";
-    if (iconElement.innerText !== novoIcone) iconElement.innerText = novoIcone;
+    
 }
 
+
 const configurarTercoUI = () => {
-    const tituloEl = document.getElementById("titulo-misterio");
-    const descEl = document.getElementById("descricao-misterio");
-    if (!tituloEl || !descEl) return;
-    
-    const hoje = obterMisterioDoDia();
-    tituloEl.innerText = hoje.titulo;
+  const tituloEl = document.getElementById("titulo-misterio");
+  const descEl = document.getElementById("descricao-misterio");
+  if (!tituloEl || !descEl) return;
 
-    let descFormatada = hoje.desc;
-    descFormatada = descFormatada.replace(/(\d\.\s)/g, '<br>$1');
-    if(descFormatada.startsWith('<br>')) descFormatada = descFormatada.substring(4);
+  const hoje = obterMisterioDoDia();
+  tituloEl.innerText = hoje.titulo;
 
-    descEl.innerHTML = `
+  let descFormatada = hoje.desc;
+  descFormatada = descFormatada.replace(/(\d\.\s)/g, "<br>$1");
+  if (descFormatada.startsWith("<br>"))
+    descFormatada = descFormatada.substring(4);
+
+  descEl.innerHTML = `
         <div class="terco-lista">
             ${descFormatada}
         </div>
@@ -197,52 +354,73 @@ const configurarTercoUI = () => {
     `;
 };
 
-function configurarNotas() {
-    const area = document.getElementById("area-notas");
-    if (!area) return;
-    const sugestoes = ["O que Deus falou ao seu coração hoje?", "Pontos da pregação...", "Orações..."];
-    if (!area.value) area.placeholder = sugestoes[Math.floor(Math.random() * sugestoes.length)];
-    const salvo = localStorage.getItem("minhas_notas_agape");
-    if (salvo) area.value = salvo;
-    area.addEventListener("input", () => {
-        localStorage.setItem("minhas_notas_agape", area.value);
-    });
-}
 
-// --- FUNÇÃO DE LISTENERS CORRIGIDA ---
+
 function configurarListenersModais() {
-    // Listener explícito para o botão da Liturgia Completa (caso o onclick falhe)
-    const btnLiturgia = document.getElementById("btn-abrir-liturgia");
-    if (btnLiturgia) {
-        btnLiturgia.onclick = () => {
-            LiturgiaModule.abrirModalLiturgiaCompleta();
-        };
-    }
-
-    // Listener explícito para o botão de explicação das Horas
-    const btnExplicacao = document.getElementById("btn-explicar-horas");
-    if (btnExplicacao) {
-        btnExplicacao.onclick = () => {
-            abrirModal("modalExplicacaoHoras");
-        };
-    }
+  const btnLiturgia = document.getElementById("btn-abrir-liturgia");
+  if (btnLiturgia)
+    btnLiturgia.onclick = () => LiturgiaModule.abrirModalLiturgiaCompleta();
+  const btnExplicacao = document.getElementById("btn-explicar-horas");
+  if (btnExplicacao)
+    btnExplicacao.onclick = () => abrirModal("modalExplicacaoHoras");
+  setupDomClick("btn-login-secreto", () => abrirModal("modalLogin"));
+  
+  const fechar = () =>
+    document
+      .querySelectorAll(".modal")
+      .forEach((m) => (m.style.display = "none"));
+      
+  document
+    .querySelectorAll(
+      ".close-modal, .close-modal-sobre, #btn-entendido-horas, #btn-fechar-explicacao"
+    )
+    .forEach((b) => (b.onclick = fechar));
     
-    // Login Admin
-    setupDomClick("btn-login-secreto", () => abrirModal("modalLogin"));
-
-    // Fechar modais
-    const fechar = () => document.querySelectorAll(".modal").forEach((m) => (m.style.display = "none"));
-    document.querySelectorAll(".close-modal, .close-modal-sobre, #btn-entendido-horas, #btn-fechar-explicacao").forEach((b) => (b.onclick = fechar));
-    
-    window.onclick = (e) => {
-        if (e.target.classList.contains("modal")) fechar();
-    };
+  window.onclick = (e) => {
+    if (e.target.classList.contains("modal")) fechar();
+  };
 }
+
+window.navegarDesktop = (idTab) => {
+  document.querySelectorAll(".conteudo-aba").forEach((tab) => {
+    tab.style.display = "none";
+  });
+  
+  const abaAlvo = document.getElementById(idTab);
+  if (abaAlvo) {
+    if (
+      window.innerWidth >= 1024 &&
+      (idTab === "tab-inicio" || idTab === "tab-oracao")
+    ) {
+      abaAlvo.style.display = "grid";
+    } else {
+      abaAlvo.style.display = "block";
+    }
+    window.scrollTo(0, 0);
+  }
+  
+  
+  document.querySelectorAll(".sidebar-item").forEach((btn) => {
+    btn.classList.remove("active");
+  });
+  const idBotao = "btn-sidebar-" + idTab.replace("tab-", "");
+  const botaoAtivo = document.getElementById(idBotao);
+  if (botaoAtivo) botaoAtivo.classList.add("active");
+  
+  
+  document.querySelectorAll(".nav-item").forEach((item) => {
+    item.classList.remove("active");
+    if (item.getAttribute("data-target") === idTab)
+      item.classList.add("active");
+  });
+
+  
+  
+  if (idTab === 'tab-menu') {
+      CalendarModule.iniciarCalendarioDesktop();
+  }
+};
 
 setTimeout(() => {
-    const splash = document.getElementById("splash-screen");
-    if (splash) {
-        splash.style.opacity = "0";
-        setTimeout(() => splash.remove(), 500);
-    }
+  document.getElementById("splash-screen")?.remove();
 }, 1000);

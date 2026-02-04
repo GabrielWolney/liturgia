@@ -561,7 +561,6 @@ textarea.input-admin {
   justify-content: center;
 }
 
-/* Modal Leitura Bíblia Fullscreen */
 #leitura-biblia-container {
   background-color: var(--bg) !important;
   color: var(--text) !important;
@@ -577,17 +576,12 @@ textarea.input-admin {
   color: var(--text) !important;
 }
 
-/* =========================================
-   NOVO DESIGN DOS AVISOS
-   ========================================= */
-/* Remove bolinhas da lista */
 #lista-avisos {
   list-style: none;
   padding: 0;
   margin: 0;
 }
 
-/* O Card de cada aviso */
 .aviso-item {
   display: flex;
   align-items: center;
@@ -604,7 +598,6 @@ textarea.input-admin {
   transform: scale(0.98);
 }
 
-/* O Bloquinho da Data (Esquerda) */
 .aviso-data-box {
   background-color: var(--card-bg);
   border: 1px solid var(--border);
@@ -618,7 +611,6 @@ textarea.input-admin {
   box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
 }
 
-/* O número do dia */
 .aviso-dia {
   font-size: 1.2rem;
   font-weight: 800;
@@ -626,7 +618,6 @@ textarea.input-admin {
   line-height: 1;
 }
 
-/* O nome do mês */
 .aviso-mes {
   font-size: 0.65rem;
   font-weight: 700;
@@ -635,7 +626,6 @@ textarea.input-admin {
   margin-top: 2px;
 }
 
-/* O Texto do aviso */
 .aviso-conteudo p {
   margin: 0;
   font-size: 0.9rem;
@@ -645,13 +635,11 @@ textarea.input-admin {
   text-align: left;
 }
 
-/* Ajuste Dark Mode específico se necessário */
 [data-theme=dark] .aviso-data-box {
   background-color: rgba(255, 255, 255, 0.05);
   border-color: rgba(255, 255, 255, 0.1);
 }
 
-/* Correção do botão X (Fechar Modal) */
 .close-modal {
   flex-shrink: 0;
   min-width: 32px;
@@ -666,10 +654,6 @@ textarea.input-admin {
   cursor: pointer;
 }
 
-/* =============================================================
-   ESTILO DO NOVO MURAL (Inputs, Abas e Feed)
-   ============================================================= */
-/* 1. Modal Container Restraints */
 #modalMuralPedidos .modal-content {
   border-radius: 25px !important;
   overflow: hidden !important;
@@ -679,7 +663,6 @@ textarea.input-admin {
   transform: translateZ(0);
 }
 
-/* 2. Modal Body Reset */
 #modalMuralPedidos .modal-body {
   padding: 0 !important;
   display: flex;
@@ -702,7 +685,6 @@ textarea.input-admin {
   z-index: 10;
 }
 
-/* 4. Input Styling */
 .mural-header-fixo input,
 .mural-header-fixo textarea {
   width: 100%;
@@ -722,7 +704,6 @@ textarea.input-admin {
   resize: none;
 }
 
-/* 6. Tabs (24h / All) */
 .mural-abas {
   display: grid;
   grid-template-columns: 1fr 1fr;
@@ -740,7 +721,6 @@ textarea.input-admin {
   transition: 0.2s;
 }
 
-/* 7. Scrolling Feed Area */
 #feed-pedidos {
   flex: 1;
   overflow-y: auto;
@@ -751,7 +731,6 @@ textarea.input-admin {
   margin-bottom: -1px;
 }
 
-/* 8. Empty State Styling */
 .mural-vazio {
   display: flex;
   flex-direction: column;
@@ -780,7 +759,6 @@ textarea.input-admin {
   gap: 15px;
 }
 
-/* O contador de intercessores */
 .contador-oracoes {
   font-size: 0.75rem;
   color: var(--muted);
@@ -1037,7 +1015,6 @@ hr,
   color: white !important;
 }
 
-/* Profile Header */
 .profile-header {
   background: #2563eb !important;
 }
@@ -1047,17 +1024,16 @@ hr,
   color: #ffffff !important;
 }
 
-/* --- BOTÃO DE INSTALAÇÃO (PWA) --- */
 #container-instalar {
   margin-top: 25px;
-  display: none; /* O JS controla isso */
+  display: none;
   text-align: center;
   padding-bottom: 20px;
   animation: fadeIn 0.5s ease;
 }
 
 .btn-install {
-  background-color: var(--card-bg) !important; /* Fundo do card */
+  background-color: var(--card-bg) !important;
   color: var(--text) !important;
   border: 1px solid var(--border) !important;
   display: flex !important;
@@ -1078,20 +1054,17 @@ hr,
   font-weight: 500;
 }
 
-/* Modo Escuro: Ajuste fino para destacar */
 [data-theme=dark] .btn-install {
   background-color: rgba(255, 255, 255, 0.05) !important;
   border-color: rgba(255, 255, 255, 0.1) !important;
 }
 
-/* Estilos específicos do Card do Terço */
 .terco-lista {
   margin-bottom: 15px;
   line-height: 1.5;
-  text-align: center; /* Centralizado */
+  text-align: center;
   font-size: 0.95rem;
   color: var(--text);
-  /* Garante que os números não fiquem colados demais */
 }
 .terco-lista br {
   content: "";
@@ -1501,7 +1474,6 @@ hr,
   border-top: 1px dashed rgba(147, 51, 234, 0.3);
 }
 
-/* Ícones Card Grande */
 .svg-card-grande {
   width: 48px !important;
   height: 48px !important;
@@ -1517,7 +1489,6 @@ hr,
   fill: #ffffff !important;
 }
 
-/* Contador de Leituras */
 #texto-contador-leituras {
   font-size: 0.7rem;
   color: var(--muted);
@@ -1618,113 +1589,104 @@ hr,
 }
 
 /* =================================================================
-   ESTILOS DO CALENDÁRIO (Modo Compacto)
+   RESGATE DO VISUAL PERFEITO - CALENDÁRIO MOBILE (MODAL)
    ================================================================= */
-/* Container do Grid */
+/* 1. O Grid Principal */
 #calendario-grid {
-  display: grid;
-  grid-template-columns: repeat(7, 1fr);
-  gap: 2px;
-  margin-bottom: 10px;
+  display: grid !important;
+  grid-template-columns: repeat(7, 1fr) !important;
+  gap: 2px !important;
+  margin-bottom: 10px !important;
+  width: 100% !important;
+  max-width: none !important; /* Remove travas anteriores */
 }
 
-#modalCalendario .modal-header {
+/* 2. Cabeçalho do Modal (Mês e Botões) */
+/* O JS injeta os botões direto na div #mes-ano-calendario, então estilizamos ela */
+#mes-ano-calendario > div {
   display: flex !important;
-  align-items: center;
-  gap: 5px;
-  margin-bottom: 5px;
+  align-items: center !important;
+  justify-content: space-between !important;
+  width: 100%;
 }
 
-/* Título do Mês */
-#mes-ano-calendario {
-  flex: 1;
-  text-align: center;
-  margin: 0;
-  font-size: 1rem;
-  font-weight: 700;
-  color: var(--text);
+/* Título (Janeiro 2026) */
+#mes-ano-calendario span {
+  font-size: 1rem !important;
+  font-weight: 700 !important;
+  color: var(--text) !important;
+  text-transform: capitalize !important;
 }
 
 /* Botões de Navegação (< e >) */
-.nav-btn {
-  background: var(--bg);
-  border: none;
-  cursor: pointer;
-  color: var(--text);
-  border-radius: 50%;
-  display: flex;
+#mes-ano-calendario button {
+  background: var(--bg) !important;
+  border: none !important;
+  cursor: pointer !important;
+  color: var(--text) !important;
+  border-radius: 50% !important;
+  display: flex !important;
   align-items: center;
   justify-content: center;
-  width: 28px;
-  height: 28px;
+  width: 28px !important;
+  height: 28px !important;
+  padding: 0 !important;
   transition: background 0.2s;
 }
 
-.nav-btn:hover {
-  background: rgba(0, 0, 0, 0.1);
+#mes-ano-calendario button:hover {
+  background: rgba(0, 0, 0, 0.1) !important;
 }
 
-.nav-btn span {
-  font-size: 20px;
+/* 3. Dias da Semana (D S T Q...) - São os primeiros 7 filhos */
+#calendario-grid > div:nth-child(-n+7) {
+  font-weight: bold !important;
+  color: #94a3b8 !important;
+  font-size: 0.75rem !important;
+  text-align: center !important;
+  margin-bottom: 2px !important;
+  height: auto !important;
+  background: transparent !important;
+  border-radius: 0 !important;
 }
 
-/* Cabeçalho dos dias (D S T Q...) */
-.calendar-header-day {
-  font-weight: bold;
-  color: #94a3b8; /* Cor muted */
-  font-size: 0.75rem;
-  text-align: center;
-  margin-bottom: 2px;
-}
-
-/* Dias do Mês */
-.calendar-day {
-  height: 36px;
+/* 4. Dias do Mês (Onde você queria border-radius: 8px) */
+/* Usamos !important para vencer o estilo inline do JS */
+#calendario-grid > div {
+  height: 36px !important;
+  width: 100% !important; /* Ocupa a célula do grid */
+  aspect-ratio: auto !important; /* Remove formato forçado de bolinha */
   display: flex;
   align-items: center;
   justify-content: center;
-  border-radius: 8px;
+  border-radius: 8px !important; /* O SEU ESTILO ORIGINAL */
   cursor: pointer;
-  font-size: 0.85rem;
+  font-size: 0.85rem !important;
   position: relative;
   color: var(--text);
+  /* Removemos o background padrão para controlar no hover */
+  /* Nota: O JS coloca background inline no dia atual. O CSS abaixo vence apenas se não for 'hoje' */
 }
 
-.calendar-day:hover {
-  background-color: #e0f2fe;
-  color: #0284c7;
+/* Hover nos dias */
+#calendario-grid > div:not(:nth-child(-n+7)):hover {
+  background-color: #e0f2fe !important;
+  color: #0284c7 !important;
 }
 
-/* Dia Atual */
-.calendar-day.today {
-  background-color: #0284c7;
-  color: white !important;
-  font-weight: bold;
-}
-
-/* Dia Selecionado */
-.calendar-day.selected {
-  border: 2px solid #0284c7;
-}
-
-/* Dias vazios (padding) */
-.calendar-day.empty {
-  pointer-events: none;
-  cursor: default;
-}
-
-/* Bolinha indicadora de evento */
-.calendar-day.has-event::after {
-  content: "";
+/* 5. Bolinha de Evento */
+/* O JS atual cria um <span> dentro da div quando tem evento. Vamos estilizá-lo. */
+#calendario-grid > div span {
   position: absolute;
   bottom: 3px;
   width: 4px;
   height: 4px;
   background-color: #db2777;
   border-radius: 50%;
+  display: block !important;
 }
 
-/* Mensagem de instrução */
+/* Instrução */
 #msg-instrucao-cal {
   text-align: center;
   font-size: 0.7rem;
@@ -1733,12 +1695,1126 @@ hr,
   font-style: italic;
 }
 
-/* Card de Evento (Quando clica) */
-.evento-card {
-  background: var(--bg);
-  color: #9d174d;
-  padding: 8px;
-  border-radius: 6px;
-  border-left: 3px solid #db2777;
-  font-size: 0.9rem;
+/* =================================================================
+   ESTILOS DESKTOP (V7.0 - REFINADO & LIMPO)
+   ================================================================= */
+/* --- 1. VISIBILIDADE --- */
+.desktop-only {
+  display: none !important;
+}
+
+.mobile-only {
+  display: flex !important;
+}
+
+@media (min-width: 1024px) {
+  .mobile-only {
+    display: none !important;
+  }
+  .desktop-only {
+    display: flex !important;
+  }
+  body {
+    flex-direction: row;
+    overflow: hidden;
+    background-color: var(--bg);
+  }
+  main {
+    flex: 1;
+    height: 100vh;
+    overflow-y: auto;
+    padding: 30px 40px !important;
+    box-sizing: border-box;
+  }
+  /* --- 2. SIDEBAR --- */
+  /* --- 3. HOME GRID --- */
+  /* --- 4. ABA ORAÇÃO (AJUSTADA: TELA CHEIA + MURAL IGUAL MOBILE) --- */
+  /* --- BOTÕES DE FILTRO (Mural & Novena) --- */
+  /* Botão Padrão de Aba Desktop */
+  /* Estado Ativo */
+  /* Especifico para Mural (Rosa) */
+  /* Grid Novenas */
+  /* Dias da Novena */
+  /* Container Principal Centralizado */
+  /* Header das Novenas (Ícone e Título) */
+  /* Abas de Filtro (Estilo Cápsula) */
+  /* GRID*/
+  /* 3. CARD DO TERÇO (Visual Idêntico ao Mobile) */
+  /* =================================================================
+     MODAL DE EXAME DE CONSCIÊNCIA (DESKTOP)
+     ================================================================= */
+  /* =================================================================
+     DASHBOARD DESKTOP (V2 - TELA CHEIA E ORGANIZADO)
+     ================================================================= */
+  /* --- CENTRALIZAÇÃO DEFINITIVA DO CARD LEITOR --- */
+  /* Aplica Flexbox no card para centralizar TODOS os filhos */
+  /* Garante que o bloco de texto não tenha margens laterais estranhas */
+}
+@media (min-width: 1024px) and (min-width: 1024px) {
+  .sidebar {
+    width: 280px;
+    height: 100vh;
+    background: var(--card-bg);
+    border-right: 1px solid var(--border);
+    flex-direction: column;
+    padding: 30px;
+    flex-shrink: 0;
+    z-index: 100;
+    overflow-y: auto;
+  }
+  .sidebar-header {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    margin-bottom: 40px;
+  }
+  .sidebar-logo {
+    width: 40px;
+    height: 40px;
+    border-radius: 10px;
+  }
+  .sidebar-header h2 {
+    font-size: 1.4rem;
+    color: var(--primary);
+    margin: 0;
+    font-weight: 800;
+  }
+  .sidebar-menu {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    flex: 1;
+  }
+  .sidebar-item {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    padding: 14px 20px;
+    border-radius: 14px;
+    border: none;
+    background: transparent;
+    color: var(--muted);
+    font-weight: 600;
+    font-size: 0.95rem;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    text-align: left;
+  }
+  .sidebar-item:hover {
+    background: var(--bg);
+    color: var(--text);
+    transform: translateX(4px);
+  }
+  .sidebar-item.active {
+    background: var(--primary) !important;
+    color: white !important;
+    box-shadow: 0 4px 12px rgba(37, 99, 235, 0.3);
+  }
+  .sidebar-item.active span,
+  .sidebar-item.active svg {
+    color: white !important;
+    fill: white !important;
+    stroke: white !important;
+  }
+}
+@media (min-width: 1024px) and (min-width: 1024px) {
+  #tab-inicio {
+    display: grid;
+    grid-template-columns: 2.2fr 1fr;
+    gap: 25px;
+    grid-template-areas: "liturgia santo" "liturgia container-proposito" "liturgia avisos";
+    grid-template-rows: auto auto 1fr;
+    align-items: stretch;
+    max-width: 1600px;
+    margin: 0 auto;
+    height: 100%;
+    padding-bottom: 20px;
+  }
+  #liturgia {
+    grid-area: liturgia;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    border-radius: 24px;
+    margin-bottom: 0 !important;
+  }
+  #liturgia-desktop-container {
+    flex: 1;
+    overflow-y: auto;
+    margin: 10px 0;
+    padding-right: 10px;
+    scrollbar-width: thin;
+  }
+  #santo {
+    grid-area: santo;
+    min-height: 220px;
+    height: 100%;
+    display: flex !important;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    margin-bottom: 0 !important;
+  }
+  #container-proposito {
+    grid-area: container-proposito;
+    display: flex;
+    flex-direction: column;
+  }
+  #container-proposito .card {
+    margin-bottom: 0 !important;
+    border-left: 4px solid #db2777;
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+  }
+  #avisos {
+    grid-area: avisos;
+    margin-top: 0;
+    height: 100%;
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 0 !important;
+  }
+  #lista-avisos {
+    flex: 1;
+  }
+}
+@media (min-width: 1024px) and (min-width: 1024px) {
+  #tab-oracao {
+    width: 100%;
+    height: 100%;
+    padding-bottom: 10px;
+  }
+  .oracao-desktop-view {
+    display: grid !important;
+    grid-template-columns: 250px 1fr 360px;
+    gap: 30px;
+    height: 100%;
+    width: 100%;
+    max-width: none;
+    margin: 0;
+    align-items: stretch;
+  }
+  /* COLUNA 1: MENU LATERAL */
+  .desk-menu-oracao {
+    overflow-y: auto;
+    padding-right: 10px;
+    scrollbar-width: thin;
+  }
+  .desk-menu-oracao h3 {
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin: 20px 0 10px 5px;
+    font-weight: 800;
+    letter-spacing: 1px;
+  }
+  .desk-menu-oracao button {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    width: 100%;
+    text-align: left;
+    padding: 12px 15px;
+    background: transparent;
+    border: 1px solid transparent;
+    border-radius: 12px;
+    margin-bottom: 4px;
+    cursor: pointer;
+    color: var(--muted);
+    font-weight: 600;
+    font-size: 0.9rem;
+    transition: all 0.2s;
+  }
+  .desk-menu-oracao button:hover {
+    background: var(--bg);
+    color: var(--text);
+    padding-left: 18px;
+  }
+  .desk-menu-oracao button.active {
+    background-color: var(--primary-light);
+    color: var(--primary);
+    font-weight: 800;
+    border-left: 4px solid var(--primary);
+    padding-left: 16px;
+  }
+  .desk-menu-oracao button.active span {
+    color: var(--primary);
+    font-variation-settings: "FILL" 1;
+  }
+  /* --- LEITOR CENTRAL (Quadradão) --- */
+  .desk-leitor-central {
+    background: var(--bg);
+    padding: 0;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+  }
+  #leitor-conteudo-desktop {
+    width: 100%;
+    height: 100%;
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 40px;
+  }
+  #leitor-conteudo-desktop.alinhado-topo {
+    justify-content: flex-start !important;
+    padding-top: 60px;
+  }
+  .card-leitor-simulacao {
+    background-color: var(--card-bg);
+    border: 1px solid var(--border);
+    border-radius: 24px;
+    padding: 50px;
+    width: 100%;
+    max-width: 600px;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
+    margin: 0;
+    animation: fadeIn 0.4s ease;
+  }
+  .card-leitor-simulacao h2 {
+    color: var(--text);
+    font-size: 1.8rem;
+    margin: 0 0 10px 0;
+    font-weight: 700;
+  }
+  .card-leitor-simulacao h3 {
+    color: var(--text);
+    font-size: 1.1rem;
+    margin: 0 0 30px 0;
+    opacity: 0.8;
+  }
+  .card-leitor-simulacao .conteudo-texto {
+    font-size: 1.15rem;
+    line-height: 1.8;
+    color: var(--text);
+    white-space: pre-wrap;
+    text-align: center !important;
+    width: 100%;
+  }
+  .conteudo-texto h2 {
+    text-align: center !important;
+  }
+  .card-leitor-simulacao .rodape-texto {
+    margin-top: 30px;
+    padding-top: 20px;
+    border-top: 1px solid var(--border);
+    font-size: 0.9rem;
+    color: var(--muted);
+    font-style: italic;
+    width: 100%;
+  }
+  /*  COLUNA LATERAL DO MURAL (Visual de Card/Modal)  */
+  .desk-mural-lateral {
+    border-radius: 24px !important;
+    border: 1px solid var(--border);
+    background-color: var(--card-bg);
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
+    height: 100%;
+    max-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    position: relative;
+    z-index: 10;
+  }
+  /* 2. Cabeçalho*/
+  .mural-header-desktop {
+    background: var(--card-bg);
+    border-bottom: 1px solid var(--border);
+    padding: 20px 0 10px 0;
+    text-align: center;
+    flex: 0 0 auto;
+  }
+  .mural-header-desktop h3 {
+    font-size: 0.95rem;
+    color: #db2777;
+    text-transform: uppercase;
+    font-weight: 800;
+    margin: 0;
+    letter-spacing: 1px;
+  }
+  /* 3. Área de Inputs */
+  .mural-input-area {
+    padding: 15px 25px;
+    background: var(--card-bg);
+    border-bottom: 1px solid var(--border);
+    flex: 0 0 auto;
+  }
+  #mural-desktop-placeholder {
+    flex: 1 1 0;
+    overflow-y: auto;
+    min-height: 0;
+    padding: 15px 25px;
+    background-color: var(--bg);
+  }
+  .input-mural-desk {
+    width: 100%;
+    padding: 12px;
+    margin-bottom: 10px;
+    border-radius: 12px;
+    border: 1px solid var(--border);
+    background: var(--bg);
+    color: var(--text);
+    font-family: inherit;
+    font-size: 0.9rem;
+    outline: none;
+    box-sizing: border-box;
+  }
+  .input-mural-desk:focus {
+    border-color: #db2777;
+  }
+  .btn-mural-rosa {
+    width: 100%;
+    background: #db2777;
+    color: white;
+    border: none;
+    padding: 12px;
+    border-radius: 8px;
+    font-weight: 700;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    transition: 0.2s;
+    margin-bottom: 15px;
+  }
+  .btn-mural-rosa:hover {
+    background: #be185d;
+  }
+  .mural-abas-desk {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+  }
+  .btn-aba-mural {
+    padding: 6px 16px;
+    border-radius: 20px;
+    border: 1px solid var(--border);
+    background: transparent;
+    color: var(--muted);
+    font-size: 0.85rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: 0.2s;
+  }
+  .btn-aba-mural:hover {
+    border-color: #db2777;
+    color: #db2777;
+  }
+  .btn-aba-mural.active {
+    background: #db2777;
+    border-color: #db2777;
+    color: white;
+  }
+  /* --- ESTILO DOS CARDS NA LISTA --- */
+  #mural-desktop-placeholder .card-pedido {
+    background-color: var(--card-bg) !important;
+    border: 1px solid var(--border) !important;
+    border-radius: 12px;
+    padding: 15px;
+    margin-bottom: 15px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.03);
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    flex-shrink: 0;
+  }
+  #mural-desktop-placeholder .pedido-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 5px;
+    padding-bottom: 8px;
+    border-bottom: 1px solid var(--border);
+  }
+  #mural-desktop-placeholder .pedido-texto {
+    font-size: 0.95rem;
+    line-height: 1.5;
+    color: var(--text);
+    word-wrap: break-word;
+  }
+  #mural-desktop-placeholder .pedido-footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 10px;
+  }
+  #mural-desktop-placeholder .btn-rezar {
+    padding: 6px 14px;
+    border-radius: 20px;
+    font-size: 0.8rem;
+    font-weight: 600;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    background: transparent;
+    border: 1px solid #db2777;
+    color: #db2777;
+  }
+  #mural-desktop-placeholder .btn-rezar.ativo {
+    background: #db2777;
+    color: white;
+  }
+}
+@media (min-width: 1024px) {
+  .abas-container-desk {
+    display: flex;
+    gap: 8px;
+    margin-bottom: 15px;
+    justify-content: center;
+  }
+  .btn-aba-desk,
+  .tab-novena-desk {
+    padding: 6px 14px;
+    border-radius: 20px;
+    border: 1px solid var(--border);
+    background: transparent;
+    color: var(--muted);
+    font-size: 0.8rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+  .btn-aba-desk.active,
+  .tab-novena-desk.active {
+    background-color: var(--primary);
+    color: white;
+    border-color: var(--primary);
+  }
+  .btn-aba-desk.active {
+    background-color: #db2777;
+    border-color: #db2777;
+  }
+  .layout-mobile-fiel {
+    width: 100%;
+    max-width: 480px;
+    text-align: center;
+    color: var(--text);
+  }
+  .layout-mobile-fiel h2 {
+    font-size: 1.4rem;
+    color: var(--text);
+    margin-bottom: 5px;
+    font-weight: 700;
+  }
+  .layout-mobile-fiel h3 {
+    font-size: 1.1rem;
+    color: var(--text);
+    margin-bottom: 30px;
+    font-weight: 700;
+  }
+  .lista-terco-fiel {
+    text-align: center;
+    font-size: 1.05rem;
+    line-height: 2.4;
+  }
+  .linha-separadora {
+    border: 0;
+    border-top: 1px solid var(--border);
+    margin: 30px auto;
+    width: 100%;
+    opacity: 0.3;
+  }
+  .texto-meditacao-fiel {
+    font-style: italic;
+    font-size: 0.95rem;
+    color: var(--muted);
+    line-height: 1.6;
+  }
+  .novena-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+    gap: 15px;
+    width: 100%;
+    margin-top: 20px;
+  }
+  .card-novena-desk {
+    background: var(--bg);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    padding: 20px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    text-align: left;
+  }
+  .card-novena-desk:hover {
+    border-color: var(--primary);
+    transform: translateY(-3px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+  }
+  .grid-dias-novena {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(80px, 1fr));
+    gap: 10px;
+    width: 100%;
+    margin-top: 20px;
+  }
+  .btn-dia-novena {
+    background-color: var(--bg);
+    border: 1px solid var(--border);
+    color: var(--text);
+    padding: 15px 10px;
+    border-radius: 12px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 50px;
+  }
+  .btn-dia-novena:hover {
+    border-color: var(--primary);
+    background-color: var(--card-bg);
+    transform: translateY(-2px);
+  }
+  .btn-dia-novena.concluido {
+    background-color: var(--primary) !important;
+    color: white !important;
+    border-color: var(--primary) !important;
+  }
+  .novenas-wrapper {
+    width: 100%;
+    max-width: 1000px;
+    margin: 0 auto;
+  }
+  .novenas-header {
+    text-align: center;
+    margin-bottom: 30px;
+  }
+  .novenas-header h2 {
+    font-size: 1.8rem;
+    color: var(--text);
+    margin: 10px 0 5px 0;
+  }
+  .tabs-novena-container {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+    margin-bottom: 30px;
+  }
+  .tab-novena-desk {
+    padding: 8px 20px;
+    border-radius: 25px;
+    border: 1px solid var(--border);
+    background: transparent;
+    color: var(--muted);
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s ease;
+  }
+  .tab-novena-desk:hover {
+    border-color: var(--primary);
+    color: var(--primary);
+  }
+  .tab-novena-desk.active {
+    background-color: var(--primary);
+    color: white;
+    border-color: var(--primary);
+    box-shadow: 0 4px 12px rgba(37, 99, 235, 0.2);
+  }
+  .novena-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+    gap: 20px;
+    width: 100%;
+  }
+  .card-novena-desk {
+    background-color: var(--card-bg);
+    border: 1px solid var(--border);
+    border-radius: 20px;
+    padding: 25px;
+    position: relative;
+    cursor: pointer;
+    transition: transform 0.2s, box-shadow 0.2s, border-color 0.2s;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    min-height: 140px;
+  }
+  .card-novena-desk:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.06);
+    border-color: var(--primary);
+  }
+  .card-novena-info strong {
+    display: block;
+    font-size: 1.1rem;
+    color: var(--text);
+    margin-bottom: 8px;
+  }
+  .card-novena-info span {
+    font-size: 0.9rem;
+    color: var(--muted);
+    background: var(--bg);
+    padding: 4px 10px;
+    border-radius: 8px;
+    display: inline-block;
+  }
+  .card-novena-arrow {
+    width: 40px;
+    height: 40px;
+    background-color: var(--bg);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--primary);
+    align-self: flex-end;
+    margin-top: 15px;
+    transition: background 0.2s;
+  }
+  .card-novena-desk:hover .card-novena-arrow {
+    background-color: var(--primary);
+    color: white;
+  }
+  #btn-tema-desk {
+    background: var(--bg);
+    border: 1px solid var(--border);
+    color: var(--text);
+    width: 45px;
+    height: 45px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.3s ease;
+  }
+  #btn-tema-desk:hover {
+    background: var(--card-bg);
+    transform: rotate(30deg);
+    border-color: var(--primary);
+    color: var(--primary);
+  }
+  .sidebar-item#btn-sidebar-confissao.active {
+    background-color: #9333ea !important;
+    border-color: #9333ea !important;
+    color: white !important;
+    box-shadow: 0 4px 15px rgba(147, 51, 234, 0.4) !important;
+  }
+  .sidebar-item#btn-sidebar-confissao.active span {
+    color: white !important;
+  }
+  .sidebar-item#btn-sidebar-confissao:hover {
+    color: #9333ea;
+  }
+  .sidebar-item#btn-sidebar-confissao.active:hover {
+    color: white !important;
+    opacity: 0.9;
+  }
+  .sidebar-item#btn-sidebar-confissao.active {
+    background-color: #9333ea !important;
+    color: white !important;
+    box-shadow: 0 4px 15px rgba(147, 51, 234, 0.4) !important;
+  }
+  .sidebar-item#btn-sidebar-confissao.active span {
+    color: white !important;
+  }
+  .sidebar-item#btn-sidebar-confissao:hover {
+    color: #9333ea;
+    background-color: rgba(147, 51, 234, 0.1);
+  }
+  #btn-tema-desk {
+    width: 45px;
+    height: 45px;
+    border-radius: 50%;
+    border: 1px solid var(--border);
+    background: var(--card-bg);
+    color: var(--text);
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
+  }
+  #btn-tema-desk:hover {
+    transform: rotate(45deg) scale(1.1);
+    border-color: var(--primary);
+    color: var(--primary);
+    background: var(--bg);
+  }
+  .desk-menu-oracao button span {
+    font-size: 22px;
+  }
+  .grid-confissao-wrapper {
+    display: block;
+    width: 100%;
+  }
+}
+@media (min-width: 1024px) and (min-width: 1024px) {
+  .confissao-desktop-view {
+    width: 100%;
+    max-width: 1200px;
+    margin: 0 auto;
+    display: block !important;
+  }
+  .grid-confissao-wrapper {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 25px;
+    align-items: stretch;
+    margin-bottom: 25px;
+  }
+  .grid-confissao-wrapper .card {
+    height: 100%;
+    margin-bottom: 0;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+  }
+}
+@media (min-width: 1024px) {
+  #leitor-conteudo-desktop {
+    flex: 1;
+    overflow-y: auto;
+    padding: 40px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+  .conteudo-leitor-centralizado {
+    width: 100%;
+    max-width: 650px;
+    text-align: center;
+    animation: fadeIn 0.3s ease;
+  }
+  @keyframes fadeIn {
+    from {
+      opacity: 0;
+      transform: translateY(5px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+  .texto-oracao-leitor {
+    font-size: 1.35rem;
+    line-height: 2;
+    color: var(--text);
+    text-align: center;
+    margin-top: 20px;
+    padding: 30px;
+    background: var(--bg);
+    border-radius: 16px;
+    border: 1px solid var(--border);
+    width: 100%;
+    max-width: 700px;
+  }
+  .card-terco-desktop {
+    background: var(--card-bg);
+    border: 1px solid var(--border);
+    border-radius: 20px;
+    padding: 30px;
+    text-align: left; /* Mobile geralmente é alinhado à esquerda */
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+  }
+  .card-terco-desktop h2 {
+    margin: 0 0 15px 0;
+    color: var(--text);
+    font-size: 1.6rem;
+    border-bottom: 1px solid var(--border);
+    padding-bottom: 10px;
+  }
+  .card-terco-desktop h3 {
+    color: var(--primary);
+    font-size: 1.2rem;
+    margin: 10px 0 5px 0;
+  }
+  .terco-lista-desk {
+    font-size: 1.05rem;
+    line-height: 1.8;
+    color: var(--text);
+    margin-bottom: 20px;
+  }
+}
+@media (min-width: 1024px) and (min-width: 1024px) {
+  .grid-confissao-wrapper {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 30px;
+    align-items: stretch;
+    height: auto;
+  }
+  /* --- ESTILO DO MODAL NO DESKTOP (JANELA FLUTUANTE) --- */
+  .modal {
+    display: none; /* Controlado pelo JS */
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(15, 23, 42, 0.85); /* Fundo escuro com blur */
+    -webkit-backdrop-filter: blur(8px);
+            backdrop-filter: blur(8px);
+    z-index: 9999;
+    /* Centraliza o conteúdo do modal */
+    align-items: center;
+    justify-content: center;
+  }
+  /* A Caixa do Modal */
+  .modal-content {
+    background-color: var(--card-bg);
+    border: 1px solid var(--border);
+    width: 100%;
+    max-width: 650px; /* Largura ideal para leitura */
+    max-height: 85vh; /* Altura máxima para não estourar a tela */
+    border-radius: 24px;
+    box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.6);
+    display: flex;
+    flex-direction: column;
+    position: relative;
+    margin: 0; /* Remove margens do mobile */
+    animation: zoomIn 0.25s ease cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  }
+  @keyframes zoomIn {
+    from {
+      transform: scale(0.95);
+      opacity: 0;
+    }
+    to {
+      transform: scale(1);
+      opacity: 1;
+    }
+  }
+  /* Header do Modal */
+  .modal-header {
+    padding: 20px 30px;
+    border-bottom: 1px solid var(--border);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: var(--card-bg);
+    border-radius: 24px 24px 0 0;
+  }
+  .modal-header h3 {
+    font-size: 1.4rem;
+    margin: 0;
+  } /* Roxo Confissão */
+  /* Corpo com Scroll */
+  .modal-body {
+    padding: 30px;
+    overflow-y: auto;
+    /* Scrollbar bonita */
+  }
+  .modal-body::-webkit-scrollbar {
+    width: 8px;
+  }
+  .modal-body::-webkit-scrollbar-track {
+    background: transparent;
+  }
+  .modal-body::-webkit-scrollbar-thumb {
+    background: #334155;
+    border-radius: 10px;
+  }
+  /* Botão Fechar */
+  .close-modal {
+    background: transparent;
+    border: none;
+    color: var(--muted);
+    font-size: 2rem;
+    cursor: pointer;
+    transition: 0.2s;
+    display: flex;
+    align-items: center;
+  }
+  .close-modal:hover {
+    color: #ef4444;
+    transform: scale(1.1);
+  }
+  /* Ajuste das Listas e Checkboxes no Desktop */
+  .lista-exame li {
+    padding: 12px 0;
+    border-bottom: 1px solid rgba(148, 163, 184, 0.1);
+  }
+  .lista-exame label {
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+    cursor: pointer;
+    font-size: 1rem;
+    line-height: 1.5;
+    color: var(--text);
+  }
+  .check-roxo {
+    accent-color: #9333ea;
+    width: 18px;
+    height: 18px;
+    margin-top: 3px;
+  }
+}
+@media (min-width: 1024px) and (min-width: 1024px) {
+  /* Container Principal Flexível */
+  .dashboard-desktop-wrapper {
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    padding: 30px 40px;
+    box-sizing: border-box;
+    max-width: 1600px;
+    margin: 0 auto;
+    gap: 25px; /* Espaço entre Header, Grid e Footer */
+  }
+  /* 1. Cabeçalho Azul (Estilo Banner) */
+  .desk-header-banner {
+    background-color: #2563eb; /* Azul padrão */
+    color: white;
+    padding: 20px;
+    border-radius: 16px;
+    text-align: center;
+    box-shadow: 0 4px 15px rgba(37, 99, 235, 0.3);
+    flex-shrink: 0; /* Não encolhe */
+  }
+  .desk-header-banner h2 {
+    margin: 0;
+    font-size: 1.5rem;
+    font-weight: 800;
+  }
+  .desk-header-banner p {
+    margin: 5px 0 0 0;
+    opacity: 0.9;
+    font-size: 0.9rem;
+  }
+  /* 2. Grid Gigante (Ocupa o resto da tela) */
+  .dashboard-grid-zao {
+    flex: 1; /* Ocupa todo o espaço vertical disponível */
+    display: grid;
+    grid-template-columns: 1fr 1fr; /* 50% / 50% */
+    gap: 30px;
+    min-height: 0; /* Importante para o scroll interno funcionar */
+  }
+  /* Cards (Calendário e Notas) */
+  .dashboard-card {
+    background: var(--card-bg);
+    border: 1px solid var(--border);
+    border-radius: 24px;
+    padding: 30px;
+    height: 100%; /* Força altura total do pai */
+    display: flex;
+    flex-direction: column;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.03);
+    box-sizing: border-box;
+  }
+  /* Header Limpo dentro do Card */
+  .dashboard-header-clean {
+    margin-bottom: 20px;
+    padding-bottom: 15px;
+    border-bottom: 1px solid var(--border);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-shrink: 0;
+  }
+  /* --- CALENDÁRIO GRANDE --- */
+  .calendar-grid-desk {
+    flex: 1; /* Ocupa todo espaço disponível no card */
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    grid-auto-rows: 1fr; /* Faz as linhas terem altura igual e distribuída */
+    gap: 10px;
+    align-items: center;
+  }
+  /* Estilo dos dias no Desktop (Grandes e Centralizados) */
+  .calendar-grid-desk > div {
+    font-size: 1.1rem; /* Fonte maior */
+    font-weight: 500;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 12px; /* Quadrado arredondado em vez de círculo fica melhor grande */
+    transition: all 0.2s;
+  }
+  .calendar-grid-desk > div:hover {
+    background-color: var(--bg);
+  }
+  .dashboard-detalhes {
+    margin-top: 20px;
+    padding-top: 15px;
+    border-top: 1px solid var(--border);
+    text-align: center;
+    font-size: 1rem;
+    min-height: 70px;
+    flex-shrink: 0;
+  }
+  /* --- NOTAS (GIGANTE) --- */
+  #desk-area-notas {
+    flex: 1; /* Ocupa todo o resto do card */
+    width: 100%;
+    background: transparent;
+    border: none;
+    resize: none;
+    font-family: inherit;
+    font-size: 1.2rem; /* Letra maior */
+    color: var(--text);
+    line-height: 1.6;
+    outline: none;
+    padding: 10px;
+    /* Pauta Sutil */
+    background-image: linear-gradient(transparent, transparent 39px, rgba(148, 163, 184, 0.1) 39px, rgba(148, 163, 184, 0.1) 40px);
+    background-size: 100% 40px;
+    line-height: 40px;
+  }
+  /* 3. Rodapé Discreto (Links) */
+  .desk-footer-botoes {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 15px;
+    padding-top: 10px;
+    flex-shrink: 0;
+  }
+  .desk-footer-botoes button {
+    background: none;
+    border: none;
+    color: var(--muted);
+    font-size: 0.85rem;
+    font-weight: 600;
+    cursor: pointer;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    transition: 0.2s;
+  }
+  .desk-footer-botoes button:hover {
+    color: var(--primary);
+    transform: translateY(-2px);
+  }
+  .separador {
+    color: var(--border);
+  }
+}
+@media (min-width: 1024px) {
+  .card-leitor-simulacao {
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: center !important; /* Centraliza horizontalmente */
+    justify-content: center !important; /* Centraliza verticalmente (se houver altura sobrando) */
+    text-align: center !important; /* Garante que o texto dentro dos elementos também fique centralizado */
+  }
+  .card-leitor-simulacao .conteudo-texto {
+    margin-left: auto !important;
+    margin-right: auto !important;
+    width: auto !important; /* Deixa a largura se ajustar ao conteúdo */
+    max-width: 80% !important; /* Limita a largura para não ficar muito extenso */
+  }
 }/*# sourceMappingURL=main.css.map */

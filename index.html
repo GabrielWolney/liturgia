@@ -25,7 +25,72 @@
       <img src="logo-agape.png" alt="Carregando..." class="splash-logo" />
     </div>
 
-    <header class="topo" id="home">
+    <aside class="sidebar desktop-only">
+        <div class="sidebar-header">
+            <img src="logo-agape.png" class="sidebar-logo" alt="Logo">
+            <div>
+                <h2>LITURGIA</h2>
+                <p>Ágape de Jovens</p>
+            </div>
+        </div>
+
+        <nav class="sidebar-menu">
+            <button class="sidebar-item active" onclick="navegarDesktop('tab-inicio')" id="btn-sidebar-inicio">
+                <span class="material-symbols-rounded">church</span>
+                <span>Início</span>
+            </button>
+            
+            <button class="sidebar-item" onclick="navegarDesktop('tab-oracao')" id="btn-sidebar-oracao">
+                <svg class="icone-oracao-custom" viewBox="0 0 682.67 682.67" xmlns="http://www.w3.org/2000/svg" style="width: 24px; height: 24px; fill: currentColor;">
+                    <g transform="matrix(1.33,0,0,-1.33,0,682.67)">
+                        <g>
+                            <path d="m 0,0 v 120 h -40 v 40 H 0 v 60 H 40 V 160 H 80 V 120 H 40 V 0 Z" transform="translate(58,282)" />
+                            <path d="m 0,0 -90.48,60.31 -56.19,-75.87 90,-60 86.65,115.54 c 2.19,2.92 3.54,6.38 3.9,10.01 l 16.17,161.63 c 0.21,2.05 0.2,4.07 0,6.03 -1.31,12.85 -10.87,23.48 -23.5,26.15 -2,0.42 -4.08,0.64 -6.21,0.64 -15.33,0 -28.17,-11.62 -29.7,-26.88 l -9.31,-93.12" transform="translate(247.67,85.56)" />
+                            <path d="M 0,0 -24.93,16.62" transform="translate(155.68,93.55)" />
+                            <path d="m 0,0 22.27,105.65 c 4.3,23.68 9.62,48.22 15.91,72.91" transform="translate(157.19,145.87)" />
+                            <path d="m 0,0 c 10.66,31.02 22.89,61.05 36.67,88.61 3.77,7.53 11.47,12.29 19.9,12.29 12.48,0 22.24,-10.17 22.24,-22.2 0,-1.21 -0.1,-2.45 -0.31,-3.7 L 56.01,-71.93" transform="translate(218.18,401.1)" />
+                            <path d="m 0,0 90.47,60.31 56.19,-75.87 -90,-60 -86.65,115.54 c -2.19,2.92 -3.54,6.38 -3.9,10.01 l -16.16,161.63 c -0.21,2.05 -0.2,4.07 0,6.03 1.31,12.85 10.86,23.48 23.49,26.15 2,0.42 4.08,0.64 6.21,0.64 15.34,0 28.18,-11.62 29.7,-26.88 L 18.66,124.44" transform="translate(347.77,85.56)" />
+                            <path d="m 0,0 24.55,16.37 h 0.01" transform="translate(440.13,93.8)" />
+                            <path d="m 0,0 -22.26,105.65 c -14.29,78.59 -39.68,166.74 -75.4,238.19 -3.77,7.53 -11.47,12.29 -19.89,12.29 -12.48,0 -22.25,-10.17 -22.25,-22.2 0,-1.22 0.1,-2.45 0.31,-3.7 L -117,183.3" transform="translate(438.24,145.87)" />
+                            <path  d="m 0,0 c 5.52,0 10,-4.48 10,-10 0,-5.52 -4.48,-10 -10,-10 -5.52,0 -10,4.48 -10,10 0,5.52 4.48,10 10,10" transform="translate(206,373)" />
+                        </g>
+                    </g>
+                </svg>
+                <span>Oração</span>
+            </button>
+
+            <button class="sidebar-item" onclick="navegarDesktop('tab-biblia')" id="btn-sidebar-biblia">
+                <span class="material-symbols-rounded">auto_stories</span>
+                <span>Bíblia Sagrada</span>
+            </button>
+            
+            <button class="sidebar-item" onclick="navegarDesktop('tab-confissao')" id="btn-sidebar-confissao">
+                <svg class="icone-estola-linear" viewBox="0 0 512 512" xmlns="http://www.w3.org/2000/svg" style="width: 24px; height: 24px; fill: none; stroke: currentColor; stroke-width: 20px;">
+                    <g class="traco-estola">
+                        <polyline points="195.8,15 195.8,497 75.3,497 75.3,135.5 195.8,15 316.2,15 436.7,135.5 436.7,497 316.2,497 316.2,15 "/>
+                        <line x1="195.8" y1="135.5" x2="316.4" y2="135.5"/>
+                        <line x1="135.5" y1="250" x2="135.5" y2="380"/> <line x1="95" y1="290" x2="175" y2="290"/> 
+                        <line x1="376.5" y1="250" x2="376.5" y2="380"/> <line x1="336" y1="290" x2="416" y2="290"/>
+                    </g>
+                </svg>
+                <span>Confissão</span>
+            </button>
+
+            <button class="sidebar-item" onclick="navegarDesktop('tab-menu')" id="btn-sidebar-menu">
+                <span class="material-symbols-rounded">grid_view</span>
+                <span>Menu</span>
+            </button>
+        </nav>
+
+        <div class="sidebar-footer">
+            <button id="btn-tema-desk" class="btn-icon">
+                <span class="material-symbols-rounded">dark_mode</span>
+            </button>
+            <span style="font-size: 10px;">v1.0 Desktop</span>
+        </div>
+    </aside>
+
+    <header class="topo mobile-only" id="home">
       <div class="header-container">
         <img src="logo-agape.png" alt="Logo" class="logo-header" />
         <h1>LITURGIA</h1>
@@ -58,13 +123,23 @@
         </section>
 
         <section class="card" id="liturgia">
-          <h2>Liturgia do Dia</h2>
-          <div id="resumo-leituras" class="resumo-texto">
-            <p>Carregando leituras...</p>
+          <div class="liturgia-header">
+            <h2>Liturgia do Dia</h2>
           </div>
-          <button class="btn-primary" id="btn-abrir-liturgia">
-            Ver Liturgia Completa
-          </button>
+          
+          <div class="mobile-only" style="flex-direction: column; width: 100%;">
+              <div id="resumo-leituras" class="resumo-texto">
+                <p>Carregando leituras...</p>
+              </div>
+              <button class="btn-primary" id="btn-abrir-liturgia">
+                Ver Liturgia Completa
+              </button>
+          </div>
+
+          <div id="liturgia-desktop-container" class="desktop-only">
+              <div id="liturgia-desktop-texto">Carregando leituras completas...</div>
+          </div>
+
           <hr class="card-divider" />
           <div class="feedback-leitura">
             <button id="btn-li-a-leitura" class="btn-outline">
@@ -85,18 +160,19 @@
 
       <section id="tab-oracao" class="conteudo-aba" style="display: none;">
 
-        <div class="card">
-            <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 10px;">
-                 <h2 style="margin: 0;">Santo Terço</h2>
+        <div class="oracao-mobile-view mobile-only" style="flex-direction: column; width: 100%;">
+            <div class="card">
+                <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 10px;">
+                      <h2 style="margin: 0;">Santo Terço</h2>
+                </div>
+                
+                <h3 id="titulo-misterio" style="color: var(--text); font-size: 1rem; margin-top: 5px;">Carregando Mistério...</h3>
+                <div id="descricao-misterio" style="font-size: 0.9rem; color: var(--muted); margin-bottom: 15px;">
+                    Verificando o dia da semana...
+                </div>
             </div>
             
-            <h3 id="titulo-misterio" style="color: var(--text); font-size: 1rem; margin-top: 5px;">Carregando Mistério...</h3>
-            <div id="descricao-misterio" style="font-size: 0.9rem; color: var(--muted); margin-bottom: 15px;">
-                Verificando o dia da semana...
-            </div>
-        </div>
-        
-        <div class="card" onclick="abrirListaNovenas()" style="cursor: pointer; display: flex; align-items: center; justify-content: space-between; gap: 15px; margin-top: 20px;">
+            <div class="card" onclick="abrirListaNovenas()" style="cursor: pointer; display: flex; align-items: center; justify-content: space-between; gap: 15px;">
             <div style="display: flex; align-items: center; gap: 15px;">
                 <div style="background: var(--bg); padding: 10px; border-radius: 12px; display: flex; align-items: center; justify-content: center;">
                     <span class="material-symbols-rounded" style="color: var(--primary); font-size: 24px;">calendar_month</span>
@@ -108,51 +184,132 @@
             </div>
         </div>
 
-        <div class="card" style="border-left: 4px solid #db2777;">
-            <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 10px;">
-                <h2 style="margin: 0; color: #db2777;">Mural de Intercessão</h2>
+            <div class="card" style="border-left: 4px solid #db2777;">
+                <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 10px;">
+                    <h2 style="margin: 0; color: #db2777;">Mural de Intercessão</h2>
+                </div>
+                <p style="font-size: 0.9rem; margin-bottom: 15px;">
+                    Peça orações à comunidade ou reze por alguém que precisa hoje.
+                </p>
+                <button class="btn-primary" onclick="abrirMuralPedidos()" style="background-color: #db2777;">
+                    Ver Pedidos e Rezar
+                </button>
             </div>
-            <p style="font-size: 0.9rem; margin-bottom: 15px;">
-                Peça orações à comunidade ou reze por alguém que precisa hoje.
-            </p>
-            <button class="btn-primary" onclick="abrirMuralPedidos()" style="background-color: #db2777;">
-                Ver Pedidos e Rezar
-            </button>
-        </div>
-        
-        <div class="card" id="horas">
-            <div style="display: flex; align-items: center; justify-content: center; gap: 10px; margin-bottom: 15px; width: 100%;">
-                <span class="material-symbols-rounded" style="color: var(--primary); font-size: 28px;">schedule</span>
-                <h2 style="margin: 0;">Liturgia das Horas</h2>
+            
+            <div class="card" id="horas">
+                <div style="display: flex; align-items: center; justify-content: center; gap: 10px; margin-bottom: 15px; width: 100%;">
+                    <span class="material-symbols-rounded" style="color: var(--primary); font-size: 28px;">schedule</span>
+                    <h2 style="margin: 0;">Liturgia das Horas</h2>
+                </div>
+                <div class="botoes-horas">
+                    <button class="btn-hora" onclick="abrirHora('laudes')">Laudes</button>
+                    <button class="btn-hora" onclick="abrirHora('vesperas')">Vésperas</button>
+                    <button class="btn-hora" onclick="abrirHora('completas')">Completas</button>
+                </div>
+                <button class="btn-primary" id="btn-explicar-horas">
+                    O que é a Liturgia das Horas?
+                  </button>
             </div>
-            <div class="botoes-horas">
-                <button class="btn-hora" onclick="abrirHora('laudes')">Laudes</button>
-                <button class="btn-hora" onclick="abrirHora('vesperas')">Vésperas</button>
-                <button class="btn-hora" onclick="abrirHora('completas')">Completas</button>
+
+            <div class="card">
+                <h2>Orações Essenciais</h2>
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px; width: 100%; margin-top: 10px;">
+                    <button class="btn-livro" onclick="abrirOracao('pai-nosso')">Pai Nosso</button>
+                    <button class="btn-livro" onclick="abrirOracao('ave-maria')">Ave Maria</button>
+                    <button class="btn-livro" onclick="abrirOracao('gloria-pai')">Glória ao Pai</button>
+                    <button class="btn-livro" onclick="abrirOracao('credo')">Credo</button>
+                    <button class="btn-livro" onclick="abrirOracao('salve-rainha')">Salve Rainha</button>     
+                    <button class="btn-livro" onclick="abrirOracao('santo-anjo')">Santo Anjo</button>
+                    <button class="btn-livro" onclick="abrirOracao('sao-miguel')">São Miguel</button>
+                    <button class="btn-livro" onclick="abrirOracao('sao-bento')">São Bento</button>         
+                    <button class="btn-livro" onclick="abrirOracao('vinde-espirito')">Espírito Santo</button>
+                    <button class="btn-livro" onclick="abrirOracao('alma-cristo')">Alma de Cristo</button>
+                </div>
             </div>
-            <button class="btn-primary" id="btn-explicar-horas">
-                O que é a Liturgia das Horas?
-              </button>
+            
+            <div style="height: 100px;"></div>
         </div>
 
-        <div class="card">
-            <h2>Orações Essenciais</h2>
-            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px; width: 100%; margin-top: 10px;">
-                <button class="btn-livro" onclick="abrirOracao('pai-nosso')">Pai Nosso</button>
-                <button class="btn-livro" onclick="abrirOracao('ave-maria')">Ave Maria</button>
-                <button class="btn-livro" onclick="abrirOracao('gloria-pai')">Glória ao Pai</button>
-                <button class="btn-livro" onclick="abrirOracao('credo')">Credo</button>
-                <button class="btn-livro" onclick="abrirOracao('salve-rainha')">Salve Rainha</button>    
-                <button class="btn-livro" onclick="abrirOracao('santo-anjo')">Santo Anjo</button>
-                <button class="btn-livro" onclick="abrirOracao('sao-miguel')">São Miguel</button>
-                <button class="btn-livro" onclick="abrirOracao('sao-bento')">São Bento</button>        
-                <button class="btn-livro" onclick="abrirOracao('vinde-espirito')">Espírito Santo</button>
-                <button class="btn-livro" onclick="abrirOracao('alma-cristo')">Alma de Cristo</button>
+        <div class="oracao-desktop-view desktop-only">
+            
+            <div class="desk-menu-oracao">
+                <h3>Devocional</h3>
+                <button onclick="carregarLeitor('terco')">
+                    <svg class="icone-oracao-custom" viewBox="0 0 682.67 682.67" xmlns="http://www.w3.org/2000/svg" style="width: 24px; height: 24px; fill: currentColor;">
+                    <g transform="matrix(1.33,0,0,-1.33,0,682.67)">
+                        <g>
+                            <path d="m 0,0 v 120 h -40 v 40 H 0 v 60 H 40 V 160 H 80 V 120 H 40 V 0 Z" transform="translate(58,282)" />
+                            <path d="m 0,0 -90.48,60.31 -56.19,-75.87 90,-60 86.65,115.54 c 2.19,2.92 3.54,6.38 3.9,10.01 l 16.17,161.63 c 0.21,2.05 0.2,4.07 0,6.03 -1.31,12.85 -10.87,23.48 -23.5,26.15 -2,0.42 -4.08,0.64 -6.21,0.64 -15.33,0 -28.17,-11.62 -29.7,-26.88 l -9.31,-93.12" transform="translate(247.67,85.56)" />
+                            <path d="M 0,0 -24.93,16.62" transform="translate(155.68,93.55)" />
+                            <path d="m 0,0 22.27,105.65 c 4.3,23.68 9.62,48.22 15.91,72.91" transform="translate(157.19,145.87)" />
+                            <path d="m 0,0 c 10.66,31.02 22.89,61.05 36.67,88.61 3.77,7.53 11.47,12.29 19.9,12.29 12.48,0 22.24,-10.17 22.24,-22.2 0,-1.21 -0.1,-2.45 -0.31,-3.7 L 56.01,-71.93" transform="translate(218.18,401.1)" />
+                            <path d="m 0,0 90.47,60.31 56.19,-75.87 -90,-60 -86.65,115.54 c -2.19,2.92 -3.54,6.38 -3.9,10.01 l -16.16,161.63 c -0.21,2.05 -0.2,4.07 0,6.03 1.31,12.85 10.86,23.48 23.49,26.15 2,0.42 4.08,0.64 6.21,0.64 15.34,0 28.18,-11.62 29.7,-26.88 L 18.66,124.44" transform="translate(347.77,85.56)" />
+                            <path d="m 0,0 24.55,16.37 h 0.01" transform="translate(440.13,93.8)" />
+                            <path d="m 0,0 -22.26,105.65 c -14.29,78.59 -39.68,166.74 -75.4,238.19 -3.77,7.53 -11.47,12.29 -19.89,12.29 -12.48,0 -22.25,-10.17 -22.25,-22.2 0,-1.22 0.1,-2.45 0.31,-3.7 L -117,183.3" transform="translate(438.24,145.87)" />
+                            <path  d="m 0,0 c 5.52,0 10,-4.48 10,-10 0,-5.52 -4.48,-10 -10,-10 -5.52,0 -10,4.48 -10,10 0,5.52 4.48,10 10,10" transform="translate(206,373)" />
+                        </g>
+                    </g>
+                </svg> Santo Terço
+                </button>
+                <button onclick="carregarLeitor('novenas')">
+                    <span class="material-symbols-rounded">calendar_month</span> Novenas
+                </button>
+                
+                <h3>Ofício Divino</h3>
+                <button onclick="carregarLeitor('laudes')">
+                    <span class="material-symbols-rounded">wb_sunny</span> Laudes
+                </button>
+                <button onclick="carregarLeitor('vesperas')">
+                    <span class="material-symbols-rounded">wb_twilight</span> Vésperas
+                </button>
+                <button onclick="carregarLeitor('completas')">
+                    <span class="material-symbols-rounded">nights_stay</span> Completas
+                </button>
+                <button onclick="carregarLeitor('explicacao-horas')" style="font-size: 0.85rem; color: var(--primary);">
+                    <span class="material-symbols-rounded">help</span> O que é isso?
+                </button>
+
+                <h3>Orações Essenciais</h3>
+                <button onclick="carregarLeitor('pai-nosso')">Pai Nosso</button>
+                <button onclick="carregarLeitor('ave-maria')">Ave Maria</button>
+                <button onclick="carregarLeitor('gloria-pai')">Glória ao Pai</button>
+                <button onclick="carregarLeitor('credo')">Credo</button>
+                <button onclick="carregarLeitor('salve-rainha')">Salve Rainha</button>
+                <button onclick="carregarLeitor('santo-anjo')">Santo Anjo</button>
+                <button onclick="carregarLeitor('sao-miguel')">São Miguel</button>
+                <button onclick="carregarLeitor('sao-bento')">São Bento</button>
+                <button onclick="carregarLeitor('vinde-espirito')">Espírito Santo</button>
+                <button onclick="carregarLeitor('alma-cristo')">Alma de Cristo</button>
             </div>
+
+            <div class="desk-leitor-central">
+                <div id="leitor-conteudo-desktop">
+                    <div class="placeholder-leitor">
+                        <p>Selecione uma oração ao lado.</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="desk-mural-lateral">
+                <div class="mural-header-desktop">
+                    <h3>Mural de Intercessão</h3>
+                </div>
+                
+                <div class="mural-input-area">
+                      <input type="text" id="desk-nome-orante" class="input-mural-desk" placeholder="Seu nome (Opcional)">
+                      <textarea id="desk-texto-pedido" class="input-mural-desk" placeholder="Escreva seu pedido de oração..." style="height: 70px; resize: none;"></textarea>
+                      <button onclick="window.enviarPedidoMuralDesktop()" class="btn-primary" style="background: #db2777; width: 100%; margin-top: 5px; display: flex; align-items: center; justify-content: center; gap: 8px;">
+                        <span class="material-symbols-rounded" style="font-size: 18px;">send</span> Publicar
+                      </button>
+                </div>
+
+                <div id="mural-desktop-placeholder">
+                    <div style="text-align: center; padding: 20px; color: var(--muted);">Carregando...</div>
+                </div>
+            </div>
+
         </div>
-        
-        <div style="height: 100px;"></div>
-      </section>
+        </section>
 
       <div id="tab-biblia" class="conteudo-aba" style="display: none;">
         <section class="card" style="margin-bottom: 5px !important; padding-bottom: 15px;">
@@ -172,206 +329,362 @@
         <div style="height: 100px;"></div>
       </div>
 
-      <div id="tab-confissao" class="conteudo-aba" style="display: none">
+      <div id="tab-confissao" class="conteudo-aba" style="display: none;">
+
+    <div class="mobile-only" style="width: 100%; display: flex; flex-direction: column;">
+        
         <section class="card" style="text-align: center; background: linear-gradient(135deg, #581c87 0%, #9333ea 100%); color: white; padding: 25px 20px;">
-          <svg class="icone-estola-complexa svg-card-grande" viewBox="0 0 225 225" xmlns="http://www.w3.org/2000/svg">
-            <g transform="translate(0,225) scale(0.1,-0.1)">
-                <path class="parte-tecido" d="M1011 2240 c-197 -28 -402 -144 -531 -302 -60 -74 -143 -237 -165 -323 -8 -33 -20 -98 -25 -145 -14 -117 -13 -1425 0 -1451 10 -18 24 -19 303 -19 215 0 296 3 305 12 9 9 12 204 12 814 l0 802 48 13 c26 7 101 14 167 15 66 2 124 3 128 3 20 2 0 46 -23 52 -56 16 -230 6 -301 -16 -18 -6 -19 0 -19 85 0 106 14 148 68 203 78 80 202 83 285 8 82 -74 77 0 77 -1042 0 -706 3 -928 12 -937 9 -9 90 -12 305 -12 284 0 293 1 303 20 8 15 10 239 7 763 -3 720 -4 744 -25 823 -80 306 -310 538 -608 614 -88 23 -237 32 -323 20z m297 -75 c75 -18 191 -70 259 -116 154 -106 261 -259 315 -454 22 -79 22 -90 22 -735 l1 -655 -155 -5 c-141 -5 -155 -7 -158 -24 -2 -10 2 -22 10 -27 7 -5 80 -9 161 -9 l148 0 -3 -37 -3 -38 -252 -3 -253 -2 0 40 0 40 44 0 c83 0 91 57 9 62 l-48 3 -5 855 -5 855 -27 45 c-55 93 -139 143 -243 144 -103 1 -188 -50 -243 -144 l-27 -45 -3 -858 -2 -857 -253 2 -252 3 0 630 c0 686 1 700 57 848 80 210 269 392 479 462 138 46 283 53 427 20z m-458 -2065 l0 -40 -252 2 -253 3 -3 38 -3 37 255 0 256 0 0 -40z"/>
-                <path class="parte-cruz" d="M577 723 c-4 -3 -7 -26 -7 -50 l0 -43 -44 0 c-83 0 -91 -57 -9 -62 l48 -3 3 -118 c2 -93 6 -119 17 -124 35 -13 45 15 45 133 l0 113 47 3 c37 2 49 7 51 22 5 24 -14 36 -60 36 -36 0 -38 1 -38 34 0 19 -3 41 -6 50 -6 16 -35 22 -47 9z"/>
-                <path class="parte-cruz" d="M1626 715 c-3 -9 -6 -32 -6 -51 0 -33 -2 -34 -37 -34 -47 0 -66 -12 -61 -36 2 -15 14 -20 51 -22 l47 -3 0 -113 c0 -118 10 -146 45 -133 11 5 15 31 17 124 l3 118 48 3 c82 5 74 62 -9 62 l-43 0 -3 48 c-2 39 -7 48 -24 50 -13 2 -24 -4 -28 -13z"/>
-            </g>
-          </svg>
-          <h2 style="color: white; margin: 0; font-size: 1.5rem;">Sacramento da Reconciliação</h2>
-          <p style="font-size: 0.9rem; font-style: italic; margin-top: 10px; opacity: 0.95; line-height: 1.5;">
-            "Coragem, filho, os teus pecados estão perdoados."<br>
-            <span style="font-size: 0.75rem; font-weight: bold;">(Mateus 9, 2)</span>
-          </p>
+            <svg class="icone-estola-complexa svg-card-grande" viewBox="0 0 225 225" xmlns="http://www.w3.org/2000/svg">
+                <g transform="translate(0,225) scale(0.1,-0.1)">
+                    <path class="parte-tecido" d="M1011 2240 c-197 -28 -402 -144 -531 -302 -60 -74 -143 -237 -165 -323 -8 -33 -20 -98 -25 -145 -14 -117 -13 -1425 0 -1451 10 -18 24 -19 303 -19 215 0 296 3 305 12 9 9 12 204 12 814 l0 802 48 13 c26 7 101 14 167 15 66 2 124 3 128 3 20 2 0 46 -23 52 -56 16 -230 6 -301 -16 -18 -6 -19 0 -19 85 0 106 14 148 68 203 78 80 202 83 285 8 82 -74 77 0 77 -1042 0 -706 3 -928 12 -937 9 -9 90 -12 305 -12 284 0 293 1 303 20 8 15 10 239 7 763 -3 720 -4 744 -25 823 -80 306 -310 538 -608 614 -88 23 -237 32 -323 20z m297 -75 c75 -18 191 -70 259 -116 154 -106 261 -259 315 -454 22 -79 22 -90 22 -735 l1 -655 -155 -5 c-141 -5 -155 -7 -158 -24 -2 -10 2 -22 10 -27 7 -5 80 -9 161 -9 l148 0 -3 -37 -3 -38 -252 -3 -253 -2 0 40 0 40 44 0 c83 0 91 57 9 62 l-48 3 -5 855 -5 855 -27 45 c-55 93 -139 143 -243 144 -103 1 -188 -50 -243 -144 l-27 -45 -3 -858 -2 -857 -253 2 -252 3 0 630 c0 686 1 700 57 848 80 210 269 392 479 462 138 46 283 53 427 20z m-458 -2065 l0 -40 -252 2 -253 3 -3 38 -3 37 255 0 256 0 0 -40z"/>
+                    <path class="parte-cruz" d="M577 723 c-4 -3 -7 -26 -7 -50 l0 -43 -44 0 c-83 0 -91 -57 -9 -62 l48 -3 3 -118 c2 -93 6 -119 17 -124 35 -13 45 15 45 133 l0 113 47 3 c37 2 49 7 51 22 5 24 -14 36 -60 36 -36 0 -38 1 -38 34 0 19 -3 41 -6 50 -6 16 -35 22 -47 9z"/>
+                    <path class="parte-cruz" d="M1626 715 c-3 -9 -6 -32 -6 -51 0 -33 -2 -34 -37 -34 -47 0 -66 -12 -61 -36 2 -15 14 -20 51 -22 l47 -3 0 -113 c0 -118 10 -146 45 -133 11 5 15 31 17 124 l3 118 48 3 c82 5 74 62 -9 62 l-43 0 -3 48 c-2 39 -7 48 -24 50 -13 2 -24 -4 -28 -13z"/>
+                </g>
+            </svg>
+            <h2 style="color: white; margin: 0; font-size: 1.5rem;">Sacramento da Reconciliação</h2>
+            <p style="font-size: 0.9rem; font-style: italic; margin-top: 10px; opacity: 0.95; line-height: 1.5;">
+                "Coragem, filho, os teus pecados estão perdoados."<br>
+                <span style="font-size: 0.75rem; font-weight: bold;">(Mateus 9, 2)</span>
+            </p>
         </section>
 
         <section class="card" style="padding-bottom: 5px;">
-          <h3 class="titulo-roxo">O Caminho da Graça</h3>
-          <p style="font-size: 0.8rem; color: var(--muted); margin-bottom: 20px;">Siga estes 5 passos:</p>
-          <div class="lista-passos-visual">
-            <div class="passo-card">
-              <div class="passo-icon-box"><span class="material-symbols-rounded">manage_search</span></div>
-              <div class="passo-content"><h4>1. Exame</h4><p>Refletir onde errei contra Deus.</p></div>
+            <h3 class="titulo-roxo">O Caminho da Graça</h3>
+            <p style="font-size: 0.8rem; color: var(--muted); margin-bottom: 20px;">Siga estes 5 passos:</p>
+            <div class="lista-passos-visual">
+                <div class="passo-card">
+                    <div class="passo-icon-box"><span class="material-symbols-rounded">manage_search</span></div>
+                    <div class="passo-content"><h4>1. Exame</h4><p>Refletir onde errei contra Deus.</p></div>
+                </div>
+                <div class="passo-card">
+                    <div class="passo-icon-box"><span class="material-symbols-rounded">sentiment_dissatisfied</span></div>
+                    <div class="passo-content"><h4>2. Arrependimento</h4><p>Dor sincera no coração.</p></div>
+                </div>
+                <div class="passo-card">
+                    <div class="passo-icon-box"><span class="material-symbols-rounded">verified</span></div>
+                    <div class="passo-content"><h4>3. Propósito</h4><p>Decidir não pecar mais.</p></div>
+                </div>
+                <div class="passo-card">
+                    <div class="passo-icon-box"><span class="material-symbols-rounded">record_voice_over</span></div>
+                    <div class="passo-content"><h4>4. Confissão</h4><p>Dizer os pecados ao padre.</p></div>
+                </div>
+                <div class="passo-card">
+                    <div class="passo-icon-box"><span class="material-symbols-rounded">task_alt</span></div>
+                    <div class="passo-content"><h4>5. Penitência</h4><p>Cumprir o ato reparador.</p></div>
+                </div>
             </div>
-            <div class="passo-card">
-              <div class="passo-icon-box"><span class="material-symbols-rounded">sentiment_dissatisfied</span></div>
-              <div class="passo-content"><h4>2. Arrependimento</h4><p>Dor sincera no coração.</p></div>
-            </div>
-            <div class="passo-card">
-              <div class="passo-icon-box"><span class="material-symbols-rounded">verified</span></div>
-              <div class="passo-content"><h4>3. Propósito</h4><p>Decidir não pecar mais.</p></div>
-            </div>
-            <div class="passo-card">
-              <div class="passo-icon-box"><span class="material-symbols-rounded">record_voice_over</span></div>
-              <div class="passo-content"><h4>4. Confissão</h4><p>Dizer os pecados ao padre.</p></div>
-            </div>
-            <div class="passo-card">
-              <div class="passo-icon-box"><span class="material-symbols-rounded">task_alt</span></div>
-              <div class="passo-content"><h4>5. Penitência</h4><p>Cumprir o ato reparador.</p></div>
-            </div>
-          </div>
         </section>
 
         <section class="card">
-          <div class="exame-header">
-            <div>
-              <h3 class="titulo-roxo">Exame de Consciência</h3>
-              <p class="subtitulo-exame">Marque para lembrar:</p>
+            <div class="exame-header">
+                <div>
+                    <h3 class="titulo-roxo">Exame de Consciência</h3>
+                    <p class="subtitulo-exame">Marque para lembrar:</p>
+                </div>
+                <button onclick="limparExame()" class="btn-limpar">Limpar tudo</button>
             </div>
-            <button onclick="limparExame()" class="btn-limpar">Limpar tudo</button>
-          </div>
 
-          <details class="exame-grupo roxo">
-            <summary>
-                <div style="display:flex; align-items:center; gap:10px;">
-                <span class="material-symbols-rounded">church</span>
-                <span>Amar a Deus</span>
-                </div>
-            </summary>
-            <ul class="lista-exame">
-                <li><label><input type="checkbox" class="check-roxo"><span>Faltei à Missa aos domingos ou festas de preceito por culpa própria?</span></label></li>
-                <li><label><input type="checkbox" class="check-roxo"><span>Cheguei tarde à Missa habitualmente por descaso?</span></label></li>
-                <li><label><input type="checkbox" class="check-roxo"><span>Recebi a Eucaristia em estado de pecado grave (sem confessar antes)?</span></label></li>
-                <li><label><input type="checkbox" class="check-roxo"><span>Omiti algum pecado grave em confissões passadas por vergonha?</span></label></li>
-                <li><label><input type="checkbox" class="check-roxo"><span>Neguei minha fé ou tive vergonha de me posicionar como católico?</span></label></li>
-                <li><label><input type="checkbox" class="check-roxo"><span>Usei o nome de Deus em vão, fiz juramentos falsos ou blasfemei?</span></label></li>
-                <li><label><input type="checkbox" class="check-roxo"><span>Dediquei tempo diário à oração ou me esqueci de Deus na correria?</span></label></li>
-                <li><label><input type="checkbox" class="check-roxo"><span>Acreditei em superstições, horóscopos, tarô ou práticas de ocultismo?</span></label></li>
-            </ul>
-          </details>
+            <details class="exame-grupo roxo">
+                <summary>
+                    <div style="display:flex; align-items:center; gap:10px;">
+                    <span class="material-symbols-rounded">church</span>
+                    <span>Amar a Deus</span>
+                    </div>
+                </summary>
+                <ul class="lista-exame">
+                    <li><label><input type="checkbox" class="check-roxo"><span>Faltei à Missa aos domingos ou festas de preceito por culpa própria?</span></label></li>
+                    <li><label><input type="checkbox" class="check-roxo"><span>Cheguei tarde à Missa habitualmente por descaso?</span></label></li>
+                    <li><label><input type="checkbox" class="check-roxo"><span>Recebi a Eucaristia em estado de pecado grave (sem confessar antes)?</span></label></li>
+                    <li><label><input type="checkbox" class="check-roxo"><span>Omiti algum pecado grave em confissões passadas por vergonha?</span></label></li>
+                    <li><label><input type="checkbox" class="check-roxo"><span>Neguei minha fé ou tive vergonha de me posicionar como católico?</span></label></li>
+                    <li><label><input type="checkbox" class="check-roxo"><span>Usei o nome de Deus em vão, fiz juramentos falsos ou blasfemei?</span></label></li>
+                    <li><label><input type="checkbox" class="check-roxo"><span>Dediquei tempo diário à oração ou me esqueci de Deus na correria?</span></label></li>
+                    <li><label><input type="checkbox" class="check-roxo"><span>Acreditei em superstições, horóscopos, tarô ou práticas de ocultismo?</span></label></li>
+                </ul>
+            </details>
 
-        <details class="exame-grupo roxo">
-            <summary>
-                <div style="display:flex; align-items:center; gap:10px;">
-                <span class="material-symbols-rounded">groups</span>
-                <span>Amar ao próximo</span>
-                </div>
-            </summary>
-            <ul class="lista-exame">
-                <li><label><input type="checkbox" class="check-roxo"><span>Fui desobediente, insolente ou falttei com o respeito aos meus pais?</span></label></li>
-                <li><label><input type="checkbox" class="check-roxo"><span>Tratei mal meus irmãos, amigos ou colegas?</span></label></li>
-                <li><label><input type="checkbox" class="check-roxo"><span>Guardei ódio, rancor ou desejei o mal a alguém?</span></label></li>
-                <li><label><input type="checkbox" class="check-roxo"><span>Fui motivo de escândalo para outros por minhas atitudes ou palavras?</span></label></li>
-                <li><label><input type="checkbox" class="check-roxo"><span>Fiz fofocas, calúnias ou espalhei boatos (mesmo que fossem verdade)?</span></label></li>
-                <li><label><input type="checkbox" class="check-roxo"><span>Menti para me beneficiar ou para prejudicar/enganar alguém?</span></label></li>
-                <li><label><input type="checkbox" class="check-roxo"><span>Fui egoísta e neguei ajuda a quem realmente precisava?</span></label></li>
-                <li><label><input type="checkbox" class="check-roxo"><span>Julguei os outros precipitadamente com malícia?</span></label></li>
-            </ul>
-        </details>
+            <details class="exame-grupo roxo">
+                <summary>
+                    <div style="display:flex; align-items:center; gap:10px;">
+                    <span class="material-symbols-rounded">groups</span>
+                    <span>Amar ao próximo</span>
+                    </div>
+                </summary>
+                <ul class="lista-exame">
+                    <li><label><input type="checkbox" class="check-roxo"><span>Fui desobediente, insolente ou faltei com o respeito aos meus pais?</span></label></li>
+                    <li><label><input type="checkbox" class="check-roxo"><span>Tratei mal meus irmãos, amigos ou colegas?</span></label></li>
+                    <li><label><input type="checkbox" class="check-roxo"><span>Guardei ódio, rancor ou desejei o mal a alguém?</span></label></li>
+                    <li><label><input type="checkbox" class="check-roxo"><span>Fui motivo de escândalo para outros por minhas atitudes ou palavras?</span></label></li>
+                    <li><label><input type="checkbox" class="check-roxo"><span>Fiz fofocas, calúnias ou espalhei boatos (mesmo que fossem verdade)?</span></label></li>
+                    <li><label><input type="checkbox" class="check-roxo"><span>Menti para me beneficiar ou para prejudicar/enganar alguém?</span></label></li>
+                    <li><label><input type="checkbox" class="check-roxo"><span>Fui egoísta e neguei ajuda a quem realmente precisava?</span></label></li>
+                    <li><label><input type="checkbox" class="check-roxo"><span>Julguei os outros precipitadamente com malícia?</span></label></li>
+                </ul>
+            </details>
 
-        <details class="exame-grupo roxo">
-            <summary>
-                <div style="display:flex; align-items:center; gap:10px;">
-                <span class="material-symbols-rounded">favorite</span>
-                <span>Pureza e Temperança</span>
-                </div>
-            </summary>
-            <ul class="lista-exame">
-                <li><label><input type="checkbox" class="check-roxo"><span>Consenti em pensamentos ou desejos impuros deliberadamente?</span></label></li>
-                <li><label><input type="checkbox" class="check-roxo"><span>Assisti pornografia ou busquei conteúdos sensuais/eróticos na internet?</span></label></li>
-                <li><label><input type="checkbox" class="check-roxo"><span>Cometi atos de impureza comigo mesmo (masturbação)?</span></label></li>
-                <li><label><input type="checkbox" class="check-roxo"><span>Tive relações sexuais fora ou antes do matrimônio?</span></label></li>
-                <li><label><input type="checkbox" class="check-roxo"><span>No namoro, faltei com o respeito ou levei o outro a pecar?</span></label></li>
-                <li><label><input type="checkbox" class="check-roxo"><span>Vesti-me de forma vulgar ou usei minha imagem para provocar desejo alheio?</span></label></li>
-                <li><label><input type="checkbox" class="check-roxo"><span>Fui guloso, bebi demais ou usei drogas?</span></label></li>
-                <li><label><input type="checkbox" class="check-roxo"><span>Fui vaidoso, soberbo ou me senti superior aos outros?</span></label></li>
-            </ul>
-        </details>
+            <details class="exame-grupo roxo">
+                <summary>
+                    <div style="display:flex; align-items:center; gap:10px;">
+                    <span class="material-symbols-rounded">favorite</span>
+                    <span>Pureza e Temperança</span>
+                    </div>
+                </summary>
+                <ul class="lista-exame">
+                    <li><label><input type="checkbox" class="check-roxo"><span>Consenti em pensamentos ou desejos impuros deliberadamente?</span></label></li>
+                    <li><label><input type="checkbox" class="check-roxo"><span>Assisti pornografia ou busquei conteúdos sensuais/eróticos na internet?</span></label></li>
+                    <li><label><input type="checkbox" class="check-roxo"><span>Cometi atos de impureza comigo mesmo (masturbação)?</span></label></li>
+                    <li><label><input type="checkbox" class="check-roxo"><span>Tive relações sexuais fora ou antes do matrimônio?</span></label></li>
+                    <li><label><input type="checkbox" class="check-roxo"><span>No namoro, faltei com o respeito ou levei o outro a pecar?</span></label></li>
+                    <li><label><input type="checkbox" class="check-roxo"><span>Vesti-me de forma vulgar ou usei minha imagem para provocar desejo alheio?</span></label></li>
+                    <li><label><input type="checkbox" class="check-roxo"><span>Fui guloso, bebi demais ou usei drogas?</span></label></li>
+                    <li><label><input type="checkbox" class="check-roxo"><span>Fui vaidoso, soberbo ou me senti superior aos outros?</span></label></li>
+                </ul>
+            </details>
 
-        <details class="exame-grupo roxo">
-            <summary>
-                <div style="display:flex; align-items:center; gap:10px;">
-                <span class="material-symbols-rounded">work</span>
-                <span>Deveres e Honestidade</span>
-                </div>
-            </summary>
-            <ul class="lista-exame">
-                <li><label><input type="checkbox" class="check-roxo"><span>Fui preguiçoso nos estudos ou no trabalho?</span></label></li>
-                <li><label><input type="checkbox" class="check-roxo"><span>Colei em provas ou apresentei trabalhos que não eram meus?</span></label></li>
-                <li><label><input type="checkbox" class="check-roxo"><span>Peguei dinheiro ou objetos que não me pertenciam sem permissão?</span></label></li>
-                <li><label><input type="checkbox" class="check-roxo"><span>Desperdicei dinheiro com coisas fúteis enquanto outros passam necessidade?</span></label></li>
-                <li><label><input type="checkbox" class="check-roxo"><span>Perdi tempo excessivo em redes sociais e jogos, negligenciando meus deveres?</span></label></li>
-                <li><label><input type="checkbox" class="check-roxo"><span>Fui invejoso em relação ao sucesso ou bens dos outros?</span></label></li>
-            </ul>
-        </details>
-
+            <details class="exame-grupo roxo">
+                <summary>
+                    <div style="display:flex; align-items:center; gap:10px;">
+                    <span class="material-symbols-rounded">work</span>
+                    <span>Deveres e Honestidade</span>
+                    </div>
+                </summary>
+                <ul class="lista-exame">
+                    <li><label><input type="checkbox" class="check-roxo"><span>Fui preguiçoso nos estudos ou no trabalho?</span></label></li>
+                    <li><label><input type="checkbox" class="check-roxo"><span>Colei em provas ou apresentei trabalhos que não eram meus?</span></label></li>
+                    <li><label><input type="checkbox" class="check-roxo"><span>Peguei dinheiro ou objetos que não me pertenciam sem permissão?</span></label></li>
+                    <li><label><input type="checkbox" class="check-roxo"><span>Desperdicei dinheiro com coisas fúteis enquanto outros passam necessidade?</span></label></li>
+                    <li><label><input type="checkbox" class="check-roxo"><span>Perdi tempo excessivo em redes sociais e jogos, negligenciando meus deveres?</span></label></li>
+                    <li><label><input type="checkbox" class="check-roxo"><span>Fui invejoso em relação ao sucesso ou bens dos outros?</span></label></li>
+                </ul>
+            </details>
         </section>
 
         <section class="card card-oracao">
-          <div style="text-align: center; margin-bottom: 15px;">
-            <span class="material-symbols-rounded" style="color: var(--cor-roxo); font-size: 32px; background: var(--cor-roxo-bg); padding: 8px; border-radius: 50%;">verified_user</span>
-            <h3 class="titulo-roxo" style="margin-top: 10px;">Ato de Contrição</h3>
-          </div>
-          <div class="texto-oracao">
-            <p>"Meu Deus, eu me arrependo de todo o coração de vos ter ofendido, porque sois tão bom e amável. Prometo, com a vossa graça, esforçar-me para ser bom e não mais pecar."</p>
-            <div class="destaque-final">Meu Jesus, misericórdia!</div>
-          </div>
+            <div style="text-align: center; margin-bottom: 15px;">
+                <span class="material-symbols-rounded" style="color: var(--cor-roxo); font-size: 32px; background: var(--cor-roxo-bg); padding: 8px; border-radius: 50%;">verified_user</span>
+                <h3 class="titulo-roxo" style="margin-top: 10px;">Ato de Contrição</h3>
+            </div>
+            <div class="texto-oracao">
+                <p>"Meu Deus, eu me arrependo de todo o coração de vos ter ofendido, porque sois tão bom e amável. Prometo, com a vossa graça, esforçar-me para ser bom e não mais pecar."</p>
+                <div class="destaque-final">Meu Jesus, misericórdia!</div>
+            </div>
         </section>
         
         <div style="height: 100px;"></div>
-      </div>
+    </div> 
+    
+    <div class="confissao-desktop-view desktop-only" style="width: 100%; max-width: 1200px; margin: 0 auto;">
+        
+        <section class="card" style="text-align: center; background: linear-gradient(135deg, #581c87 0%, #9333ea 100%); color: white; padding: 30px; margin-bottom: 20px; border-radius: 20px;">
+             <svg class="icone-estola-complexa svg-card-grande" viewBox="0 0 225 225" xmlns="http://www.w3.org/2000/svg" style="height: 100px; width: 100px; margin-bottom: 10px;">
+                <g transform="translate(0,225) scale(0.1,-0.1)">
+                    <path class="parte-tecido" fill="white" d="M1011 2240 c-197 -28 -402 -144 -531 -302 -60 -74 -143 -237 -165 -323 -8 -33 -20 -98 -25 -145 -14 -117 -13 -1425 0 -1451 10 -18 24 -19 303 -19 215 0 296 3 305 12 9 9 12 204 12 814 l0 802 48 13 c26 7 101 14 167 15 66 2 124 3 128 3 20 2 0 46 -23 52 -56 16 -230 6 -301 -16 -18 -6 -19 0 -19 85 0 106 14 148 68 203 78 80 202 83 285 8 82 -74 77 0 77 -1042 0 -706 3 -928 12 -937 9 -9 90 -12 305 -12 284 0 293 1 303 20 8 15 10 239 7 763 -3 720 -4 744 -25 823 -80 306 -310 538 -608 614 -88 23 -237 32 -323 20z m297 -75 c75 -18 191 -70 259 -116 154 -106 261 -259 315 -454 22 -79 22 -90 22 -735 l1 -655 -155 -5 c-141 -5 -155 -7 -158 -24 -2 -10 2 -22 10 -27 7 -5 80 -9 161 -9 l148 0 -3 -37 -3 -38 -252 -3 -253 -2 0 40 0 40 44 0 c83 0 91 57 9 62 l-48 3 -5 855 -5 855 -27 45 c-55 93 -139 143 -243 144 -103 1 -188 -50 -243 -144 l-27 -45 -3 -858 -2 -857 -253 2 -252 3 0 630 c0 686 1 700 57 848 80 210 269 392 479 462 138 46 283 53 427 20z m-458 -2065 l0 -40 -252 2 -253 3 -3 38 -3 37 255 0 256 0 0 -40z"/>
+                    <path class="parte-cruz" fill="#fbbf24" d="M577 723 c-4 -3 -7 -26 -7 -50 l0 -43 -44 0 c-83 0 -91 -57 -9 -62 l48 -3 3 -118 c2 -93 6 -119 17 -124 35 -13 45 15 45 133 l0 113 47 3 c37 2 49 7 51 22 5 24 -14 36 -60 36 -36 0 -38 1 -38 34 0 19 -3 41 -6 50 -6 16 -35 22 -47 9z"/>
+                    <path class="parte-cruz" fill="#fbbf24" d="M1626 715 c-3 -9 -6 -32 -6 -51 0 -33 -2 -34 -37 -34 -47 0 -66 -12 -61 -36 2 -15 14 -20 51 -22 l47 -3 0 -113 c0 -118 10 -146 45 -133 11 5 15 31 17 124 l3 118 48 3 c82 5 74 62 -9 62 l-43 0 -3 48 c-2 39 -7 48 -24 50 -13 2 -24 -4 -28 -13z"/>
+                </g>
+             </svg>
+             <h2 style="color: white; margin: 0; font-size: 1.8rem;">Sacramento da Reconciliação</h2>
+             <p style="font-size: 1rem; font-style: italic; margin-top: 10px; opacity: 0.95;">
+                "Coragem, filho, os teus pecados estão perdoados." (Mateus 9, 2)
+             </p>
+        </section>
+
+        <div class="grid-confissao-wrapper">
+            
+            <section class="card" style="height: 100%; display: flex; flex-direction: column; justify-content: center;">
+                <h3 class="titulo-roxo" style="text-align: center;">O Caminho da Graça</h3>
+                <p style="font-size: 0.9rem; color: var(--muted); margin-bottom: 25px; text-align: center;">5 Passos para a Confissão</p>
+                <div class="lista-passos-visual">
+                    <div class="passo-card"><div class="passo-icon-box"><span class="material-symbols-rounded">manage_search</span></div><div class="passo-content"><h4>1. Exame</h4><p>Refletir onde errei contra Deus.</p></div></div>
+                    <div class="passo-card"><div class="passo-icon-box"><span class="material-symbols-rounded">sentiment_dissatisfied</span></div><div class="passo-content"><h4>2. Arrependimento</h4><p>Dor sincera no coração.</p></div></div>
+                    <div class="passo-card"><div class="passo-icon-box"><span class="material-symbols-rounded">verified</span></div><div class="passo-content"><h4>3. Propósito</h4><p>Decidir não pecar mais.</p></div></div>
+                    <div class="passo-card"><div class="passo-icon-box"><span class="material-symbols-rounded">record_voice_over</span></div><div class="passo-content"><h4>4. Confissão</h4><p>Dizer os pecados ao padre.</p></div></div>
+                    <div class="passo-card"><div class="passo-icon-box"><span class="material-symbols-rounded">task_alt</span></div><div class="passo-content"><h4>5. Penitência</h4><p>Cumprir o ato reparador.</p></div></div>
+                </div>
+            </section>
+
+            <section class="card" style="height: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; padding: 40px;">
+                <div style="width: 100px; height: 100px; background: var(--bg); border-radius: 50%; display: flex; align-items: center; justify-content: center; margin-bottom: 25px;">
+                    <span class="material-symbols-rounded" style="font-size: 48px; color: #9333ea;">psychology_alt</span>
+                </div>
+                <h3 class="titulo-roxo" style="font-size: 1.5rem; margin-bottom: 10px;">Exame de Consciência</h3>
+                <p style="color: var(--muted); font-size: 1rem; margin-bottom: 30px; line-height: 1.6; max-width: 80%;">
+                    Reserve um momento de silêncio e prepare sua alma.<br>Clique abaixo para abrir a lista completa.
+                </p>
+                <button onclick="abrirModal('modalExameCompleto')" class="btn-primary" style="padding: 15px 40px; font-size: 1.1rem; box-shadow: 0 4px 15px rgba(147, 51, 234, 0.3);">
+                    Iniciar Exame
+                </button>
+            </section>
+        </div>
+
+        <section class="card card-oracao">
+            <div style="text-align: center;">
+                <span class="material-symbols-rounded" style="color: var(--cor-roxo); font-size: 32px; background: var(--cor-roxo-bg); padding: 8px; border-radius: 50%;">verified_user</span>
+                <h3 class="titulo-roxo" style="margin-top: 10px;">Ato de Contrição</h3>
+            </div>
+            <div class="texto-oracao" style="text-align: center; margin-top: 15px;">
+                <p>"Meu Deus, eu me arrependo de todo o coração de vos ter ofendido, porque sois tão bom e amável. Prometo, com a vossa graça, esforçar-me para ser bom e não mais pecar."</p>
+                <div class="destaque-final" style="color: var(--primary); margin-top: 10px; font-weight: bold;">Meu Jesus, misericórdia!</div>
+            </div>
+        </section>
+
+    </div> <div id="modalExameCompleto" class="modal">
+        <div class="modal-content" style="max-width: 700px; max-height: 90vh; display: flex; flex-direction: column;">
+            
+            <div class="modal-header">
+                <h3 style="margin: 0; color: #9333ea;">Exame de Consciência</h3>
+                <button class="close-modal" onclick="document.getElementById('modalExameCompleto').style.display='none'">
+                    <span class="material-symbols-rounded">close</span>
+                </button>
+            </div>
+
+            <div class="modal-body" style="overflow-y: auto; padding: 20px;">
+                
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+                    <p style="margin: 0; color: var(--muted);">Marque suas faltas para lembrar na confissão:</p>
+                    <button onclick="limparExame()" class="btn-limpar">Limpar tudo</button>
+                </div>
+
+                <h4 style="color: var(--primary); margin-top: 20px; border-bottom: 1px solid var(--border); padding-bottom: 5px;">Amar a Deus</h4>
+                <ul class="lista-exame" style="margin-bottom: 20px;">
+                    <li><label><input type="checkbox" class="check-roxo"><span>Faltei à Missa aos domingos ou festas de preceito por culpa própria?</span></label></li>
+                    <li><label><input type="checkbox" class="check-roxo"><span>Cheguei tarde à Missa habitualmente por descaso?</span></label></li>
+                    <li><label><input type="checkbox" class="check-roxo"><span>Recebi a Eucaristia em estado de pecado grave (sem confessar antes)?</span></label></li>
+                    <li><label><input type="checkbox" class="check-roxo"><span>Omiti algum pecado grave em confissões passadas por vergonha?</span></label></li>
+                    <li><label><input type="checkbox" class="check-roxo"><span>Neguei minha fé ou tive vergonha de me posicionar como católico?</span></label></li>
+                    <li><label><input type="checkbox" class="check-roxo"><span>Usei o nome de Deus em vão, fiz juramentos falsos ou blasfemei?</span></label></li>
+                    <li><label><input type="checkbox" class="check-roxo"><span>Dediquei tempo diário à oração ou me esqueci de Deus na correria?</span></label></li>
+                    <li><label><input type="checkbox" class="check-roxo"><span>Acreditei em superstições, horóscopos, tarô ou práticas de ocultismo?</span></label></li>
+                </ul>
+
+                <h4 style="color: var(--primary); margin-top: 20px; border-bottom: 1px solid var(--border); padding-bottom: 5px;">Amar ao Próximo</h4>
+                <ul class="lista-exame" style="margin-bottom: 20px;">
+                    <li><label><input type="checkbox" class="check-roxo"><span>Fui desobediente, insolente ou faltei com o respeito aos meus pais?</span></label></li>
+                    <li><label><input type="checkbox" class="check-roxo"><span>Tratei mal meus irmãos, amigos ou colegas?</span></label></li>
+                    <li><label><input type="checkbox" class="check-roxo"><span>Guardei ódio, rancor ou desejei o mal a alguém?</span></label></li>
+                    <li><label><input type="checkbox" class="check-roxo"><span>Fui motivo de escândalo para outros por minhas atitudes ou palavras?</span></label></li>
+                    <li><label><input type="checkbox" class="check-roxo"><span>Fiz fofocas, calúnias ou espalhei boatos (mesmo que fossem verdade)?</span></label></li>
+                    <li><label><input type="checkbox" class="check-roxo"><span>Menti para me beneficiar ou para prejudicar/enganar alguém?</span></label></li>
+                    <li><label><input type="checkbox" class="check-roxo"><span>Fui egoísta e neguei ajuda a quem realmente precisava?</span></label></li>
+                    <li><label><input type="checkbox" class="check-roxo"><span>Julguei os outros precipitadamente com malícia?</span></label></li>
+                </ul>
+
+                <h4 style="color: var(--primary); margin-top: 20px; border-bottom: 1px solid var(--border); padding-bottom: 5px;">Pureza e Temperança</h4>
+                <ul class="lista-exame" style="margin-bottom: 20px;">
+                    <li><label><input type="checkbox" class="check-roxo"><span>Consenti em pensamentos ou desejos impuros deliberadamente?</span></label></li>
+                    <li><label><input type="checkbox" class="check-roxo"><span>Assisti pornografia ou busquei conteúdos sensuais/eróticos na internet?</span></label></li>
+                    <li><label><input type="checkbox" class="check-roxo"><span>Cometi atos de impureza comigo mesmo (masturbação)?</span></label></li>
+                    <li><label><input type="checkbox" class="check-roxo"><span>Tive relações sexuais fora ou antes do matrimônio?</span></label></li>
+                    <li><label><input type="checkbox" class="check-roxo"><span>No namoro, faltei com o respeito ou levei o outro a pecar?</span></label></li>
+                    <li><label><input type="checkbox" class="check-roxo"><span>Vesti-me de forma vulgar ou usei minha imagem para provocar desejo alheio?</span></label></li>
+                    <li><label><input type="checkbox" class="check-roxo"><span>Fui guloso, bebi demais ou usei drogas?</span></label></li>
+                    <li><label><input type="checkbox" class="check-roxo"><span>Fui vaidoso, soberbo ou me senti superior aos outros?</span></label></li>
+                </ul>
+
+                <h4 style="color: var(--primary); margin-top: 20px; border-bottom: 1px solid var(--border); padding-bottom: 5px;">Deveres e Honestidade</h4>
+                <ul class="lista-exame" style="margin-bottom: 20px;">
+                    <li><label><input type="checkbox" class="check-roxo"><span>Fui preguiçoso nos estudos ou no trabalho?</span></label></li>
+                    <li><label><input type="checkbox" class="check-roxo"><span>Colei em provas ou apresentei trabalhos que não eram meus?</span></label></li>
+                    <li><label><input type="checkbox" class="check-roxo"><span>Peguei dinheiro ou objetos que não me pertenciam sem permissão?</span></label></li>
+                    <li><label><input type="checkbox" class="check-roxo"><span>Desperdicei dinheiro com coisas fúteis enquanto outros passam necessidade?</span></label></li>
+                    <li><label><input type="checkbox" class="check-roxo"><span>Perdi tempo excessivo em redes sociais e jogos, negligenciando meus deveres?</span></label></li>
+                    <li><label><input type="checkbox" class="check-roxo"><span>Fui invejoso em relação ao sucesso ou bens dos outros?</span></label></li>
+                </ul>
+
+                <div style="background: var(--bg); padding: 15px; border-radius: 12px; margin-top: 30px; text-align: center;">
+                    <strong>Dica:</strong> Após a confissão, clique em "Limpar tudo" para zerar sua consciência.
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
 
       <div id="tab-menu" class="conteudo-aba" style="display: none">
+    
+    <div class="mobile-only" style="flex-direction: column; width: 100%;">
         <section class="card profile-header" style="margin-bottom: 20px;">
-          <div class="profile-info" style="text-align: center; width: 100%;">
-            <h2 style="color: var(--text); margin: 0;">Menu & Ferramentas</h2>
-            <p style="color: var(--text); font-size: 0.8rem;">Ágape de Jovens</p>
-          </div>
+            <div class="profile-info" style="text-align: center; width: 100%;">
+                <h2 style="color: var(--text); margin: 0;">Menu & Ferramentas</h2>
+                <p style="color: var(--text); font-size: 0.8rem;">Ágape de Jovens</p>
+            </div>
         </section>
 
         <div class="menu-grid" style="grid-template-columns: 1fr 1fr; gap: 15px;">
-          <div class="card menu-item" onclick="abrirCalendario()">
-            <span class="material-symbols-rounded" style="font-size: 36px; color: #0284c7;">calendar_month</span>
-            <span style="margin-top: 10px; color: var(--text);">Calendário</span>
-          </div>
-          <div class="card menu-item" onclick="abrirMuralPedidos()">
-            <svg class="icone-oracao-custom" viewBox="0 0 682.67 682.67" xmlns="http://www.w3.org/2000/svg">
-        <g transform="matrix(1.33,0,0,-1.33,0,682.67)">
-            <g>
-                <path d="m 0,0 v 120 h -40 v 40 H 0 v 60 H 40 V 160 H 80 V 120 H 40 V 0 Z" transform="translate(58,282)" />
-                <path d="m 0,0 -90.48,60.31 -56.19,-75.87 90,-60 86.65,115.54 c 2.19,2.92 3.54,6.38 3.9,10.01 l 16.17,161.63 c 0.21,2.05 0.2,4.07 0,6.03 -1.31,12.85 -10.87,23.48 -23.5,26.15 -2,0.42 -4.08,0.64 -6.21,0.64 -15.33,0 -28.17,-11.62 -29.7,-26.88 l -9.31,-93.12" transform="translate(247.67,85.56)" />
-                <path d="M 0,0 -24.93,16.62" transform="translate(155.68,93.55)" />
-                <path d="m 0,0 22.27,105.65 c 4.3,23.68 9.62,48.22 15.91,72.91" transform="translate(157.19,145.87)" />
-                <path d="m 0,0 c 10.66,31.02 22.89,61.05 36.67,88.61 3.77,7.53 11.47,12.29 19.9,12.29 12.48,0 22.24,-10.17 22.24,-22.2 0,-1.21 -0.1,-2.45 -0.31,-3.7 L 56.01,-71.93" transform="translate(218.18,401.1)" />
-                <path d="m 0,0 90.47,60.31 56.19,-75.87 -90,-60 -86.65,115.54 c -2.19,2.92 -3.54,6.38 -3.9,10.01 l -16.16,161.63 c -0.21,2.05 -0.2,4.07 0,6.03 1.31,12.85 10.86,23.48 23.49,26.15 2,0.42 4.08,0.64 6.21,0.64 15.34,0 28.18,-11.62 29.7,-26.88 L 18.66,124.44" transform="translate(347.77,85.56)" />
-                <path d="m 0,0 24.55,16.37 h 0.01" transform="translate(440.13,93.8)" />
-                <path d="m 0,0 -22.26,105.65 c -14.29,78.59 -39.68,166.74 -75.4,238.19 -3.77,7.53 -11.47,12.29 -19.89,12.29 -12.48,0 -22.25,-10.17 -22.25,-22.2 0,-1.22 0.1,-2.45 0.31,-3.7 L -117,183.3" transform="translate(438.24,145.87)" />
-                
-                <path  d="m 0,0 c 5.52,0 10,-4.48 10,-10 0,-5.52 -4.48,-10 -10,-10 -5.52,0 -10,4.48 -10,10 0,5.52 4.48,10 10,10" transform="translate(206,373)" />
-            </g>
-        </g>
-    </svg>
-            <span style="margin-top: 10px; color: var(--text);">Mural de Oração</span>
-          </div>
-          <div class="card menu-item" onclick="abrirNotas()">
-            <span class="material-symbols-rounded" style="font-size: 36px; color: #ca8a04;">edit_note</span>
-            <span style="margin-top: 10px; color: var(--text);">Anotações</span>
-          </div>
-          <div class="card menu-item" onclick="document.getElementById('modalSobreSite').style.display='flex'">
-            <span class="material-symbols-rounded" style="font-size: 36px; color: var(--muted);">info</span>
-            <span style="margin-top: 10px; color: var(--text);">Sobre</span>
-          </div>
-          </div> <div id="container-instalar">
-    <button id="btn-instalar-app" class="btn-primary btn-install">
-        <span class="material-symbols-rounded">download</span>
-        <span>Instalar Aplicativo (PC e Android)</span>
-    </button>
-    <p class="legenda-instalar">Disponível para PC e Android</p>
-</div>
+            <div class="card menu-item" onclick="abrirCalendario()">
+                <span class="material-symbols-rounded" style="font-size: 36px; color: #0284c7;">calendar_month</span>
+                <span style="margin-top: 10px; color: var(--text);">Calendário</span>
+            </div>
+            <div class="card menu-item" onclick="abrirMuralPedidos()">
+                <span class="material-symbols-rounded" style="font-size: 36px; color: #db2777;">volunteer_activism</span>
+                <span style="margin-top: 10px; color: var(--text);">Mural de Oração</span>
+            </div>
+            <div class="card menu-item" onclick="abrirNotas()">
+                <span class="material-symbols-rounded" style="font-size: 36px; color: #ca8a04;">edit_note</span>
+                <span style="margin-top: 10px; color: var(--text);">Anotações</span>
+            </div>
+            <div class="card menu-item" onclick="document.getElementById('modalSobreSite').style.display='flex'">
+                <span class="material-symbols-rounded" style="font-size: 36px; color: var(--muted);">info</span>
+                <span style="margin-top: 10px; color: var(--text);">Sobre</span>
+            </div>
+        </div>
+        
+        <div id="container-instalar">
+            <button id="btn-instalar-app" class="btn-primary btn-install">
+                <span class="material-symbols-rounded">download</span>
+                <span>Instalar Aplicativo (PC e Android)</span>
+            </button>
+            <p class="legenda-instalar">Disponível para PC e Android</p>
         </div>
         <div style="height: 100px;"></div>
-      </div>
+    </div>
+
+    <div class="desktop-only dashboard-desktop-wrapper">
+        
+        <div class="desk-header-banner">
+            <h2>Menu & Ferramentas</h2>
+            <p>Ágape de Jovens</p>
+        </div>
+
+        <div class="dashboard-grid-zao">
+            
+            <div class="card dashboard-card">
+                <div class="dashboard-header-clean">
+                    <div id="desk-calendar-header" style="width:100%"></div>
+                </div>
+                <div id="desk-calendar-grid" class="calendar-grid-desk"></div>
+                <div id="desk-calendar-details" class="dashboard-detalhes">
+                    <span style="color:var(--muted);">Selecione uma data acima.</span>
+                </div>
+            </div>
+
+            <div class="card dashboard-card">
+                <div class="dashboard-header-clean">
+                    <h3 style="margin:0; font-size: 1.2rem; color: #ca8a04; display: flex; align-items: center; gap: 10px;">
+                        <span class="material-symbols-rounded">edit_note</span> Minhas Anotações
+                    </h3>
+                </div>
+                <textarea id="desk-area-notas" placeholder="Escreva aqui suas reflexões..." spellcheck="false"></textarea>
+            </div>
+
+        </div>
+
+        <div class="desk-footer-botoes">
+            <button onclick="window.abrirModal('modalLogin')">Admin</button>
+            <span class="separador">•</span>
+            <button onclick="window.abrirAdminIntercessao()" style="color: #db2777;">Intercessão</button>
+        </div>
+
+    </div>
+</div>
     </main>
 
-    <nav class="bottom-nav">
+    <nav class="bottom-nav mobile-only">
       <a href="#" class="nav-item active" data-target="tab-inicio">
         <span class="material-symbols-rounded">church</span>
         <span>Início</span>
       </a>
-        <a href="#" class="nav-item" data-target="tab-oracao">
+      <a href="#" class="nav-item" data-target="tab-oracao">
     <svg class="icone-oracao-custom" viewBox="0 0 682.67 682.67" xmlns="http://www.w3.org/2000/svg">
         <g transform="matrix(1.33,0,0,-1.33,0,682.67)">
             <g>
@@ -413,7 +726,7 @@
 
     <div id="modalCapitulos" class="modal">
       <div class="modal-content modal-content-centered">
-        <div class="modal-header"><h3 id="titulo-livro-selecionado">Livro</h3><button class="close-modal">&times;</button></div>
+        <div class="modal-header"><h3 id="titulo-livro-selecionado" style="color: var;">Livro</h3><button class="close-modal">&times;</button></div>
         <div class="modal-body">
           <p style="margin-bottom: 10px; color: var(--muted)">Capítulo:</p>
           <input type="number" id="input-capitulo" class="input-admin" placeholder="Ex: 1" min="1">

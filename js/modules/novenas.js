@@ -1,3 +1,4 @@
+
 import { abrirModal } from "../utils/dom-utils.js";
 
 let cacheNovenas = null;
@@ -29,13 +30,13 @@ export const abrirListaNovenas = async (element) => {
     const db = await carregarNovenas();
     if (!db) return;
 
-    const leitorDesktop = document.getElementById("leitor-oracao-desktop");
+    const leitorDesktop = document.getElementById("leitor-conteudo-desktop");
     const isDesktop = leitorDesktop && leitorDesktop.offsetParent !== null;
 
     if (isDesktop) {
         if(element) highlightMenu(element); 
         leitorDesktop.innerHTML = `
-            <div class="conteudo-leitor-centralizado">
+            <div class="conteudo-leitor-centralizado" style="width:100%; max-width:800px;">
                 <div style="text-align: center; margin-bottom: 30px;">
                     <span class="material-symbols-rounded" style="font-size: 40px; color: var(--primary); margin-bottom: 10px;">calendar_month</span>
                     <h2 style="font-size: 2rem; margin: 0; color: var(--text);">Novenas e Devoções</h2>
@@ -54,7 +55,6 @@ export const abrirListaNovenas = async (element) => {
     } else {
         // MOBILE
         const modalHeader = document.querySelector("#modalGeral .modal-header");
-        // Reseta o header para o padrão (Sem seta)
         if (modalHeader) {
             modalHeader.innerHTML = `
                 <h3 id="modal-titulo" style="margin:0;">Novenas</h3>
@@ -158,7 +158,7 @@ export const abrirDetalhesNovena = async (id) => {
     const novena = db.detalhes[id];
     if (!novena) return;
 
-    const leitorDesktop = document.getElementById("leitor-oracao-desktop");
+    const leitorDesktop = document.getElementById("leitor-conteudo-desktop");
     const isDesktop = leitorDesktop && leitorDesktop.offsetParent !== null;
     
     let htmlDias = `<div style="display:grid; grid-template-columns: repeat(auto-fill, minmax(100px, 1fr)); gap:10px;">`;
@@ -176,14 +176,14 @@ export const abrirDetalhesNovena = async (id) => {
 
     if(isDesktop) {
         leitorDesktop.innerHTML = `
-            <div class="conteudo-leitor-centralizado">
+            <div class="conteudo-leitor-centralizado" style="width:100%; max-width:800px;">
                 <button onclick="window.abrirListaNovenas()" style="background:none; border:none; cursor:pointer; color:var(--muted); margin-bottom:20px; display:flex; align-items:center; font-size:0.9rem;"><span class="material-symbols-rounded">arrow_back</span> Voltar</button>
                 <h2 style="font-size: 2rem; color: var(--text); margin-bottom: 10px; text-align:center;">${novena.titulo}</h2>
                 <div style="margin-bottom:30px; font-size:1rem; color:var(--muted); text-align:center; max-width:600px; margin: 0 auto 30px auto;">${novena.intro}</div>
                 ${htmlDias}
             </div>`;
     } else {
-        // --- MOBILE FIX: HEADER COM SETA PARA LISTA ---
+
         const modalHeader = document.querySelector("#modalGeral .modal-header");
         if(modalHeader) {
             modalHeader.innerHTML = `
@@ -205,7 +205,7 @@ export const abrirDetalhesNovena = async (id) => {
     }
 };
 
-// --- LER DIA ESPECÍFICO (CORRIGIDO MANTENDO CONTEÚDO) ---
+// --- LER DIA ESPECÍFICO ---
 export const lerDiaNovena = async (id, index) => {
     const db = await carregarNovenas();
     const novena = db.detalhes[id];
@@ -213,14 +213,13 @@ export const lerDiaNovena = async (id, index) => {
     const progresso = JSON.parse(localStorage.getItem(`novena_${id}`)) || [];
     const feito = progresso.includes(index);
  
-    const leitorDesktop = document.getElementById("leitor-oracao-desktop");
+    const leitorDesktop = document.getElementById("leitor-conteudo-desktop");
     const isDesktop = leitorDesktop && leitorDesktop.offsetParent !== null;
 
     const btnAcao = feito 
         ? `<button class="btn-primary" style="background:transparent; border:1px solid var(--border); color:var(--text);" onclick="window.alternarStatusDia('${id}', ${index})">Desmarcar Dia</button>`
         : `<button class="btn-primary" onclick="window.alternarStatusDia('${id}', ${index})">Concluir Dia</button>`;
 
-    // --- CONTEÚDO EXATO DO SEU CÓDIGO ORIGINAL ---
     const htmlConteudo = `
         <div style="padding:0 5px;">
             <h4 style="color:var(--primary); margin-bottom:10px;">Oração Inicial</h4>
@@ -238,16 +237,14 @@ export const lerDiaNovena = async (id, index) => {
     `;
 
     if (isDesktop) {
-        // Desktop: Botão voltar no corpo (padrão)
         leitorDesktop.innerHTML = `
-            <div class="conteudo-leitor-centralizado">
+            <div class="conteudo-leitor-centralizado" style="width:100%; max-width:800px;">
                 <button onclick="window.abrirDetalhesNovena('${id}')" style="background:none; border:none; cursor:pointer; color:var(--muted); margin-bottom:20px; display:flex; align-items:center; font-size:0.9rem;"><span class="material-symbols-rounded">arrow_back</span> Voltar</button>
                 <h3 style="color:var(--text); margin-bottom:20px; font-size: 1.5rem; text-align:center;">${diaObj.dia}º Dia</h3>
                 ${htmlConteudo}
             </div>`;
         leitorDesktop.scrollTop = 0;
     } else {
-        // --- MOBILE FIX: HEADER COM SETA PARA DETALHES ---
         const modalHeader = document.querySelector("#modalGeral .modal-header");
         if (modalHeader) {
             modalHeader.innerHTML = `
@@ -259,13 +256,11 @@ export const lerDiaNovena = async (id, index) => {
                     <span class="material-symbols-rounded">close</span>
                 </button>
             `;
-            // Garante o alinhamento
             modalHeader.style.display = "flex";
             modalHeader.style.justifyContent = "space-between";
             modalHeader.style.alignItems = "center";
         }
         
-        // Injeta o conteúdo no corpo
         document.getElementById("modal-corpo").innerHTML = htmlConteudo;
     }
 };
@@ -280,9 +275,3 @@ export const alternarStatusDia = (id, index) => {
     localStorage.setItem(`novena_${id}`, JSON.stringify(progresso));
     lerDiaNovena(id, index);
 };
-
-window.abrirListaNovenas = abrirListaNovenas;
-window.alternarAbaNovenas = alternarAbaNovenas;
-window.abrirDetalhesNovena = abrirDetalhesNovena;
-window.lerDiaNovena = lerDiaNovena;
-window.alternarStatusDia = alternarStatusDia;
