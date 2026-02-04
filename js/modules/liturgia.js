@@ -1,7 +1,6 @@
-
 import { abrirModal } from "../utils/dom-utils.js";
-import { buscarDadosLiturgia } from "../services/api-service.js"; // Se usar serviço separado
-import { atualizarContadorLeitura, ouvirContador } from "../services/firestore-service.js"; // Se usar firestore
+import { buscarDadosLiturgia } from "../services/api-service.js";
+import { atualizarContadorLeitura, ouvirContador } from "../services/firestore-service.js";
 import { formatarSalmo, formatarLeitura, getText, getRef } from "../utils/formatters.js";
 import { analytics } from "../config/firebase-config.js";
 import { logEvent } from "https://www.gstatic.com/firebasejs/12.7.0/firebase-analytics.js";
@@ -76,8 +75,13 @@ const atualizarInterfaceLiturgia = (dados) => {
             <p><strong>1ª Leitura:</strong> ${l1}</p>
             <p><strong>Salmo:</strong> ${sal}</p>`;
             
+        // CORREÇÃO: Validação mais segura da Segunda Leitura
         const s2Texto = getText(dados.segundaLeitura);
-        if (s2Texto && s2Texto.length > 20 && !s2Texto.toLowerCase().includes("não há")) {
+        const temSegundaLeitura = s2Texto && 
+                                  s2Texto.length > 5 && 
+                                  !s2Texto.toLowerCase().includes("não há segunda leitura");
+
+        if (temSegundaLeitura) {
             html += `<p><strong>2ª Leitura:</strong> ${getRef(dados.segundaLeitura)}</p>`;
         }
         
@@ -93,7 +97,7 @@ const atualizarInterfaceLiturgia = (dados) => {
 
 const usarBackup = () => {
     const backup = {
-        liturgia: "Liturgia Diária", cor: "Verde", primeiraLeitura: "Leitura indisponível.", salmo: "Salmo indisponível.", evangelho: "Evangelho indisponível.", segundaLeitura: "Não há",
+        liturgia: "Liturgia Diária", cor: "Verde", primeiraLeitura: "Leitura indisponível.", salmo: "Salmo indisponível.", evangelho: "Evangelho indisponível.", segundaLeitura: "Não há segunda leitura",
     };
     dadosLiturgiaCache = backup;
     atualizarInterfaceLiturgia(backup);
@@ -133,9 +137,14 @@ function gerarHTMLCompleto(data) {
         ${formatarSalmo(data.salmo)}
     </div><hr>`;
     
-    // 2ª Leitura
+    // 2ª Leitura (CORREÇÃO DE LÓGICA)
     const s2Texto = getText(data.segundaLeitura);
-    if (s2Texto && s2Texto.length > 20 && !s2Texto.toLowerCase().includes("não há")) {
+    // Verifica se existe texto, se tem tamanho mínimo e se não é a frase padrão de ausência
+    const temSegundaLeitura = s2Texto && 
+                              s2Texto.length > 5 && 
+                              !s2Texto.toLowerCase().includes("não há segunda leitura");
+
+    if (temSegundaLeitura) {
         html += `<div class="leitura-bloco">
             <h4>2ª Leitura</h4>
             <p style="color: #64748b; font-weight: bold;">${getRef(data.segundaLeitura)}</p>
@@ -143,7 +152,7 @@ function gerarHTMLCompleto(data) {
         </div><hr>`;
     }
       
-
+    // Evangelho
     html += `<div class="leitura-bloco destaque-evangelho">
         <h4>Evangelho</h4>
         <p style="color: #64748b; font-weight: bold; margin-bottom: 10px;">${getRef(data.evangelho)}</p>
@@ -241,7 +250,6 @@ export const abrirHora = (tipo) => {
             </div>`;
         abrirModal("modalGeral");
     } else {
-        // Fallback direto
         window.open('https://www.youtube.com/LiturgiadasHorasOnline', '_blank');
     }
 };

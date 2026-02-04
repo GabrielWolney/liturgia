@@ -1,6 +1,5 @@
 export const buscarDadosLiturgia = async () => {
     const controller = new AbortController();
-    // Timeout de 3 segundos para não travar se a API estiver lenta
     const timeoutId = setTimeout(() => controller.abort(), 3000);
 
     try {
