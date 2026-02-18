@@ -34,16 +34,22 @@
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
 }
 .circulo-liturgico.vermelho {
-  background: #fee2e2;
-  color: #991b1b;
+  background: linear-gradient(135deg, #ef4444, #b91c1c);
+  box-shadow: 0 8px 20px -5px rgba(239, 68, 68, 0.5);
 }
 .circulo-liturgico.roxo {
-  background: #f3e8ff;
-  color: #6b21a8;
+  background: linear-gradient(135deg, #c282ff, #6b21a8); 
+  box-shadow: 0 10px 20px -5px rgba(168, 85, 247, 0.5);    
 }
+
+.badge-cor.roxo {
+  background-color: rgba(168, 85, 247, 0.1);; 
+  color: #9333ea;                            
+}
+
 .circulo-liturgico.rosa {
-  background: #fdf2f8;
-  color: #9d174d;
+  background: linear-gradient(135deg, #ec4899, #be185d);
+  box-shadow: 0 8px 20px -5px rgba(236, 72, 153, 0.5);  
 }
 
 #emoji-tempo {
@@ -82,10 +88,7 @@
   background: #fee2e2;
   color: #991b1b;
 }
-.badge-cor.roxo {
-  background: #f3e8ff;
-  color: #6b21a8;
-}
+
 .badge-cor.rosa {
   background: #fdf2f8;
   color: #9d174d;
