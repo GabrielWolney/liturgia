@@ -768,6 +768,49 @@ textarea.input-admin {
   white-space: nowrap;
 }
 
+/* --- LEGENDA DO BOTÃO (Grudada no botão) --- */
+.legenda-botao-quaresma {
+  text-align: center;
+  font-size: 0.75rem;
+  color: var(--muted);
+  /* Margens ajustadas para grudar no botão e afastar do card de baixo */
+  margin-top: 4px !important;
+  margin-bottom: 0 !important;
+  font-weight: 500;
+  opacity: 0.8;
+}
+
+/* --- WRAPPER MOBILE (O Container do Botão + Legenda) --- */
+#btn-quaresma-mobile-wrapper {
+  /* Espaço em cima (separa da Liturgia) */
+  margin-top: 15px;
+  /* Espaço em baixo (separa da Intercessão) */
+  margin-bottom: 30px;
+}
+
+/* --- AVISO DE PRIVACIDADE (CADEADO) --- */
+.aviso-privacidade {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  font-size: 0.8rem;
+  color: var(--muted);
+  background-color: var(--bg);
+  padding: 12px;
+  border-radius: 12px;
+  margin-top: 20px; /* Separa do conteúdo acima */
+  border: 1px dashed var(--border);
+  text-align: center;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.aviso-privacidade span.material-symbols-rounded {
+  font-size: 18px;
+  color: var(--cor-roxo, #9333ea);
+}
+
 .card {
   background: var(--card-bg);
   border-radius: 20px;

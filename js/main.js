@@ -180,7 +180,7 @@ const initPropositoQuaresma = () => {
     const card = document.getElementById('card-proposito');
     if (!card) return;
 
-    // --- 1. DATA ---
+    // --- 1. VERIFICAR DATA ---
     const verificarSeEhQuaresma = () => {
         const hoje = new Date();
         const ano = hoje.getFullYear();
@@ -188,8 +188,7 @@ const initPropositoQuaresma = () => {
         const fim = new Date(ano, 3, 5);     // 05 Abr
         hoje.setHours(0,0,0,0);
         
-        // ⚠️ TRUE para testar agora (pode mudar para false depois)
-        const isModoTeste = true; 
+        const isModoTeste = true; // ⚠️ Mantenha TRUE para testar hoje
         
         if ((hoje >= inicio && hoje <= fim) || isModoTeste) return true;
         return false;
@@ -200,13 +199,43 @@ const initPropositoQuaresma = () => {
         return;
     }
 
-    // --- 2. CRIAR OVERLAY (MODAL) ---
+    // --- 2. INJETAR AVISO DE PRIVACIDADE (CORRIGIDO) ---
+    // Cria o HTML do aviso
+    const htmlAviso = `
+        <div class="aviso-privacidade" style="margin-top: 20px; border-top: 1px solid var(--border); padding-top: 15px;">
+            <span class="material-symbols-rounded" style="font-size: 16px;">lock</span>
+            <span style="font-size: 0.8rem; opacity: 0.8;">Pessoal. Visível apenas para você.</span>
+        </div>
+    `;
+
+    // Injeta no FORMULÁRIO (Modo Edição)
+    const formBody = document.getElementById('proposito-form');
+    if (formBody && !formBody.querySelector('.aviso-privacidade')) {
+        // Cria um elemento temporário para converter string em HTML
+        const tempDiv = document.createElement('div');
+        tempDiv.innerHTML = htmlAviso;
+        formBody.appendChild(tempDiv.firstElementChild);
+    }
+
+    // Injeta na VISUALIZAÇÃO (Modo Salvo)
+    const viewBody = document.getElementById('proposito-view');
+    if (viewBody && !viewBody.querySelector('.aviso-privacidade')) {
+        const tempDiv = document.createElement('div');
+        tempDiv.innerHTML = htmlAviso;
+        // Adiciona bem no final
+        viewBody.appendChild(tempDiv.firstElementChild);
+    }
+
+    // --- 3. PREPARAR O MODAL ---
     let overlay = document.getElementById('modal-quaresma-overlay');
     if (!overlay) {
         overlay = document.createElement('div');
         overlay.id = 'modal-quaresma-overlay';
         document.body.appendChild(overlay);
         
+        overlay.onclick = (e) => {
+            if (e.target === overlay) fecharmodal();
+        };
     }
 
     const fecharmodal = () => {
@@ -218,65 +247,78 @@ const initPropositoQuaresma = () => {
         overlay.appendChild(card);
         card.style.display = 'block';
 
-        // --- INJEÇÃO DO BOTÃO "X" (CLOSE) ---
-        // Verifica se o cabeçalho do card já tem o botão de fechar
+        // Botão X no header
         const header = card.querySelector('.proposito-header');
         if (header && !header.querySelector('.btn-close-quaresma')) {
             const btnClose = document.createElement('button');
             btnClose.className = 'btn-close-quaresma';
             btnClose.innerHTML = '<span class="material-symbols-rounded" style="font-size: 20px;">close</span>';
-            btnClose.onclick = fecharmodal; // Ação de fechar
-            
-            // Adiciona no final do cabeçalho (lado direito)
+            btnClose.onclick = fecharmodal;
             header.appendChild(btnClose);
         }
     };
 
-    // --- 3. BOTÃO PRINCIPAL (ROXO) ---
-    const criarBotaoPrincipal = (id) => {
+    // --- 4. CRIAR BOTÃO + LEGENDA ---
+    const criarConjuntoBotao = (id) => {
+        const wrapper = document.createElement('div');
+        wrapper.id = id + '-wrapper';
+        wrapper.style.display = 'flex';
+        wrapper.style.flexDirection = 'column';
+        
         const btn = document.createElement('button');
         btn.id = id;
-        btn.className = 'btn-quaresma-estilo'; // Classe com o estilo roxo
+        btn.className = 'btn-quaresma-estilo'; 
         btn.innerHTML = '<span class="material-symbols-rounded">church</span> Meu Propósito';
         btn.onclick = abrirModal;
-        return btn;
+        
+        const legenda = document.createElement('p');
+        legenda.className = 'legenda-botao-quaresma';
+        legenda.innerText = 'Toque para definir ou ver';
+
+        wrapper.appendChild(btn);
+        wrapper.appendChild(legenda);
+        
+        return wrapper;
     };
 
     // --- POSICIONAMENTO DESKTOP ---
     if (window.innerWidth >= 1024) {
-        // Se já existe no HTML (grid), usa ele. Se não, cria.
-        let btnDesk = document.getElementById('btn-quaresma-desktop');
-        if (!btnDesk) {
-            // Tenta colocar dentro da área de botões da liturgia ou cria nova
-            // (Assumindo que você ajustou o Grid conforme conversamos antes)
+        let areaBotao = document.getElementById('area-botao-quaresma');
+        if (!areaBotao) {
+            // Cria a área se não existir
+            areaBotao = document.createElement('div');
+            areaBotao.id = 'area-botao-quaresma';
+            // Ajuste fino da margem para o Desktop
+            areaBotao.style.marginTop = '-15px'; 
+            
+            const tabInicio = document.getElementById('tab-inicio');
+            if(tabInicio) tabInicio.appendChild(areaBotao);
         }
-        // Se o botão já estiver no HTML via Grid, só ativamos:
-        if (btnDesk) {
-            btnDesk.onclick = abrirModal;
-            btnDesk.classList.add('btn-quaresma-estilo');
+        
+        // Garante que o botão esteja lá
+        if (areaBotao && areaBotao.children.length === 0) {
+            areaBotao.appendChild(criarConjuntoBotao('btn-quaresma-desktop'));
         }
     } 
-    // --- POSICIONAMENTO MOBILE (Ajuste de Espaçamento) ---
+    // --- POSICIONAMENTO MOBILE ---
     else {
-        let btnMobile = document.getElementById('btn-quaresma-mobile');
-        if (!btnMobile) {
-            btnMobile = criarBotaoPrincipal('btn-quaresma-mobile');
+        if (!document.getElementById('btn-quaresma-mobile-wrapper')) {
+            const btnConjunto = criarConjuntoBotao('btn-quaresma-mobile');
             
-            // Insere LOGO APÓS o card da Liturgia
+            // Insere após a Liturgia
             const liturgiaCard = document.getElementById('liturgia');
             if (liturgiaCard && liturgiaCard.parentNode) {
-                // insertBefore(novo, proximoIrmao) = Inserir Depois
-                liturgiaCard.parentNode.insertBefore(btnMobile, liturgiaCard.nextSibling);
+                liturgiaCard.parentNode.insertBefore(btnConjunto, liturgiaCard.nextSibling);
             }
         }
     }
 
-    // Esconde card original da lista (para não duplicar)
+    // Esconde card original (só aparece no modal)
     if (card.parentNode !== overlay) {
         card.style.display = 'none';
     }
 
-    // --- LÓGICA DE SALVAR/EDITAR (Mantida) ---
+    // --- LÓGICA SALVAR/EDITAR ---
     const atualizarInterface = () => {
         const salvo = localStorage.getItem('agape_proposito_2026');
         const viewForm = document.getElementById('proposito-form');
