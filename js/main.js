@@ -207,10 +207,6 @@ const initPropositoQuaresma = () => {
         overlay.id = 'modal-quaresma-overlay';
         document.body.appendChild(overlay);
         
-        // Fechar ao clicar no fundo escuro
-        overlay.onclick = (e) => {
-            if (e.target === overlay) fecharmodal();
-        };
     }
 
     const fecharmodal = () => {
