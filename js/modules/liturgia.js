@@ -42,7 +42,26 @@ const atualizarInterfaceLiturgia = (dados) => {
     let corAPI = (dados.cor || "Branco").toLowerCase();
     const tituloLiturgia = (dados.liturgia || "").toLowerCase();
 
-    // Lógica de cores litúrgicas
+    const mainContainer = document.querySelector("main");
+    const avisoExistente = document.getElementById("aviso-jejum");
+
+    if (avisoExistente) avisoExistente.remove();
+
+    
+    if (tituloLiturgia.includes("cinzas") || tituloLiturgia.includes("paixão do senhor")) {
+        const aviso = document.createElement("div");
+        aviso.id = "aviso-jejum";
+        aviso.className = "aviso-jejum slide-in"; 
+        aviso.innerHTML = `
+            <span class="material-symbols-rounded" style="font-size: 1.2rem;">no_food</span>
+            <span><strong>Hoje é dia de Jejum e Abstinência!</strong></span>
+        `;
+        
+        
+        if (mainContainer) mainContainer.prepend(aviso);
+    }
+
+    
     if (tituloLiturgia.includes("tempo comum")) corAPI = "verde";
     else if (tituloLiturgia.includes("quaresma") || tituloLiturgia.includes("advento")) corAPI = "roxo";
     else if (tituloLiturgia.includes("mártir") || tituloLiturgia.includes("paixão")) corAPI = "vermelho";

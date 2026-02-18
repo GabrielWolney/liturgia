@@ -1082,6 +1082,253 @@ hr,
   text-align: center;
 }
 
+/* =================================================================
+   CARD PROPÓSITO QUARESMA (INTEGRADO AO SEU TEMA)
+   ================================================================= */
+/* 1. ESTRUTURA E CORES (Usa suas variáveis nativas) */
+.card-quaresma {
+  background-color: var(--card-bg); /* Branco no Light / Escuro no Dark */
+  border: 1px solid var(--border);
+  border-radius: 20px;
+  overflow: hidden;
+  position: relative;
+  box-shadow: var(--shadow);
+  /* Margem importante para separar dos outros cards */
+  margin-bottom: 25px;
+  display: none; /* JS ativa */
+}
+
+/* 2. CABEÇALHO ROXO (Sempre igual) */
+.proposito-header {
+  background: linear-gradient(135deg, #672b94, #9742d8);
+  padding: 18px 20px;
+  display: flex;
+  align-items: center;
+  gap: 15px;
+}
+
+/* Força texto branco no header */
+.proposito-header h3,
+.proposito-header span {
+  color: #ffffff !important;
+}
+
+.proposito-titulo h3 {
+  margin: 0;
+  font-size: 1.1rem;
+  font-weight: 700;
+}
+
+.proposito-titulo span {
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  opacity: 0.9;
+}
+
+.icon-box {
+  background: rgba(255, 255, 255, 0.2);
+  width: 42px;
+  height: 42px;
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #ffffff !important;
+}
+
+.btn-icon-sm {
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  color: rgba(255, 255, 255, 0.8) !important;
+  margin-left: auto;
+}
+
+/* 3. CORPO & INPUT */
+.proposito-body {
+  padding: 25px;
+}
+
+.instrucao {
+  font-size: 0.95rem;
+  color: var(--muted);
+  margin-bottom: 15px;
+  font-weight: 500;
+}
+
+#input-proposito {
+  width: 100%;
+  padding: 15px;
+  border-radius: 12px;
+  border: 1px solid var(--border);
+  /* Fundo sutilmente diferente do card para destacar */
+  background-color: var(--bg);
+  color: var(--text);
+  font-family: inherit;
+  font-size: 1rem;
+  resize: none;
+  outline: none;
+  transition: border-color 0.2s;
+}
+
+#input-proposito:focus {
+  border-color: var(--cor-roxo, #9333ea);
+  background-color: var(--card-bg); /* Fica igual ao card ao focar */
+}
+
+/* Botão Salvar */
+.btn-compromisso {
+  width: 100%;
+  margin-top: 15px;
+  background: linear-gradient(135deg, #672b94, #9742d8);
+  color: #ffffff !important;
+  border: none;
+  padding: 14px;
+  border-radius: 12px;
+  font-weight: 600;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+}
+
+.btn-compromisso:hover {
+  opacity: 0.9;
+  transform: translateY(-2px);
+}
+
+/* SELO FINAL */
+.compromisso-selo {
+  background: var(--cor-roxo-bg, rgba(147, 51, 234, 0.1));
+  border: 1px dashed var(--cor-roxo, #9333ea);
+  padding: 20px;
+  border-radius: 16px;
+  text-align: center;
+  margin-bottom: 15px;
+}
+
+.compromisso-selo span {
+  color: var(--cor-roxo, #9333ea);
+  font-size: 2.5rem;
+  display: block;
+  margin-bottom: 5px;
+}
+
+#texto-compromisso-final {
+  font-size: 1.2rem;
+  font-weight: 700;
+  color: var(--text);
+}
+
+.frase-santo {
+  text-align: center;
+  font-size: 0.85rem;
+  font-style: italic;
+  color: var(--muted);
+  border-top: 1px solid var(--border);
+  padding-top: 15px;
+  margin-top: 10px;
+}
+
+/* --- ESTILO DO BOTÃO (Roxo e Bonito) --- */
+.btn-quaresma-estilo {
+  width: 100%;
+  background: linear-gradient(135deg, #9333ea, #7e22ce);
+  color: white;
+  border: none;
+  padding: 15px;
+  border-radius: 16px;
+  font-size: 1rem;
+  font-weight: 700;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  box-shadow: 0 4px 15px rgba(147, 51, 234, 0.3);
+  margin-top: 15px; /* Espaço do elemento de cima */
+  transition: transform 0.2s;
+}
+
+.btn-quaresma-estilo:hover {
+  transform: translateY(-2px);
+  filter: brightness(1.1);
+}
+
+/* --- ESTILO DO MODAL (Centralizado e Fundo Escuro) --- */
+#modal-quaresma-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.85); /* Fundo escuro */
+  backdrop-filter: blur(5px);
+  z-index: 99999; /* Bem alto para ficar na frente de tudo */
+  display: none; /* JS controla isso */
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+  box-sizing: border-box;
+}
+
+/* O Card quando está dentro do Modal */
+#modal-quaresma-overlay #card-proposito {
+  display: block !important; /* Garante que apareça */
+  max-width: 500px;
+  width: 100%;
+  background: var(--card-bg, #fff); /* Usa sua variável ou branco */
+  margin: 0;
+  animation: zoomIn 0.3s ease;
+  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.5);
+}
+
+@keyframes zoomIn {
+  from {
+    transform: scale(0.9);
+    opacity: 0;
+  }
+  to {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+/* --- 1. AJUSTE DE ESPAÇAMENTO NO MOBILE --- */
+/* Só aplica no celular para separar o botão dos outros cards */
+@media (max-width: 1023px) {
+  .btn-quaresma-estilo {
+    margin-top: 10px;
+    margin-bottom: 15px;
+    width: 100%;
+  }
+}
+/* --- 2. BOTÃO DE FECHAR (X) DENTRO DO MODAL --- */
+.btn-close-quaresma {
+  background: rgba(255, 255, 255, 0.2);
+  border: none;
+  color: white;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: background 0.2s;
+  margin-left: 10px; /* Separa do botão de editar */
+}
+
+.btn-close-quaresma:hover {
+  background: rgba(255, 255, 255, 0.4);
+  transform: scale(1.1);
+}
+
+/* Ajuste para garantir que o cabeçalho do card acomode o botão extra */
+.proposito-header {
+  justify-content: space-between; /* Garante que os itens se espalhem */
+}
+
 /* --- LITURGIA --- */
 .circulo-liturgico {
   width: 80px;
@@ -1498,6 +1745,44 @@ hr,
   display: block;
 }
 
+/* =================================================================
+   AVISO DE JEJUM (QUARESMA)
+   ================================================================= */
+.aviso-jejum {
+  background: linear-gradient(135deg, #581c87, #3b0764);
+  color: #fff;
+  padding: 12px 20px;
+  border-radius: 12px;
+  margin: 0 0 20px 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  font-size: 0.95rem;
+  box-shadow: 0 4px 15px rgba(88, 28, 135, 0.4);
+  width: 100%;
+}
+
+.slide-in {
+  animation: slideDown 0.6s cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+
+@keyframes slideDown {
+  from {
+    opacity: 0;
+    transform: translateY(-20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+@media (max-width: 480px) {
+  .aviso-jejum {
+    font-size: 0.85rem;
+    padding: 10px;
+  }
+}
 /* --- SPLASH SCREEN --- */
 #splash-screen {
   position: fixed;

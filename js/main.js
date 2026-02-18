@@ -176,9 +176,158 @@ window.carregarLeitor = (tipo) => {
         PrayersModule.abrirOracao(tipo);
     }
 };
+const initPropositoQuaresma = () => {
+    const card = document.getElementById('card-proposito');
+    if (!card) return;
+
+    // --- 1. DATA ---
+    const verificarSeEhQuaresma = () => {
+        const hoje = new Date();
+        const ano = hoje.getFullYear();
+        const inicio = new Date(ano, 1, 18); // 18 Fev
+        const fim = new Date(ano, 3, 5);     // 05 Abr
+        hoje.setHours(0,0,0,0);
+        
+        // ⚠️ TRUE para testar agora (pode mudar para false depois)
+        const isModoTeste = true; 
+        
+        if ((hoje >= inicio && hoje <= fim) || isModoTeste) return true;
+        return false;
+    };
+
+    if (!verificarSeEhQuaresma()) {
+        card.style.display = 'none';
+        return;
+    }
+
+    // --- 2. CRIAR OVERLAY (MODAL) ---
+    let overlay = document.getElementById('modal-quaresma-overlay');
+    if (!overlay) {
+        overlay = document.createElement('div');
+        overlay.id = 'modal-quaresma-overlay';
+        document.body.appendChild(overlay);
+        
+        // Fechar ao clicar no fundo escuro
+        overlay.onclick = (e) => {
+            if (e.target === overlay) fecharmodal();
+        };
+    }
+
+    const fecharmodal = () => {
+        overlay.style.display = 'none';
+    };
+
+    const abrirModal = () => {
+        overlay.style.display = 'flex';
+        overlay.appendChild(card);
+        card.style.display = 'block';
+
+        // --- INJEÇÃO DO BOTÃO "X" (CLOSE) ---
+        // Verifica se o cabeçalho do card já tem o botão de fechar
+        const header = card.querySelector('.proposito-header');
+        if (header && !header.querySelector('.btn-close-quaresma')) {
+            const btnClose = document.createElement('button');
+            btnClose.className = 'btn-close-quaresma';
+            btnClose.innerHTML = '<span class="material-symbols-rounded" style="font-size: 20px;">close</span>';
+            btnClose.onclick = fecharmodal; // Ação de fechar
+            
+            // Adiciona no final do cabeçalho (lado direito)
+            header.appendChild(btnClose);
+        }
+    };
+
+    // --- 3. BOTÃO PRINCIPAL (ROXO) ---
+    const criarBotaoPrincipal = (id) => {
+        const btn = document.createElement('button');
+        btn.id = id;
+        btn.className = 'btn-quaresma-estilo'; // Classe com o estilo roxo
+        btn.innerHTML = '<span class="material-symbols-rounded">church</span> Meu Propósito';
+        btn.onclick = abrirModal;
+        return btn;
+    };
+
+    // --- POSICIONAMENTO DESKTOP ---
+    if (window.innerWidth >= 1024) {
+        // Se já existe no HTML (grid), usa ele. Se não, cria.
+        let btnDesk = document.getElementById('btn-quaresma-desktop');
+        if (!btnDesk) {
+            // Tenta colocar dentro da área de botões da liturgia ou cria nova
+            // (Assumindo que você ajustou o Grid conforme conversamos antes)
+        }
+        // Se o botão já estiver no HTML via Grid, só ativamos:
+        if (btnDesk) {
+            btnDesk.onclick = abrirModal;
+            btnDesk.classList.add('btn-quaresma-estilo');
+        }
+    } 
+    // --- POSICIONAMENTO MOBILE (Ajuste de Espaçamento) ---
+    else {
+        let btnMobile = document.getElementById('btn-quaresma-mobile');
+        if (!btnMobile) {
+            btnMobile = criarBotaoPrincipal('btn-quaresma-mobile');
+            
+            // Insere LOGO APÓS o card da Liturgia
+            const liturgiaCard = document.getElementById('liturgia');
+            if (liturgiaCard && liturgiaCard.parentNode) {
+                // insertBefore(novo, proximoIrmao) = Inserir Depois
+                liturgiaCard.parentNode.insertBefore(btnMobile, liturgiaCard.nextSibling);
+            }
+        }
+    }
+
+    // Esconde card original da lista (para não duplicar)
+    if (card.parentNode !== overlay) {
+        card.style.display = 'none';
+    }
+
+    // --- LÓGICA DE SALVAR/EDITAR (Mantida) ---
+    const atualizarInterface = () => {
+        const salvo = localStorage.getItem('agape_proposito_2026');
+        const viewForm = document.getElementById('proposito-form');
+        const viewDisplay = document.getElementById('proposito-view');
+        const textoFinal = document.getElementById('texto-compromisso-final');
+        const btnEditar = document.getElementById('btn-editar-proposito');
+        const input = document.getElementById('input-proposito');
+
+        if (salvo) {
+            if(textoFinal) textoFinal.innerText = `"${salvo}"`;
+            if(viewForm) viewForm.style.display = 'none';
+            if(viewDisplay) viewDisplay.style.display = 'block'; 
+            if(btnEditar) btnEditar.style.display = 'block';
+        } else {
+            if(viewDisplay) viewDisplay.style.display = 'none';
+            if(viewForm) viewForm.style.display = 'block';
+            if(btnEditar) btnEditar.style.display = 'none';
+            if(input) input.value = ''; 
+        }
+    };
+
+    const btnSalvar = document.getElementById('btn-salvar-proposito');
+    if(btnSalvar) {
+        btnSalvar.onclick = () => {
+            const input = document.getElementById('input-proposito');
+            const txt = input.value.trim();
+            if(txt.length < 3) return alert("Digite seu propósito!");
+            localStorage.setItem('agape_proposito_2026', txt);
+            atualizarInterface();
+        };
+    }
+    
+    const btnEditar = document.getElementById('btn-editar-proposito');
+    if(btnEditar) {
+        btnEditar.onclick = () => {
+            if(confirm("Editar propósito?")) {
+                localStorage.removeItem('agape_proposito_2026');
+                atualizarInterface();
+            }
+        };
+    }
+    atualizarInterface();
+};
 
 document.addEventListener("DOMContentLoaded", () => {
   initApp();
+  initPropositoQuaresma();
 });
 
 async function initApp() {
