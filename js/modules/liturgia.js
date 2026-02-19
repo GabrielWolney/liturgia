@@ -47,8 +47,11 @@ const atualizarInterfaceLiturgia = (dados) => {
 
     if (avisoExistente) avisoExistente.remove();
 
-    
-    if (tituloLiturgia.includes("cinzas") || tituloLiturgia.includes("paixão do senhor")) {
+    // CORREÇÃO AQUI: Só mostra se for Quarta de Cinzas ou Sexta-feira Santa
+    const ehQuartaDeCinzas = tituloLiturgia.includes("quarta") && tituloLiturgia.includes("cinzas");
+    const ehSextaSanta = tituloLiturgia.includes("paixão do senhor");
+
+    if (ehQuartaDeCinzas || ehSextaSanta) {
         const aviso = document.createElement("div");
         aviso.id = "aviso-jejum";
         aviso.className = "aviso-jejum slide-in"; 
@@ -57,11 +60,9 @@ const atualizarInterfaceLiturgia = (dados) => {
             <span><strong>Hoje é dia de Jejum e Abstinência!</strong></span>
         `;
         
-        
         if (mainContainer) mainContainer.prepend(aviso);
     }
 
-    
     if (tituloLiturgia.includes("tempo comum")) corAPI = "verde";
     else if (tituloLiturgia.includes("quaresma") || tituloLiturgia.includes("advento")) corAPI = "roxo";
     else if (tituloLiturgia.includes("mártir") || tituloLiturgia.includes("paixão")) corAPI = "vermelho";
@@ -94,7 +95,7 @@ const atualizarInterfaceLiturgia = (dados) => {
             <p><strong>1ª Leitura:</strong> ${l1}</p>
             <p><strong>Salmo:</strong> ${sal}</p>`;
             
-        // CORREÇÃO: Validação mais segura da Segunda Leitura
+        // Validação mais segura da Segunda Leitura
         const s2Texto = getText(dados.segundaLeitura);
         const temSegundaLeitura = s2Texto && 
                                   s2Texto.length > 5 && 
