@@ -1,5 +1,5 @@
 
-const CACHE_NAME = "agape-v91";
+const CACHE_NAME = "agape-v1000";
 
 const ASSETS = [
   "./",          
